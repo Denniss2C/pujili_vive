@@ -1,0 +1,176 @@
+[
+  {
+    "id": "santuario-nino-isinche",
+    "name": {
+      "es": "Santuario del Niño de Isinche",
+      "en": "Sanctuary of El Niño de Isinche"
+    },
+    "shortDescription": {
+      "es": "Lugar sagrado de peregrinación, conocido por sus murales coloridos y su arquitectura única.",
+      "en": "Sacred pilgrimage site, known for its colorful murals and unique architecture."
+    },
+    "category": "religious",
+    "latitude": -0.9667,
+    "longitude": -78.7000,
+    "schedule": {
+      "es": "9:00 - 18:00",
+      "en": "9:00 AM - 6:00 PM"
+    },
+    "cost": {
+      "es": "Entrada libre",
+      "en": "Free entry"
+    },
+    "location": {
+      "es": "Pujilí, Cotopaxi",
+      "en": "Pujilí, Cotopaxi"
+    },
+    "images": [
+      "assets/images/isinche_1.jpg"
+    ]
+  },
+  {
+    "id": "plaza-iglesia-matriz",
+    "name": {
+      "es": "Plaza Central e Iglesia Matriz",
+      "en": "Central Square & Main Church"
+    },
+    "shortDescription": {
+      "es": "Corazón histórico de Pujilí, con su iglesia matriz y el ambiente de la vida local.",
+      "en": "The historic heart of Pujilí, with its main church and the buzz of local life."
+    },
+    "category": "cultural",
+    "latitude": -0.9578,
+    "longitude": -78.6967,
+    "schedule": {
+      "es": "Abierto todo el día",
+      "en": "Open all day"
+    },
+    "cost": {
+      "es": "Entrada libre",
+      "en": "Free entry"
+    },
+    "location": {
+      "es": "Centro de Pujilí, Cotopaxi",
+      "en": "Downtown Pujilí, Cotopaxi"
+    },
+    "images": [
+      "assets/images/iglesia_matriz_1.jpg"
+    ]
+  },
+  {
+    "id": "mirador-cruz-calvario",
+    "name": {
+      "es": "Mirador de la Cruz del Calvario",
+      "en": "Cruz del Calvario Viewpoint"
+    },
+    "shortDescription": {
+      "es": "Vistas panorámicas del cantón desde lo alto, ideal para fotografía y atardeceres.",
+      "en": "Panoramic views over the town from above, ideal for photography and sunsets."
+    },
+    "category": "nature",
+    "latitude": -0.9550,
+    "longitude": -78.6939,
+    "schedule": {
+      "es": "Recomendado de día",
+      "en": "Best during daylight"
+    },
+    "cost": {
+      "es": "Entrada libre",
+      "en": "Free entry"
+    },
+    "location": {
+      "es": "Pujilí, Cotopaxi",
+      "en": "Pujilí, Cotopaxi"
+    },
+    "images": [
+      "assets/images/calvario_1.jpg"
+    ]
+  },
+  {
+    "id": "talleres-ceramica-victoria",
+    "name": {
+      "es": "Talleres de Cerámica de La Victoria",
+      "en": "La Victoria Ceramic Workshops"
+    },
+    "shortDescription": {
+      "es": "Visita a los maestros alfareros y descubre la técnica ancestral de la cerámica.",
+      "en": "Visit master potters and discover the ancestral technique of ceramics."
+    },
+    "category": "crafts",
+    "latitude": -0.9333,
+    "longitude": -78.6667,
+    "schedule": {
+      "es": "8:00 - 17:00",
+      "en": "8:00 AM - 5:00 PM"
+    },
+    "cost": {
+      "es": "Entrada libre",
+      "en": "Free entry"
+    },
+    "location": {
+      "es": "Parroquia La Victoria, Pujilí",
+      "en": "La Victoria Parish, Pujilí"
+    },
+    "images": [
+      "assets/images/ceramica_1.jpg"
+    ]
+  },
+  {
+    "id": "feria-dominical",
+    "name": {
+      "es": "Feria Dominical",
+      "en": "Sunday Market"
+    },
+    "shortDescription": {
+      "es": "Mercado tradicional de los domingos con productos locales, artesanía y gastronomía.",
+      "en": "Traditional Sunday market with local produce, crafts and food."
+    },
+    "category": "cultural",
+    "latitude": -0.9581,
+    "longitude": -78.6972,
+    "schedule": {
+      "es": "Domingos, 6:00 - 15:00",
+      "en": "Sundays, 6:00 AM - 3:00 PM"
+    },
+    "cost": {
+      "es": "Entrada libre",
+      "en": "Free entry"
+    },
+    "location": {
+      "es": "Centro de Pujilí, Cotopaxi",
+      "en": "Downtown Pujilí, Cotopaxi"
+    },
+    "images": [
+      "assets/images/feria_1.jpg"
+    ]
+  },
+  {
+    "id": "laguna-quilotoa",
+    "name": {
+      "es": "Laguna del Quilotoa",
+      "en": "Quilotoa Lagoon"
+    },
+    "shortDescription": {
+      "es": "Cráter volcánico con una laguna turquesa, uno de los destinos naturales más impresionantes cercanos.",
+      "en": "Volcanic crater with a turquoise lagoon, one of the most stunning nearby natural destinations."
+    },
+    "category": "nature",
+    "latitude": -0.8583,
+    "longitude": -78.9061,
+    "schedule": {
+      "es": "8:00 - 16:00",
+      "en": "8:00 AM - 4:00 PM"
+    },
+    "cost": {
+      "es": "USD 2.00",
+      "en": "USD 2.00"
+    },
+    "location": {
+      "es": "Quilotoa, Cotopaxi (destino cercano)",
+      "en": "Quilotoa, Cotopaxi (nearby destination)"
+    },
+    "images": [
+      "assets/images/quilotoa_1.jpg"
+    ]
+  }
+]

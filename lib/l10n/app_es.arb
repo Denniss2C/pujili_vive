@@ -1,0 +1,44 @@
+{
+  "@@locale": "es",
+  "appName": "Pujilí Vive",
+  "searchExperiences": "Buscar experiencias...",
+  "nextEvent": "Próximo Evento",
+  "seeMore": "Ver más",
+  "whatToVisit": "Qué visitar",
+  "artisanRoute": "Ruta Artesanal",
+  "days": "Días",
+  "hours": "Horas",
+  "minutes": "Min",
+
+  "navHome": "Inicio",
+  "navExplore": "Explorar",
+  "navCalendar": "Calendario",
+  "navMap": "Mapa",
+  "navProfile": "Perfil",
+
+  "attractionsTitle": "Atractivos Turísticos",
+  "filterAll": "Todos",
+  "filterCultural": "Cultural",
+  "filterReligious": "Religioso",
+  "filterNature": "Naturaleza",
+  "filterCrafts": "Artesanía",
+
+  "calendarTitle": "Calendario de Fiestas",
+  "searchEvents": "Buscar eventos...",
+
+  "artisansTitle": "Artesanos y Gastronomía",
+
+  "mapTitle": "Mapa Interactivo",
+  "routeArtisan": "Ruta del artesano",
+  "routeReligious": "Ruta religiosa",
+  "routeNature": "Ruta natural",
+  "explorePlaces": "Explorar Lugares",
+  "search": "Buscar",
+
+  "detailSchedule": "Horario",
+  "detailCost": "Costo",
+  "detailLocation": "Ubicación",
+  "detailFree": "Entrada libre",
+  "detailHowToGet": "Cómo llegar",
+  "detailCategory": "Categoría"
+}
