@@ -15,6 +15,15 @@ y el proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 - `.editorconfig` y `.gitignore` reforzado.
 - `analysis_options.yaml` con set de lints ampliado.
 
+### Fixed
+- CI en rojo desde el primer merge: `dart format` fallaba por dos archivos
+  sin formatear (`attraction_model.dart`, `attractions_bloc.dart`).
+- `analysis_options.yaml` referenciaba `avoid_returning_null_for_future`,
+  lint retirado en Dart 3.3.0, que generaba un warning fatal.
+- El paso de análisis del CI usa `--no-fatal-infos`: `flutter analyze` trae
+  esa opción activada por defecto, lo que rompía el build con lints de
+  nivel `info`, en contra de lo definido en `project_rules/09_code_style.md`.
+
 ## [1.0.0] - 2026-08-28
 
 ### Added

@@ -26,12 +26,13 @@ class AttractionModel extends Attraction {
       category: AttractionCategory.fromString(json['category'] as String),
       latitude: (json['latitude'] as num).toDouble(),
       longitude: (json['longitude'] as num).toDouble(),
-      schedule: LocalizedText.fromJson(json['schedule'] as Map<String, dynamic>),
+      schedule:
+          LocalizedText.fromJson(json['schedule'] as Map<String, dynamic>),
       cost: LocalizedText.fromJson(json['cost'] as Map<String, dynamic>),
-      location: LocalizedText.fromJson(json['location'] as Map<String, dynamic>),
-      images: (json['images'] as List<dynamic>)
-          .map((e) => e as String)
-          .toList(),
+      location:
+          LocalizedText.fromJson(json['location'] as Map<String, dynamic>),
+      images:
+          (json['images'] as List<dynamic>).map((e) => e as String).toList(),
     );
   }
 }

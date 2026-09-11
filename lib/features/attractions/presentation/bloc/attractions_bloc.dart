@@ -40,9 +40,7 @@ class AttractionsBloc extends Bloc<AttractionsEvent, AttractionsState> {
 
     final filtered = event.category == null
         ? current.all
-        : current.all
-            .where((a) => a.category == event.category)
-            .toList();
+        : current.all.where((a) => a.category == event.category).toList();
 
     emit(
       AttractionsLoaded(

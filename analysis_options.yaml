@@ -25,7 +25,6 @@ linter:
     - cancel_subscriptions
     - close_sinks
     - unawaited_futures
-    - avoid_returning_null_for_future
     - throw_in_finally
 
     # --- Estilo consistente ---

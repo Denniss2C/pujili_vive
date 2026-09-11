@@ -38,12 +38,14 @@ jobs:
       - name: Formato
         run: dart format --set-exit-if-changed lib test
 
-      # `flutter analyze` falla ante errores y warnings. Los lints de
-      # nivel "info" de analysis_options todavía NO rompen el build: se
-      # endurecerán a --fatal-infos cuando el código los cumpla del todo
-      # (ver project_rules/09_code_style.md).
+      # OJO: `flutter analyze` trae --fatal-infos y --fatal-warnings
+      # ACTIVADOS por defecto. Los lints de nivel "info" de
+      # analysis_options todavía NO deben romper el build, así que se
+      # desactivan explícitamente; siguen siendo visibles en el log.
+      # Se endurecerá quitando --no-fatal-infos cuando el código los
+      # cumpla del todo (ver project_rules/09_code_style.md).
       - name: Análisis estático
-        run: flutter analyze
+        run: flutter analyze --no-fatal-infos
 
       - name: Tests con cobertura
         run: flutter test --coverage
