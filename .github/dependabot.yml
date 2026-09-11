@@ -10,6 +10,12 @@ updates:
       prefix: chore
       include: scope
     labels: [dependencies]
+    # `flutter_localizations` del SDK fija intl a una version EXACTA
+    # (hoy 0.20.2), asi que cualquier bump falla en `flutter pub get`
+    # con "version solving failed". Solo se desbloquea al subir la
+    # version de Flutter; hasta entonces la PR seria inviable. Ver #7.
+    ignore:
+      - dependency-name: intl
 
   - package-ecosystem: github-actions
     directory: "/"
