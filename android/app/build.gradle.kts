@@ -35,6 +35,21 @@ android {
         manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
     }
 
+    // Ambientes dev/prod. Con esto, `flutter run`/`build` SIEMPRE
+    // requieren --flavor dev|prod. dev usa un applicationId con sufijo
+    // .dev para poder instalarse junto a prod en el mismo dispositivo.
+    flavorDimensions += "env"
+    productFlavors {
+        create("dev") {
+            dimension = "env"
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
+        }
+        create("prod") {
+            dimension = "env"
+        }
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
