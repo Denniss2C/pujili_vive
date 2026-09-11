@@ -19,7 +19,7 @@ pujili_vive/
 │   ├── data/               ← attractions.json (y futuros)
 │   └── images/
 ├── project_rules/          ← este manual
-├── .github/                ← CI, plantillas, CODEOWNERS, dependabot
+├── .github/                ← CI, plantillas, CODEOWNERS
 ├── .editorconfig
 ├── .gitignore
 ├── analysis_options.yaml

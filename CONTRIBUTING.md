@@ -14,16 +14,31 @@ y un conjunto de reglas obligatorias documentadas en
 
 1. Crea una rama desde `main` con el prefijo correcto (ver §2).
 2. Haz commits pequeños y con formato convencional (ver §3).
-3. Asegúrate de que pasa el CI local:
+3. Asegúrate de que pasa el CI local. Estos son exactamente los mismos
+   comandos que ejecuta el workflow:
    ```bash
-   dart format lib test
-   flutter analyze
-   flutter test
+   dart format --output=none --set-exit-if-changed lib test
+   flutter analyze --no-fatal-infos
+   flutter test --coverage
    ```
+   > Ojo con `flutter analyze`: trae `--fatal-infos` activado por
+   > defecto. El CI lo desactiva a propósito (ver §4), así que usa el
+   > mismo flag en local o verás fallos que el CI no da.
 4. Abre una Pull Request contra `main` usando la plantilla.
-5. Espera al menos **1 aprobación** y a que el CI esté verde.
+5. Espera a que **los dos jobs del CI** estén verdes: `Formato, análisis
+   y tests` y `Build Android (debug)`. Hasta entonces GitHub bloquea el
+   botón de merge.
 
-> `main` está protegida: no se hace push directo. Todo entra por PR.
+> `main` está protegida por una regla de GitHub, no solo por convención:
+>
+> - No se admite push directo: todo entra por Pull Request.
+> - No se puede mergear con el CI en rojo.
+> - No se admite force-push ni borrar la rama.
+> - La regla aplica también al owner del repositorio.
+>
+> No se exigen aprobaciones porque hoy el proyecto tiene un único
+> colaborador y GitHub no permite aprobar las PRs propias. Cuando se
+> sume una segunda persona, conviene subir la revisión obligatoria a 1.
 
 ---
 

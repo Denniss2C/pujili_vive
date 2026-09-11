@@ -11,9 +11,13 @@ y el proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 - Políticas de repositorio: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`,
   `SECURITY.md`, `LICENSE` (propietaria) y `project_rules/`.
 - CI de GitHub Actions (formato, análisis y tests).
-- Plantillas de Pull Request e Issues, `CODEOWNERS` y `dependabot.yml`.
+- Plantillas de Pull Request e Issues y `CODEOWNERS`.
 - `.editorconfig` y `.gitignore` reforzado.
 - `analysis_options.yaml` con set de lints ampliado.
+
+### Removed
+- `dependabot.yml`: las actualizaciones automaticas se gestionan a mano.
+  Los bumps que ya habia propuesto quedan aplicados en `main`.
 
 ### Fixed
 - CI en rojo desde el primer merge: `dart format` fallaba por dos archivos
