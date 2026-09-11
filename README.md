@@ -79,3 +79,22 @@ assets/
 - El tab "Perfil" apunta temporalmente a `ArtisansPage`; crear su feature.
 - Para el mapa: falta la API key de Google Maps (ver arriba) y reemplazar el
   placeholder de `map_page.dart` por el widget `GoogleMap` con los pines.
+
+## Contribuir y políticas del repositorio
+
+Antes de tu primera contribución, lee:
+
+- [`CONTRIBUTING.md`](./CONTRIBUTING.md) — flujo de trabajo, convención de
+  ramas y de commits (Conventional Commits).
+- [`project_rules/`](./project_rules/) — reglas de arquitectura, BLoC,
+  testing, naming, estilo, seguridad y **Definition of Done**.
+- [`SECURITY.md`](./SECURITY.md) — manejo de claves y reporte de
+  vulnerabilidades.
+- [`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md).
+
+Todo cambio entra por **Pull Request** contra `main` (rama protegida), con
+CI en verde y al menos una aprobación. El historial de cambios está en
+[`CHANGELOG.md`](./CHANGELOG.md).
+
+> **Licencia:** software propietario. Todos los derechos reservados. Ver
+> [`LICENSE`](./LICENSE).

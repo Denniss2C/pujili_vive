@@ -1,13 +1,50 @@
+# Reglas de análisis estático de Pujilí Vive.
+#
+# Los lints activados aquí son el estándar de calidad del proyecto.
+# La mayoría son de severidad "info": aparecen en el IDE y en el CI,
+# pero no rompen el build todavía. El objetivo (documentado en
+# project_rules/09_code_style.md) es endurecerlos a error por grupos
+# y activar strict-casts / strict-inference cuando el código los cumpla.
 include: package:flutter_lints/flutter.yaml
 
 analyzer:
+  errors:
+    # Un TODO sin ticket no debe tumbar el análisis, pero sí verse.
+    todo: ignore
   exclude:
     - lib/l10n/app_localizations*.dart
     - build/**
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
 
 linter:
   rules:
-    - prefer_const_constructors
-    - prefer_const_declarations
+    # --- Corrección / seguridad ---
     - avoid_print
+    - avoid_dynamic_calls
+    - cancel_subscriptions
+    - close_sinks
+    - unawaited_futures
+    - avoid_returning_null_for_future
+    - throw_in_finally
+
+    # --- Estilo consistente ---
+    - prefer_const_constructors
+    - prefer_const_constructors_in_immutables
+    - prefer_const_declarations
+    - prefer_const_literals_to_create_immutables
+    - prefer_final_locals
+    - prefer_single_quotes
     - require_trailing_commas
+    - sort_child_properties_last
+    - use_super_parameters
+    - use_key_in_widget_constructors
+    - prefer_collection_literals
+    - directives_ordering
+    - sort_pub_dependencies
+
+    # --- Widgets / Flutter ---
+    - avoid_unnecessary_containers
+    - sized_box_for_whitespace
+    - use_colored_box
+    - use_decorated_box

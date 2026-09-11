@@ -1,29 +1,83 @@
-# Flutter/Dart
+# ============================================================
+#  Pujilí Vive — .gitignore
+# ============================================================
+
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ / Android Studio
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# VS Code (descomenta si NO quieres versionar launch.json/tasks.json)
+#.vscode/
+
+# Flutter / Dart / Pub
+**/doc/api/
+**/ios/Flutter/.last_build_id
 .dart_tool/
-.packages
-build/
 .flutter-plugins
 .flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+/coverage/
+.packages
 
-# Claves y config local (NO commitear: contiene MAPS_API_KEY)
+# Symbolication / Obfuscation
+app.*.symbols
+app.*.map.json
+
+# Android build artifacts
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# Localización generada (se regenera en cada build a partir de los .arb)
+/lib/l10n/app_localizations.dart
+/lib/l10n/app_localizations_en.dart
+/lib/l10n/app_localizations_es.dart
+
+# ============================================================
+# SEGURIDAD: claves y config local (NUNCA al repo)
+# ============================================================
+# Variables de entorno locales
+.env
+.env.*
+!.env.example
+
+# Google Maps API key y config local por plataforma
 **/local.properties
 **/key.properties
-*.jks
+android/app/src/**/AndroidManifest.local.xml
+
+# Material de firma Android
+/android/app/*.jks
+/android/app/*.keystore
+/android/app/upload-keystore.jks
+**/keystore.properties
 
 # iOS
-ios/Pods/
-ios/.symlinks/
-ios/Flutter/Flutter.framework
-ios/Flutter/Flutter.podspec
-ios/Flutter/ephemeral/
+/ios/Pods/
+/ios/.symlinks/
+/ios/Flutter/Flutter.framework
+/ios/Flutter/Flutter.podspec
+/ios/Flutter/ephemeral/
 
-# IDE
-.idea/
-.vscode/
-*.iml
-
-# Generated localization
-lib/l10n/app_localizations*.dart
-
-# OS
-.DS_Store
+# Otros archivos locales sensibles
+*.p12
+*.pem
+*.cer
+secrets/
