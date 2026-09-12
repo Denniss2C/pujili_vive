@@ -1,5 +1,5 @@
-import 'core/flavors/flavor_config.dart';
-import 'main.dart' as entrypoint;
+import '../../main.dart' as entrypoint;
+import 'flavor_config.dart';
 
 /// Entrypoint del ambiente DEV. Compilar/correr con:
 ///   flutter run --flavor dev -t lib/main_dev.dart
