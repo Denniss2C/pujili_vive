@@ -34,19 +34,19 @@ coverage: ## Tests con cobertura (genera coverage/lcov.info)
 check: format-check analyze test ## Todo lo que valida el CI
 
 run-dev: ## Corre la app (flavor dev)
-	$(FLUTTER) run --flavor dev -t lib/main_dev.dart
+	$(FLUTTER) run --flavor dev -t lib/core/flavors/main_dev.dart
 
 run-prod: ## Corre la app (flavor prod)
-	$(FLUTTER) run --flavor prod -t lib/main_prod.dart
+	$(FLUTTER) run --flavor prod -t lib/core/flavors/main_prod.dart
 
 apk-dev: ## APK debug (dev)
-	$(FLUTTER) build apk --flavor dev -t lib/main_dev.dart --debug
+	$(FLUTTER) build apk --flavor dev -t lib/core/flavors/main_dev.dart --debug
 
 apk-prod: ## APK release (prod)
-	$(FLUTTER) build apk --flavor prod -t lib/main_prod.dart --release
+	$(FLUTTER) build apk --flavor prod -t lib/core/flavors/main_prod.dart --release
 
 aab-prod: ## App Bundle release (prod) para Play Store
-	$(FLUTTER) build appbundle --flavor prod -t lib/main_prod.dart --release
+	$(FLUTTER) build appbundle --flavor prod -t lib/core/flavors/main_prod.dart --release
 
 web: ## Build web
 	$(FLUTTER) build web

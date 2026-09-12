@@ -96,7 +96,7 @@ jobs:
         run: flutter pub get
 
       - name: APK de debug (prod)
-        run: flutter build apk --flavor prod -t lib/main_prod.dart --debug
+        run: flutter build apk --flavor prod -t lib/core/flavors/main_prod.dart --debug
 
       - uses: actions/upload-artifact@v7
         with:

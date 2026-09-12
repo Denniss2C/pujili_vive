@@ -5,14 +5,14 @@
       "name": "Pujilí Vive (dev)",
       "request": "launch",
       "type": "dart",
-      "program": "lib/main_dev.dart",
+      "program": "lib/core/flavors/main_dev.dart",
       "args": ["--flavor", "dev"]
     },
     {
       "name": "Pujilí Vive (prod)",
       "request": "launch",
       "type": "dart",
-      "program": "lib/main_prod.dart",
+      "program": "lib/core/flavors/main_prod.dart",
       "args": ["--flavor", "prod"]
     },
     {
@@ -20,7 +20,7 @@
       "request": "launch",
       "type": "dart",
       "flutterMode": "profile",
-      "program": "lib/main_dev.dart",
+      "program": "lib/core/flavors/main_dev.dart",
       "args": ["--flavor", "dev"]
     }
   ]

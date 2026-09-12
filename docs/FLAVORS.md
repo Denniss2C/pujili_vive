@@ -11,9 +11,9 @@ lleva sufijo `.dev`) y para separar configuración por ambiente en el futuro.
 
 ```bash
 # dev
-flutter run --flavor dev  -t lib/main_dev.dart
+flutter run --flavor dev  -t lib/core/flavors/main_dev.dart
 # prod
-flutter run --flavor prod -t lib/main_prod.dart
+flutter run --flavor prod -t lib/core/flavors/main_prod.dart
 
 # o con el Makefile
 make run-dev
@@ -27,7 +27,7 @@ En **VSCode** usa las configuraciones ya incluidas en
 
 - `lib/core/flavors/flavor_config.dart` — enum `Flavor` y `FlavorConfig`
   (singleton). Consulta el ambiente con `FlavorConfig.isDev` / `.isProd`.
-- `lib/main_dev.dart` / `lib/main_prod.dart` — fijan el flavor y delegan en
+- `lib/core/flavors/main_dev.dart` / `lib/core/flavors/main_prod.dart` — fijan el flavor y delegan en
   `main.dart` (que queda intacto). Por eso `flutter test`, que usa
   `main.dart` / `PujiliViveApp`, sigue funcionando sin flavor (cae a prod).
 - **Android:** `android/app/build.gradle.kts` define `productFlavors`

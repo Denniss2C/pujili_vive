@@ -4,7 +4,7 @@ En Android los flavors se configuran por código (`build.gradle.kts`). En
 iOS hay que crearlos en **Xcode**, porque implica configuraciones y
 esquemas dentro del `.xcodeproj` (editarlo a mano es riesgoso).
 
-> Haz esto una sola vez. Después, `flutter run --flavor dev -t lib/main_dev.dart`
+> Haz esto una sola vez. Después, `flutter run --flavor dev -t lib/core/flavors/main_dev.dart`
 > usará el esquema `dev`.
 
 ## 1. Abrir el proyecto
@@ -42,8 +42,8 @@ correcta a Run/Test/Profile/Archive (p. ej. `dev` → `Debug-dev` /
 ## 5. Probar
 
 ```bash
-flutter run   --flavor dev  -t lib/main_dev.dart
-flutter build ios --flavor prod -t lib/main_prod.dart --no-codesign
+flutter run   --flavor dev  -t lib/core/flavors/main_dev.dart
+flutter build ios --flavor prod -t lib/core/flavors/main_prod.dart --no-codesign
 ```
 
 Flutter mapea `--flavor dev` al esquema `dev`. Si el nombre del esquema no

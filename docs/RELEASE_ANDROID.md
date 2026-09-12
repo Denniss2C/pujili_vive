@@ -49,12 +49,12 @@ Asegúrate de tener `MAPS_API_KEY` en `android/local.properties`
 
 ```bash
 # App Bundle para Play Store (recomendado)
-flutter build appbundle --flavor prod -t lib/main_prod.dart --release
+flutter build appbundle --flavor prod -t lib/core/flavors/main_prod.dart --release
 # o con Makefile
 make aab-prod
 
 # APK (pruebas/distribución directa)
-flutter build apk --flavor prod -t lib/main_prod.dart --release
+flutter build apk --flavor prod -t lib/core/flavors/main_prod.dart --release
 ```
 
 Salida:
