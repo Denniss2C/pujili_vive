@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pujilí Vive — Mockups corregidos</title>
+<style>
+/* ─────────────────────────────────────────────────────────────
+   PUJILÍ VIVE — mockups de referencia
+   Paleta Danzante de Pujilí (DECIDIDO):
+     terracota  #B5502E   dorado  #C8993A
+     verde      #1F4A3A   crema   #F6EBD3
+   Tipografía: sin familia decidida todavía → stack de sistema.
+   ───────────────────────────────────────────────────────────── */
+:root{
+  --terracota:#B5502E;
+  --terracota-oscuro:#8E3D21;
+  --dorado:#C8993A;
+  --verde:#1F4A3A;
+  --verde-claro:#2F6650;
+  --crema:#F6EBD3;
+  --crema-card:#FFFBF2;
+  --tinta:#2B211C;
+  --tinta-suave:#6B5B50;
+  --linea:rgba(43,33,28,.12);
+  --sombra:0 2px 10px rgba(43,33,28,.10);
+  --r-card:18px;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:var(--sans);
+  background:#14352A;
+  color:var(--crema);
+  line-height:1.5;
+  padding:40px 24px 80px;
+}
+
+/* ── cabecera del documento ───────────────────────────────── */
+.doc{max-width:1180px;margin:0 auto}
+.doc-head{max-width:760px;margin-bottom:40px}
+.doc-head h1{font-size:34px;letter-spacing:-.02em;margin-bottom:10px}
+.doc-head p{color:#C9DBD1;margin-bottom:12px}
+.doc-head code{background:rgba(255,255,255,.1);padding:1px 5px;border-radius:4px;font-size:.92em}
+
+.leyenda{
+  border:1px solid rgba(200,153,58,.45);
+  border-radius:12px;padding:16px 18px;margin-top:24px;
+  background:rgba(200,153,58,.08);
+}
+.leyenda h2{font-size:14px;color:var(--dorado);margin-bottom:10px}
+.leyenda ul{list-style:none;display:grid;gap:8px;font-size:14px;color:#DCE9E3}
+.leyenda li{display:flex;gap:10px;align-items:baseline}
+.muestra{flex:0 0 auto}
+
+/* ── bloque por pantalla ──────────────────────────────────── */
+.pantalla{
+  display:grid;grid-template-columns:390px 1fr;gap:40px;
+  padding:44px 0;border-top:1px solid rgba(255,255,255,.12);
+}
+@media (max-width:900px){.pantalla{grid-template-columns:1fr}}
+
+.notas h2{font-size:24px;margin-bottom:4px;letter-spacing:-.01em}
+.notas .tab{
+  display:inline-block;font-size:12px;color:var(--verde);
+  background:var(--dorado);padding:2px 10px;border-radius:99px;margin-bottom:16px;
+}
+.notas .tab.sin{background:#7A8B84;color:#14352A}
+.notas h3{font-size:13px;color:var(--dorado);margin:18px 0 6px}
+.notas p,.notas li{font-size:14px;color:#D3E2DB}
+.notas ul{list-style:none;display:grid;gap:5px}
+.notas li{padding-left:14px;position:relative}
+.notas li::before{content:"·";position:absolute;left:3px;color:var(--dorado)}
+.notas code{background:rgba(255,255,255,.1);padding:1px 5px;border-radius:4px;font-size:.9em}
+.notas .abierta{color:#F0C46B}
+
+/* ── marco de teléfono ────────────────────────────────────── */
+.tel{
+  width:390px;height:800px;border-radius:38px;overflow:hidden;
+  background:var(--crema);color:var(--tinta);
+  border:9px solid #0D2419;box-shadow:0 18px 40px rgba(0,0,0,.35);
+  display:flex;flex-direction:column;position:relative;
+}
+.tel .scroll{flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
+.tel .scroll::-webkit-scrollbar{display:none}
+
+.status{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 20px 2px;font-size:12px;font-weight:600;color:var(--tinta);
+}
+
+/* ── barra de navegación UNIFICADA (5 tabs, idéntica siempre) ── */
+.nav{
+  display:flex;background:var(--crema-card);
+  border-top:1px solid var(--linea);padding:8px 4px 14px;
+}
+.nav div{flex:1;text-align:center;font-size:10.5px;color:var(--tinta-suave)}
+.nav div .ic{display:block;font-size:17px;line-height:1.4;opacity:.55}
+.nav div.on{color:var(--terracota);font-weight:700}
+.nav div.on .ic{opacity:1}
+
+/* ── app bar ──────────────────────────────────────────────── */
+.appbar{display:flex;align-items:center;gap:12px;padding:6px 18px 14px}
+.appbar .volver{font-size:20px;color:var(--tinta);width:20px}
+.appbar h1{font-size:19px;font-weight:700;flex:1;text-align:center}
+.appbar .der{width:20px;text-align:right;font-size:17px;color:var(--terracota)}
+
+/* ── marcas de estado del contenido ───────────────────────── */
+.tbd{
+  border-bottom:1.5px dotted var(--terracota);
+  text-decoration:none;
+}
+.v2{
+  border:1.5px dashed var(--terracota);background:transparent;
+  position:relative;opacity:.75;
+}
+.badge{
+  position:absolute;top:-9px;right:12px;background:var(--terracota);color:#fff;
+  font-size:9px;font-weight:700;padding:2px 8px;border-radius:99px;letter-spacing:.04em;
+}
+.badge.gris{background:#7A8B84}
+.sin-decidir{
+  border:1.5px dashed #7A8B84;border-radius:14px;padding:14px;
+  background:rgba(122,139,132,.08);position:relative;
+}
+
+/* ── foto de marcador de posición ─────────────────────────── */
+.ph{
+  position:relative;display:flex;align-items:flex-end;
+  background:
+    repeating-linear-gradient(135deg,
+      rgba(255,255,255,.10) 0 6px, rgba(0,0,0,.04) 6px 12px),
+    linear-gradient(160deg,var(--c1),var(--c2));
+  color:#fff;overflow:hidden;
+}
+.ph span{
+  font-size:9.5px;padding:5px 8px;opacity:.9;
+  text-shadow:0 1px 2px rgba(0,0,0,.5);letter-spacing:.01em;
+}
+.c-religioso{--c1:#8E6B3A;--c2:#5C4326}
+.c-cultural{--c1:#B5502E;--c2:#7A2F17}
+.c-natura{--c1:#2F6650;--c2:#17402F}
+.c-artesania{--c1:#C8993A;--c2:#8A6317}
+.c-fiesta{--c1:#C05A32;--c2:#8E3D21}
+.c-comida{--c1:#A5642C;--c2:#6E3F17}
+
+/* ── piezas comunes ───────────────────────────────────────── */
+.buscador{
+  display:flex;align-items:center;gap:9px;background:#fff;
+  border-radius:99px;padding:11px 16px;box-shadow:var(--sombra);
+  font-size:14px;color:#9C8E84;
+}
+.chips{display:flex;gap:8px;padding:0 18px 14px;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{
+  flex:0 0 auto;border:1.5px solid var(--terracota);color:var(--terracota);
+  border-radius:99px;padding:6px 16px;font-size:13.5px;background:transparent;
+}
+.chip.on{background:var(--terracota);color:#fff}
+.seccion{
+  font-size:18px;font-weight:700;color:var(--verde);
+  padding:22px 18px 10px;
+}
+.carrusel{display:flex;gap:12px;padding:0 18px 4px;overflow-x:auto;scrollbar-width:none}
+.carrusel::-webkit-scrollbar{display:none}
+
+/* ── INICIO ───────────────────────────────────────────────── */
+.hero{position:relative;height:190px}
+.hero .ph{position:absolute;inset:0}
+.hero-top{position:relative;z-index:2;padding:12px 18px 0}
+.hero-top h1{
+  font-size:30px;color:var(--dorado);text-align:center;font-weight:800;
+  letter-spacing:-.02em;text-shadow:0 1px 3px rgba(0,0,0,.35);margin-bottom:12px;
+}
+.evento-card{
+  margin:-46px 16px 0;position:relative;z-index:3;
+  background:var(--terracota);border-radius:20px;padding:8px;box-shadow:var(--sombra);
+}
+.evento-inner{
+  background:var(--dorado);border-radius:14px;padding:12px;
+  display:flex;gap:12px;align-items:center;
+}
+.evento-inner .ph{width:96px;height:108px;border-radius:10px;flex:0 0 auto}
+.evento-txt{flex:1;color:var(--verde)}
+.evento-txt .eyebrow{font-size:12px;opacity:.85}
+.evento-txt h3{font-size:17px;font-weight:800;margin-bottom:8px;line-height:1.2}
+.cuenta{display:flex;gap:6px;margin-bottom:8px}
+.cuenta div{
+  background:var(--verde);color:var(--crema);border-radius:8px;
+  padding:4px 0;text-align:center;flex:1;
+}
+.cuenta b{display:block;font-size:17px;line-height:1.1}
+.cuenta small{font-size:9px;opacity:.85}
+.btn-verde{
+  display:block;background:var(--verde);color:var(--crema);text-align:center;
+  border-radius:10px;padding:7px;font-size:13px;font-weight:600;
+}
+.mini{flex:0 0 128px}
+.mini .ph{height:86px;border-radius:14px 14px 0 0}
+.mini .cap{
+  background:var(--verde);color:var(--crema);font-size:12px;font-weight:600;
+  padding:8px 10px;border-radius:0 0 14px 14px;min-height:48px;line-height:1.25;
+}
+.mini.art .cap{background:var(--terracota)}
+
+/* ── ATRACTIVOS ───────────────────────────────────────────── */
+.att-card{
+  margin:0 18px 12px;border-radius:var(--r-card);overflow:hidden;
+  position:relative;height:128px;box-shadow:var(--sombra);
+}
+.att-card .ph{position:absolute;inset:0}
+.att-txt{
+  position:relative;z-index:2;margin-top:auto;width:100%;
+  padding:14px 16px 12px;color:#fff;
+  background:linear-gradient(transparent,rgba(0,0,0,.72));
+}
+.att-card{display:flex}
+.att-txt h3{font-size:17px;font-weight:700;line-height:1.2}
+.att-meta{display:flex;justify-content:space-between;font-size:12.5px;opacity:.92;margin-top:2px}
+.ad{
+  margin:6px 18px 18px;border-radius:14px;padding:12px;
+  display:flex;gap:12px;align-items:center;
+}
+.ad .ph{width:64px;height:52px;border-radius:8px;flex:0 0 auto}
+.ad .ad-txt{flex:1;font-size:13px;color:var(--tinta)}
+.ad .ad-txt b{display:block;font-weight:700;margin-bottom:5px}
+.ad .pill{
+  display:inline-block;background:var(--terracota);color:#fff;
+  font-size:11px;padding:4px 10px;border-radius:99px;
+}
+.ad .label{font-size:10px;color:var(--tinta-suave);align-self:flex-end}
+
+/* ── DETALLE ──────────────────────────────────────────────── */
+.det-foto{height:250px;position:relative}
+.det-foto .ph{position:absolute;inset:0}
+.det-volver{
+  position:absolute;top:16px;left:16px;z-index:3;
+  width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.55);
+  display:flex;align-items:center;justify-content:center;font-size:19px;color:var(--tinta);
+}
+.det-panel{
+  background:var(--crema-card);border-radius:24px 24px 0 0;
+  margin-top:-26px;position:relative;z-index:2;padding:22px 20px;
+}
+.det-cinta{
+  position:absolute;top:-14px;right:22px;display:flex;gap:3px;
+}
+.det-cinta i{display:block;width:9px;height:26px;border-radius:2px}
+.det-panel h2{font-size:25px;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+.det-cat{font-size:14px;color:var(--tinta-suave);margin:4px 0 14px}
+.det-desc{font-size:14.5px;color:var(--tinta);margin-bottom:18px}
+.det-datos{
+  display:flex;border-top:1px solid var(--linea);border-bottom:1px solid var(--linea);
+  padding:14px 0;margin-bottom:18px;
+}
+.det-datos div{flex:1;padding:0 8px;font-size:12.5px}
+.det-datos div+div{border-left:1px solid var(--linea)}
+.det-datos b{display:block;font-size:12.5px;color:var(--tinta)}
+.det-datos .ic{color:var(--terracota);font-size:15px}
+.det-datos span{color:var(--tinta-suave)}
+.btn-terracota{
+  display:block;background:var(--terracota);color:#fff;text-align:center;
+  border-radius:14px;padding:15px;font-size:16px;font-weight:600;margin-bottom:18px;
+}
+.galeria{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:6px}
+.galeria::-webkit-scrollbar{display:none}
+.galeria .ph{flex:0 0 104px;height:92px;border-radius:12px}
+
+/* ── CALENDARIO ───────────────────────────────────────────── */
+.timeline{position:relative;padding:4px 18px 20px 44px}
+.timeline::before{
+  content:"";position:absolute;left:24px;top:0;bottom:24px;
+  width:2px;background:var(--dorado);opacity:.55;
+}
+.mes{font-size:16px;font-weight:800;color:var(--dorado);margin:20px 0 12px}
+.mes b{color:var(--terracota-oscuro)}
+.ev{position:relative;margin-bottom:14px;display:flex;gap:12px;align-items:center}
+.ev .nodo{position:absolute;left:-26px;top:50%;transform:translateY(-50%)}
+.ev .nodo i{
+  display:block;width:10px;height:10px;border-radius:50%;
+  background:var(--dorado);border:2px solid var(--crema);
+}
+.ev.destacado{
+  background:#fff;border:2px solid var(--dorado);border-radius:12px;
+  padding:10px;box-shadow:var(--sombra);
+  outline:2px solid var(--terracota);outline-offset:3px;
+}
+.ev.destacado .nodo{left:-33px}
+.ev.destacado .nodo i{
+  width:28px;height:28px;border-radius:50%;background:var(--terracota);
+  border:3px solid var(--dorado);display:flex;align-items:center;justify-content:center;
+  color:var(--dorado);font-size:13px;
+}
+.ev .ph{width:74px;height:74px;flex:0 0 auto;border-radius:8px}
+.ev.normal .ph{border-radius:50%;width:66px;height:66px}
+.ev .fecha{
+  background:var(--terracota);color:#fff;border-radius:8px;
+  padding:6px 9px;text-align:center;flex:0 0 auto;
+}
+.ev .fecha b{display:block;font-size:17px;line-height:1}
+.ev .fecha small{font-size:9.5px;letter-spacing:.04em}
+.ev .cuerpo{flex:1}
+.ev .cuerpo h3{font-size:15.5px;font-weight:700;line-height:1.2;margin-bottom:3px}
+.ev .cuerpo p{font-size:12.5px;color:var(--tinta-suave);line-height:1.35}
+
+/* ── MAPA ─────────────────────────────────────────────────── */
+.segmento{
+  display:flex;margin:0 18px 12px;border:1.5px solid var(--dorado);
+  border-radius:99px;overflow:hidden;background:var(--crema-card);
+}
+.segmento div{flex:1;text-align:center;font-size:12.5px;padding:9px 4px;color:var(--tinta-suave)}
+.segmento div.on{background:var(--dorado);color:#fff;font-weight:700}
+.mapa{
+  position:relative;flex:1;min-height:0;
+  background:
+    radial-gradient(circle at 42% 40%,#E9A24E 0 22%,transparent 22.5%),
+    linear-gradient(120deg,#1F4A3A 0 18%,#B5502E 18% 52%,#8E3D21 52% 100%);
+  overflow:hidden;
+}
+.calle{position:absolute;background:rgba(255,255,255,.5);height:1.5px}
+.pin{position:absolute;text-align:center;width:96px;margin-left:-48px}
+.pin i{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:40px;height:40px;border-radius:50% 50% 50% 4px;transform:rotate(-45deg);
+  background:var(--crema-card);border:3px solid var(--terracota);font-size:17px;
+}
+.pin i span{transform:rotate(45deg)}
+.pin b{
+  display:inline-block;background:var(--crema-card);color:var(--tinta);
+  font-size:9.5px;font-weight:600;padding:3px 6px;border-radius:5px;
+  margin-top:4px;box-shadow:var(--sombra);line-height:1.25;
+}
+.pueblo{
+  position:absolute;left:38%;top:57%;font-size:19px;font-weight:800;color:#3A2415;
+}
+.hoja{
+  position:absolute;left:0;right:0;bottom:0;background:var(--crema-card);
+  border-radius:20px 20px 0 0;box-shadow:0 -6px 20px rgba(0,0,0,.22);
+  padding:10px 18px 14px;height:50%;
+}
+.asa{width:44px;height:4px;border-radius:99px;background:#C9BBAC;margin:0 auto 10px}
+.hoja h3{font-size:19px;font-weight:800;margin-bottom:10px}
+.hoja .fila{
+  display:flex;gap:12px;align-items:center;padding:10px 0;
+  border-bottom:1px solid var(--linea);
+}
+.hoja .fila .ph{width:58px;height:58px;border-radius:10px;flex:0 0 auto}
+.hoja .fila .t{flex:1}
+.hoja .fila h4{font-size:14.5px;font-weight:700;line-height:1.2}
+.hoja .fila p{font-size:12px;color:var(--tinta-suave)}
+.hoja .fila .chev{color:var(--terracota);font-size:17px}
+
+/* ── ARTESANOS ────────────────────────────────────────────── */
+.titulo-grande{font-size:27px;font-weight:800;color:var(--terracota-oscuro);padding:0 18px 14px;letter-spacing:-.02em}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 18px}
+.art-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:var(--sombra)}
+.art-card .ph{height:92px}
+.art-card .cuerpo{padding:10px 11px 12px}
+.art-card h3{font-size:14.5px;font-weight:700;color:var(--terracota-oscuro);line-height:1.15;margin-bottom:4px}
+.art-card p{font-size:12px;color:var(--tinta);line-height:1.3}
+.art-card .loc{font-size:11.5px;color:var(--dorado);margin-top:6px}
+.franja{
+  margin:16px 0 0;background:var(--dorado);padding:12px 18px;
+  display:flex;gap:12px;align-items:center;
+}
+.franja .t{flex:1;font-size:12.5px;color:var(--verde);line-height:1.3}
+.franja .t b{display:block;font-weight:800}
+.franja .btn{background:var(--crema-card);color:var(--terracota);font-size:12px;font-weight:700;padding:7px 14px;border-radius:99px}
+
+/* ── PERFIL (sin definir) ─────────────────────────────────── */
+.perfil-wrap{padding:18px}
+.perfil-wrap h2{font-size:20px;font-weight:800;margin-bottom:10px}
+.perfil-wrap p{font-size:13.5px;color:var(--tinta);margin-bottom:12px}
+.perfil-wrap ul{list-style:none;display:grid;gap:9px;font-size:13.5px}
+.perfil-wrap li{
+  background:#fff;border:1px dashed #B9A996;border-radius:10px;
+  padding:11px 13px;color:var(--tinta-suave);display:flex;justify-content:space-between;
+}
+</style>
+</head>
+<body>
+<div class="doc">
+
+<header class="doc-head">
+  <h1>Pujilí Vive — mockups de referencia</h1>
+  <p>
+    Versión corregida y unificada de los mockups originales de Stitch. Reemplaza
+    a las imágenes: los errores de aquellos mocks (barras de navegación distintas
+    en cada pantalla, nombres de atractivos inventados, símbolo €, el typo
+    «Sarvardado», el pin duplicado, la venta de entradas fuera de alcance)
+    <strong>ya están arreglados aquí</strong>. Donde este archivo y los mocks
+    viejos discrepen, manda este archivo.
+  </p>
+  <p>
+    Este HTML se abre en el navegador para verlo, y también se lee como texto:
+    las clases, los textos y los comentarios describen la estructura sin
+    necesidad de mirar la pantalla. Acompaña a <code>docs/CONCEPTO.md</code>,
+    que tiene el producto, el modelo de datos y las preguntas abiertas.
+  </p>
+
+  <div class="leyenda">
+    <h2>Cómo leer las marcas</h2>
+    <ul>
+      <li><span class="muestra"><span class="tbd">texto punteado</span></span>
+          — dato de relleno. Hay que verificarlo o levantarlo en campo antes de publicar.</li>
+      <li><span class="muestra" style="border:1.5px dashed var(--terracota);padding:1px 8px;border-radius:6px">recuadro terracota «V2»</span>
+          — no va en la V1. Se dibuja solo para reservar el sitio.</li>
+      <li><span class="muestra" style="border:1.5px dashed #7A8B84;padding:1px 8px;border-radius:6px">recuadro gris</span>
+          — sin decidir. No implementar sin resolver la pregunta abierta.</li>
+      <li><span class="muestra">Bloques de color en vez de fotos</span>
+          — no hay fotografía definitiva; el color indica la categoría.</li>
+    </ul>
+  </div>
+</header>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     1. INICIO
+     ══════════════════════════════════════════════════════════ -->
+<section class="pantalla">
+  <div class="tel">
+    <div class="scroll">
+      <div class="status"><span>9:41</span><span>▂▄▆ ᯤ ▮</span></div>
+
+      <div class="hero">
+        <div class="ph c-natura"><span>foto: paisaje de Pujilí desde la carretera</span></div>
+        <div class="hero-top">
+          <h1>Pujilí Vive</h1>
+          <div class="buscador"><span style="color:var(--terracota)">⌕</span> Buscar experiencias…</div>
+        </div>
+      </div>
+
+      <!-- card de próximo evento: el diferenciador, en el sitio más visible -->
+      <div class="evento-card">
+        <div class="evento-inner">
+          <div class="ph c-fiesta"><span>foto: Danzante</span></div>
+          <div class="evento-txt">
+            <div class="eyebrow">Próxima fiesta</div>
+            <h3>Corpus Christi<br>Danzantes de Pujilí</h3>
+            <div class="cuenta">
+              <div><b class="tbd">03</b><small>días</small></div>
+              <div><b class="tbd">14</b><small>horas</small></div>
+              <div><b class="tbd">35</b><small>min</small></div>
+            </div>
+            <div class="btn-verde">Ver la fiesta</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="seccion">Qué visitar</div>
+      <div class="carrusel">
+        <div class="mini"><div class="ph c-religioso"><span>foto</span></div><div class="cap">Santuario del Niño de Isinche</div></div>
+        <div class="mini"><div class="ph c-cultural"><span>foto</span></div><div class="cap">Plaza e Iglesia Matriz</div></div>
+        <div class="mini"><div class="ph c-cultural"><span>foto</span></div><div class="cap">Mirador Cruz del Calvario</div></div>
+        <div class="mini"><div class="ph c-natura"><span>foto</span></div><div class="cap">Laguna del Quilotoa</div></div>
+      </div>
+
+      <div class="seccion">Ruta artesanal</div>
+      <div class="carrusel">
+        <div class="mini art"><div class="ph c-artesania"><span>foto</span></div><div class="cap">Talleres de cerámica de La Victoria</div></div>
+        <div class="mini art"><div class="ph c-cultural"><span>foto</span></div><div class="cap">Feria dominical</div></div>
+        <div class="mini art"><div class="ph c-comida"><span>foto</span></div><div class="cap tbd">Hornado tradicional</div></div>
+      </div>
+      <div style="height:20px"></div>
+    </div>
+
+    <nav class="nav">
+      <div class="on"><span class="ic">⌂</span>Inicio</div>
+      <div><span class="ic">◎</span>Explorar</div>
+      <div><span class="ic">▤</span>Calendario</div>
+      <div><span class="ic">◈</span>Mapa</div>
+      <div><span class="ic">☻</span>Perfil</div>
+    </nav>
+  </div>
+
+  <div class="notas">
+    <h2>Inicio</h2>
+    <span class="tab">tab Inicio · feature <code>home</code></span>
+
+    <h3>Qué cambió respecto al mock viejo</h3>
+    <ul>
+      <li>Barra inferior unificada de 5 tabs (el mock tenía Mapa / Eventos / Rutas / Perfil).</li>
+      <li>«Talleres de Cerámica» ya no aparece repetido en la ruta artesanal.</li>
+      <li>Los carruseles usan los seis atractivos reales del <code>attractions.json</code>.</li>
+      <li>La card de evento ya no queda recortada por el borde de la foto: se apoya sobre ella con margen.</li>
+    </ul>
+
+    <h3>Estructura, de arriba abajo</h3>
+    <ul>
+      <li>Hero con foto, nombre de la app y buscador superpuesto.</li>
+      <li>Card de próxima fiesta montada sobre el hero, con cuenta regresiva en días / horas / minutos.</li>
+      <li>Carrusel horizontal «Qué visitar» — tarjetas con foto y nombre sobre fondo verde.</li>
+      <li>Carrusel horizontal «Ruta artesanal» — mismas tarjetas sobre fondo terracota, para distinguir las dos secciones sin repetir un título de categoría.</li>
+    </ul>
+
+    <h3>Acciones</h3>
+    <ul>
+      <li>Card de fiesta o «Ver la fiesta» → detalle del evento.</li>
+      <li>Tarjeta de «Qué visitar» → detalle de atractivo.</li>
+      <li>Tarjeta de «Ruta artesanal» → detalle de artesano o plato.</li>
+    </ul>
+
+    <h3>Datos</h3>
+    <ul>
+      <li><code>FestivalEvent</code> más próximo por <code>startDate</code> → alimenta el contador.</li>
+      <li>Subconjunto de <code>Attraction</code> (<code>name</code>, <code>photos[0]</code>).</li>
+      <li>Subconjunto de <code>ArtisanItem</code>.</li>
+    </ul>
+
+    <h3>Estados</h3>
+    <ul>
+      <li>Sin fiestas futuras: la card desaparece y la pantalla empieza en «Qué visitar». No se deja un contador en cero.</li>
+      <li>Error de carga: el mensaje va dentro de la sección afectada; el resto de la pantalla sigue en pie.</li>
+    </ul>
+
+    <h3 class="abierta">Sin decidir</h3>
+    <ul>
+      <li class="abierta">Qué indexa el buscador y cómo se ven los resultados.</li>
+      <li class="abierta">Si el contador muestra segundos (obliga a refrescar cada segundo).</li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     2. ATRACTIVOS
+     ══════════════════════════════════════════════════════════ -->
+<section class="pantalla">
+  <div class="tel">
+    <div class="scroll">
+      <div class="status"><span>9:41</span><span>▂▄▆ ᯤ ▮</span></div>
+      <div class="appbar"><span class="volver">‹</span><h1>Atractivos</h1><span class="der"></span></div>
+
+      <div class="chips">
+        <div class="chip on">Todos</div>
+        <div class="chip">Cultural</div>
+        <div class="chip">Religioso</div>
+        <div class="chip">Naturaleza</div>
+        <div class="chip">Artesanía</div>
+      </div>
+
+      <div class="att-card">
+        <div class="ph c-religioso"><span>foto: fachada del santuario</span></div>
+        <div class="att-txt">
+          <h3>Santuario del Niño de Isinche</h3>
+          <div class="att-meta"><span>Religioso</span><span class="tbd">2,5 km</span></div>
+        </div>
+      </div>
+
+      <div class="att-card">
+        <div class="ph c-cultural"><span>foto: plaza central</span></div>
+        <div class="att-txt">
+          <h3>Plaza e Iglesia Matriz</h3>
+          <div class="att-meta"><span>Cultural</span><span class="tbd">0,3 km</span></div>
+        </div>
+      </div>
+
+      <div class="att-card">
+        <div class="ph c-cultural"><span>foto: mirador sobre el valle</span></div>
+        <div class="att-txt">
+          <h3>Mirador Cruz del Calvario</h3>
+          <div class="att-meta"><span class="tbd">Cultural</span><span class="tbd">1,0 km</span></div>
+        </div>
+      </div>
+
+      <div class="att-card">
+        <div class="ph c-artesania"><span>foto: taller de cerámica</span></div>
+        <div class="att-txt">
+          <h3>Talleres de cerámica de La Victoria</h3>
+          <div class="att-meta"><span>Artesanía</span><span class="tbd">6 km</span></div>
+        </div>
+      </div>
+
+      <div class="att-card">
+        <div class="ph c-cultural"><span>foto: feria dominical</span></div>
+        <div class="att-txt">
+          <h3>Feria dominical</h3>
+          <div class="att-meta"><span>Cultural</span><span class="tbd">0,6 km</span></div>
+        </div>
+      </div>
+
+      <div class="att-card">
+        <div class="ph c-natura"><span>foto: laguna</span></div>
+        <div class="att-txt">
+          <h3>Laguna del Quilotoa</h3>
+          <div class="att-meta"><span>Naturaleza</span><span class="tbd">54 km</span></div>
+        </div>
+      </div>
+
+      <!-- slot publicitario: NO va en la V1 -->
+      <div class="ad v2">
+        <span class="badge">V2</span>
+        <div class="ph c-comida"><span></span></div>
+        <div class="ad-txt">
+          <b class="tbd">Nombre del anunciante</b>
+          <span class="pill">Ver más</span>
+        </div>
+        <div class="label">Publicidad</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <div><span class="ic">⌂</span>Inicio</div>
+      <div class="on"><span class="ic">◎</span>Explorar</div>
+      <div><span class="ic">▤</span>Calendario</div>
+      <div><span class="ic">◈</span>Mapa</div>
+      <div><span class="ic">☻</span>Perfil</div>
+    </nav>
+  </div>
+
+  <div class="notas">
+    <h2>Atractivos</h2>
+    <span class="tab">tab Explorar · feature <code>attractions</code> (ya implementada)</span>
+
+    <h3>Qué cambió respecto al mock viejo</h3>
+    <ul>
+      <li>Los seis atractivos son los acordados. Fuera «Danzantes de Pujilí», «Mercado de Artesanías» y «Ruta de los Andes», que no existen en el dataset.</li>
+      <li>El banner publicitario queda marcado como V2 y con la etiqueta «Publicidad» visible, no disfrazado de contenido.</li>
+      <li>Barra inferior unificada.</li>
+    </ul>
+
+    <h3>Estructura</h3>
+    <ul>
+      <li>App bar con título centrado.</li>
+      <li>Fila de chips con scroll horizontal; «Todos» activo por defecto, relleno sólido para el activo y contorno para el resto.</li>
+      <li>Lista vertical de tarjetas: foto a sangre, degradado oscuro al pie, nombre en blanco, y debajo categoría a la izquierda y distancia a la derecha.</li>
+    </ul>
+
+    <h3>Acciones</h3>
+    <ul>
+      <li>Chip → filtra en sitio por <code>category</code>, no navega.</li>
+      <li>Tarjeta → detalle de atractivo.</li>
+    </ul>
+
+    <h3>Datos</h3>
+    <ul>
+      <li><code>Attraction</code>: <code>name</code>, <code>category</code>, <code>photos[0]</code> y distancia.</li>
+    </ul>
+
+    <h3>Estados</h3>
+    <ul>
+      <li>Filtro sin resultados: mensaje y acción para volver a «Todos». Nunca los chips solos sobre el vacío.</li>
+      <li>Error de carga del JSON: mensaje con reintento a pantalla completa.</li>
+    </ul>
+
+    <h3 class="abierta">Sin decidir</h3>
+    <ul>
+      <li class="abierta">Las distancias: ¿valor fijo desde el centro de Pujilí guardado en el JSON, o cálculo contra la ubicación real? Decide si la app pide permiso de geolocalización.</li>
+      <li class="abierta">La categoría del Mirador Cruz del Calvario (Cultural o Naturaleza).</li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     3. DETALLE DE ATRACTIVO
+     ══════════════════════════════════════════════════════════ -->
+<section class="pantalla">
+  <div class="tel">
+    <div class="scroll">
+      <div class="det-foto">
+        <div class="ph c-religioso"><span>foto de portada a sangre</span></div>
+        <div class="det-volver">‹</div>
+      </div>
+
+      <div class="det-panel">
+        <div class="det-cinta">
+          <i style="background:var(--terracota)"></i>
+          <i style="background:var(--dorado)"></i>
+          <i style="background:var(--verde)"></i>
+          <i style="background:var(--terracota)"></i>
+        </div>
+        <h2>Santuario del Niño de Isinche</h2>
+        <div class="det-cat">Religioso</div>
+        <p class="det-desc tbd">Descripción corta del atractivo, de dos a cuatro líneas. Texto pendiente de redactar y de traducir al inglés.</p>
+
+        <div class="det-datos">
+          <div><span class="ic">◷</span> <b>Horario</b><span class="tbd">9:00 – 18:00</span></div>
+          <div><span class="ic">$</span> <b>Costo</b><span class="tbd">Entrada libre</span></div>
+          <div><span class="ic">◉</span> <b>Dónde</b><span>Isinche, Pujilí</span></div>
+        </div>
+
+        <div class="btn-terracota">Cómo llegar</div>
+
+        <div class="galeria">
+          <div class="ph c-religioso"><span>foto 2</span></div>
+          <div class="ph c-artesania"><span>foto 3</span></div>
+          <div class="ph c-cultural"><span>foto 4</span></div>
+          <div class="ph c-natura"><span>foto 5</span></div>
+        </div>
+      </div>
+      <div style="height:16px"></div>
+    </div>
+
+    <nav class="nav">
+      <div><span class="ic">⌂</span>Inicio</div>
+      <div class="on"><span class="ic">◎</span>Explorar</div>
+      <div><span class="ic">▤</span>Calendario</div>
+      <div><span class="ic">◈</span>Mapa</div>
+      <div><span class="ic">☻</span>Perfil</div>
+    </nav>
+  </div>
+
+  <div class="notas">
+    <h2>Detalle de atractivo</h2>
+    <span class="tab">sin tab propio · se empuja dentro del tab activo</span>
+
+    <h3>Qué cambió respecto al mock viejo</h3>
+    <ul>
+      <li>El nombre correcto es «Santuario del Niño de Isinche», no «Santuario del Divino Niño».</li>
+      <li>La categoría sale del enumerado real (Religioso), no de un «Patrimonio Cultural» inventado.</li>
+      <li>El costo va en dólares. El mock usaba el símbolo €.</li>
+    </ul>
+
+    <h3>Estructura</h3>
+    <ul>
+      <li>Foto a sangre en el tercio superior, con botón de retroceso circular translúcido encima.</li>
+      <li>Panel que sube sobre la foto con esquinas redondeadas y una cinta de cuatro tiras de color en la esquina superior derecha — el único adorno de la pantalla.</li>
+      <li>Nombre, categoría, descripción.</li>
+      <li>Fila de tres datos separados por divisores: horario, costo, dónde.</li>
+      <li>Botón primario ancho «Cómo llegar».</li>
+      <li>Galería horizontal al pie.</li>
+    </ul>
+
+    <h3>Datos</h3>
+    <ul>
+      <li><code>Attraction</code> completa: <code>name</code>, <code>category</code>, <code>description</code>, <code>schedule</code>, <code>cost</code>, <code>locationLabel</code>, <code>latitude</code>, <code>longitude</code>, <code>photos[]</code>.</li>
+    </ul>
+
+    <h3>Estados</h3>
+    <ul>
+      <li><code>schedule</code> y <code>cost</code> son opcionales: un mirador no tiene horario. Si falta el dato, la columna se oculta — no se escribe «No disponible».</li>
+      <li>Sin fotos adicionales, la galería no se dibuja.</li>
+    </ul>
+
+    <h3 class="abierta">Sin decidir</h3>
+    <ul>
+      <li class="abierta">Qué hace «Cómo llegar»: abrir el tab Mapa centrado en el punto, o lanzar la app de mapas del teléfono con las coordenadas.</li>
+      <li class="abierta">Si la galería abre un visor a pantalla completa.</li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     4. CALENDARIO DE FIESTAS  ← diferenciador del producto
+     ══════════════════════════════════════════════════════════ -->
+<section class="pantalla">
+  <div class="tel">
+    <div class="scroll">
+      <div class="status"><span>9:41</span><span>▂▄▆ ᯤ ▮</span></div>
+      <div class="appbar"><span class="volver">‹</span><h1>Fiestas</h1><span class="der">⌕</span></div>
+
+      <div style="padding:0 18px 6px">
+        <div class="buscador"><span style="color:var(--terracota)">⌕</span> Buscar una fiesta…</div>
+      </div>
+
+      <div class="timeline">
+        <div class="mes">Junio <b class="tbd">2027</b></div>
+
+        <div class="ev destacado">
+          <div class="nodo"><i><span>☀</span></i></div>
+          <div class="ph c-fiesta"><span>foto</span></div>
+          <div class="fecha"><b class="tbd">27</b><small>JUN</small></div>
+          <div class="cuerpo">
+            <h3>Corpus Christi: Danzantes de Pujilí</h3>
+            <p>La fiesta mayor del cantón. Patrimonio Cultural Inmaterial.</p>
+          </div>
+        </div>
+
+        <div class="ev destacado">
+          <div class="nodo"><i><span>☀</span></i></div>
+          <div class="ph c-fiesta"><span>foto</span></div>
+          <div class="fecha"><b class="tbd">4</b><small>JUL</small></div>
+          <div class="cuerpo">
+            <h3>La Octava de Corpus Christi</h3>
+            <p>Cierre de la fiesta, con procesiones y música tradicional.</p>
+          </div>
+        </div>
+
+        <div class="mes">Julio <b class="tbd">2027</b></div>
+
+        <div class="ev normal">
+          <div class="nodo"><i></i></div>
+          <div class="ph c-comida"><span>foto</span></div>
+          <div class="fecha"><b class="tbd">16</b><small>JUL</small></div>
+          <div class="cuerpo">
+            <h3 class="tbd">Fiesta de la Virgen del Carmen</h3>
+            <p class="tbd">Feria gastronómica y artesanal.</p>
+          </div>
+        </div>
+
+        <div class="mes">Agosto <b class="tbd">2027</b></div>
+
+        <div class="ev normal">
+          <div class="nodo"><i></i></div>
+          <div class="ph c-cultural"><span>foto</span></div>
+          <div class="fecha"><b class="tbd">10</b><small>AGO</small></div>
+          <div class="cuerpo">
+            <h3 class="tbd">Fiesta de San Lorenzo</h3>
+            <p class="tbd">Desfile cívico y comparsas.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <div><span class="ic">⌂</span>Inicio</div>
+      <div><span class="ic">◎</span>Explorar</div>
+      <div class="on"><span class="ic">▤</span>Calendario</div>
+      <div><span class="ic">◈</span>Mapa</div>
+      <div><span class="ic">☻</span>Perfil</div>
+    </nav>
+  </div>
+
+  <div class="notas">
+    <h2>Fiestas</h2>
+    <span class="tab">tab Calendario · feature <code>calendar</code> — prioridad 1</span>
+
+    <h3>Por qué esta pantalla manda</h3>
+    <p>Es el diferenciador del producto: ninguna app turística del mercado ecuatoriano tiene un calendario vivo de fiestas de un cantón. Si hay que recortar alcance, se recorta de cualquier otro lado.</p>
+
+    <h3>Qué cambió respecto al mock viejo</h3>
+    <ul>
+      <li>Las fechas de 2024 eran relleno del generador: aquí van punteadas, pendientes de definir.</li>
+      <li>El Corpus Christi es fiesta móvil (depende de la Pascua). No se puede fijar un día del año en el JSON y olvidarse.</li>
+      <li>Barra inferior unificada.</li>
+    </ul>
+
+    <h3>Dos jerarquías de tarjeta</h3>
+    <ul>
+      <li><strong>Destacada</strong> (<code>isHighlighted: true</code>): doble marco dorado y terracota, medallón redondo sobre la línea de tiempo, foto rectangular. Solo para Corpus Christi y la Octava.</li>
+      <li><strong>Normal</strong>: sin marco, nodo pequeño en la línea, foto circular.</li>
+    </ul>
+
+    <h3>Estructura</h3>
+    <ul>
+      <li>App bar y buscador de eventos.</li>
+      <li>Línea de tiempo vertical continua por el borde izquierdo.</li>
+      <li>Encabezado de mes repetido a lo largo del scroll, con el mes en dorado y el año en terracota.</li>
+      <li>Cada evento: foto, bloque de fecha en color sólido, título y descripción de una o dos líneas.</li>
+    </ul>
+
+    <h3>Datos</h3>
+    <ul>
+      <li><code>FestivalEvent</code>: <code>title</code>, <code>description</code>, <code>startDate</code>, <code>endDate</code>, <code>photo</code>, <code>isHighlighted</code>, <code>locationLabel</code>. Ordenados por fecha y agrupados por mes.</li>
+    </ul>
+
+    <h3 class="abierta">Sin decidir</h3>
+    <ul>
+      <li class="abierta">Qué pasa con las fiestas ya pasadas: ¿se ocultan, se atenúan, o van en una sección aparte?</li>
+      <li class="abierta">Cómo se mantiene la fecha del Corpus: ¿se calcula, se edita el JSON cada año, o el contenido se mueve a Remote Config para cambiarlo sin publicar versión?</li>
+      <li class="abierta">Si la tarjeta abre un detalle de evento — esa pantalla no está diseñada.</li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     5. MAPA
+     ══════════════════════════════════════════════════════════ -->
+<section class="pantalla">
+  <div class="tel">
+    <div class="status"><span>10:30</span><span>▂▄▆ ᯤ ▮</span></div>
+    <div class="appbar"><span class="volver">‹</span><h1>Mapa</h1><span class="der"></span></div>
+
+    <div class="segmento">
+      <div class="on">Ruta del artesano</div>
+      <div>Ruta religiosa</div>
+      <div>Ruta natural</div>
+    </div>
+
+    <!-- el render real es google_maps_flutter; esto solo indica composición -->
+    <div class="mapa">
+      <div class="calle" style="left:8%;top:44%;width:84%"></div>
+      <div class="calle" style="left:30%;top:20%;width:2px;height:62%"></div>
+      <div class="calle" style="left:12%;top:60%;width:70%;transform:rotate(-8deg)"></div>
+      <div class="calle" style="left:52%;top:16%;width:2px;height:60%"></div>
+
+      <div class="pin" style="left:24%;top:16%"><i><span>⚱</span></i><b>Talleres de cerámica<br>de La Victoria</b></div>
+      <div class="pin" style="left:62%;top:14%"><i><span>⛰</span></i><b>Mirador Cruz<br>del Calvario</b></div>
+      <div class="pin" style="left:46%;top:36%"><i><span>⛪</span></i><b>Plaza e Iglesia Matriz</b></div>
+      <div class="pin" style="left:20%;top:42%"><i><span>☷</span></i><b>Feria dominical</b></div>
+      <div class="pin" style="left:72%;top:40%"><i><span>✝</span></i><b>Santuario del Niño<br>de Isinche</b></div>
+      <div class="pueblo">Pujilí</div>
+
+      <div class="hoja">
+        <div class="asa"></div>
+        <h3>Explorar lugares</h3>
+        <div class="fila">
+          <div class="ph c-artesania"><span></span></div>
+          <div class="t"><h4>Talleres de cerámica de La Victoria</h4><p>Artesanía · <span class="tbd">6 km</span></p></div>
+          <div class="chev">›</div>
+        </div>
+        <div class="fila">
+          <div class="ph c-religioso"><span></span></div>
+          <div class="t"><h4>Santuario del Niño de Isinche</h4><p>Religioso · <span class="tbd">2,5 km</span></p></div>
+          <div class="chev">›</div>
+        </div>
+        <div class="fila">
+          <div class="ph c-cultural"><span></span></div>
+          <div class="t"><h4>Plaza e Iglesia Matriz</h4><p>Cultural · <span class="tbd">0,3 km</span></p></div>
+          <div class="chev">›</div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <div><span class="ic">⌂</span>Inicio</div>
+      <div><span class="ic">◎</span>Explorar</div>
+      <div><span class="ic">▤</span>Calendario</div>
+      <div class="on"><span class="ic">◈</span>Mapa</div>
+      <div><span class="ic">☻</span>Perfil</div>
+    </nav>
+  </div>
+
+  <div class="notas">
+    <h2>Mapa</h2>
+    <span class="tab">tab Mapa · feature <code>map</code></span>
+
+    <h3>Qué cambió respecto al mock viejo</h3>
+    <ul>
+      <li>«Reserva Ecológica Los Ilinizas» ya no aparece duplicada.</li>
+      <li>Los pines son los atractivos reales; fuera «Mercado de Artesanías», «Centro de Tejidos Artesanales» y «Mirador del Cotopaxi», que no están en el dataset.</li>
+      <li>Se quitó el icono de filtro del bottom sheet: duplicaba el selector de rutas de arriba sin que nadie hubiera definido qué filtraba.</li>
+    </ul>
+
+    <h3>Estructura</h3>
+    <ul>
+      <li>App bar.</li>
+      <li>Selector segmentado de tres rutas temáticas dentro de una píldora con borde dorado; la activa en relleno sólido.</li>
+      <li>Mapa ocupando el resto, con pines en forma de gota, icono ilustrado según categoría y etiqueta de texto debajo.</li>
+      <li>Bottom sheet arrastrable «Explorar lugares» con asa, y lista de miniatura + nombre + «categoría · distancia» + chevron.</li>
+    </ul>
+
+    <h3>Ojo con el estilo</h3>
+    <p>El fondo naranja y terracota de este boceto es ilustrativo. El render real es <code>google_maps_flutter</code>; ese aspecto solo se consigue con un <em>map style</em> JSON personalizado, y no está decidido si vale el esfuerzo o se usa el estilo por defecto.</p>
+
+    <h3>Datos</h3>
+    <ul>
+      <li><code>Attraction</code> con <code>latitude</code> y <code>longitude</code> obligatorias y <code>category</code> para elegir el icono del pin.</li>
+      <li><code>ThematicRoute</code>: <code>id</code>, <code>name</code>, <code>placeIds</code>.</li>
+    </ul>
+
+    <h3>Estados</h3>
+    <ul>
+      <li>Sin permiso de ubicación: el mapa se centra en el casco urbano y las distancias se ocultan. La app tiene que ser usable sin conceder ubicación.</li>
+      <li>Sin red: el mapa no carga, pero el sheet sigue funcionando porque sus datos son locales. Aviso dentro del área del mapa, no a pantalla completa.</li>
+      <li>Ruta sin lugares: mensaje en el sheet, no lista en blanco.</li>
+    </ul>
+
+    <h3 class="abierta">Sin decidir</h3>
+    <ul>
+      <li class="abierta">Qué hace tocar un pin: expandir el sheet en ese lugar, mostrar una card flotante, o ir directo al detalle.</li>
+      <li class="abierta">Si las rutas son solo un filtro de pines o un recorrido ordenado con trazado dibujado. El nombre «Ruta» sugiere lo segundo; el diseño solo resuelve lo primero.</li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     6. ARTESANOS Y GASTRONOMÍA
+     ══════════════════════════════════════════════════════════ -->
+<section class="pantalla">
+  <div class="tel">
+    <div class="scroll">
+      <div class="status"><span>9:41</span><span>▂▄▆ ᯤ ▮</span></div>
+      <div class="appbar"><span class="volver">‹</span><h1></h1><span class="der">⚟</span></div>
+      <div class="titulo-grande">Artesanos y comida</div>
+
+      <div class="grid2">
+        <div class="art-card">
+          <div class="ph c-artesania"><span>foto</span></div>
+          <div class="cuerpo">
+            <h3>Talleres de alfarería</h3>
+            <p class="tbd">Descubre la técnica ancestral de los maestros alfareros.</p>
+            <div class="loc tbd">◉ La Victoria, Pujilí</div>
+          </div>
+        </div>
+        <div class="art-card">
+          <div class="ph c-cultural"><span>foto</span></div>
+          <div class="cuerpo">
+            <h3>Talladores de máscaras</h3>
+            <p class="tbd">Visita a los artesanos que dan vida al Danzante.</p>
+            <div class="loc tbd">◉ Pujilí centro</div>
+          </div>
+        </div>
+        <div class="art-card">
+          <div class="ph c-comida"><span>foto</span></div>
+          <div class="cuerpo">
+            <h3>Hornado</h3>
+            <p class="tbd">Saborea el plato de cerdo asado en leña.</p>
+          </div>
+        </div>
+        <div class="art-card">
+          <div class="ph c-comida"><span>foto</span></div>
+          <div class="cuerpo">
+            <h3>Cuy asado</h3>
+            <p class="tbd">Prueba el manjar ceremonial de la región.</p>
+          </div>
+        </div>
+        <div class="art-card">
+          <div class="ph c-artesania"><span>foto</span></div>
+          <div class="cuerpo">
+            <h3>Tejidos</h3>
+            <p class="tbd">Telares manuales con diseños de la cosmovisión andina.</p>
+          </div>
+        </div>
+        <div class="art-card">
+          <div class="ph c-artesania"><span>foto</span></div>
+          <div class="cuerpo">
+            <h3>Cerámica decorativa</h3>
+            <p class="tbd">Llévate a casa un pedazo de la cultura del cantón.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="franja">
+        <div class="t">
+          <b>Fiesta del Danzante</b>
+          <span class="tbd">Junio en Pujilí. Mira el programa completo.</span>
+        </div>
+        <div class="btn">Ver fiestas</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <div><span class="ic">⌂</span>Inicio</div>
+      <div class="on"><span class="ic">◎</span>Explorar</div>
+      <div><span class="ic">▤</span>Calendario</div>
+      <div><span class="ic">◈</span>Mapa</div>
+      <div><span class="ic">☻</span>Perfil</div>
+    </nav>
+  </div>
+
+  <div class="notas">
+    <h2>Artesanos y comida</h2>
+    <span class="tab sin">tab sin resolver — ver abajo</span>
+
+    <h3>Qué cambió respecto al mock viejo</h3>
+    <ul>
+      <li>La franja del pie ya no dice «Compra tus entradas ahora»: la venta de entradas está fuera de alcance y esa promesa no se puede mostrar. Ahora lleva al calendario de fiestas, que sí existe.</li>
+      <li>Fuera el typo «Sarvardado» y el «Explore» en inglés dentro de una pantalla en español: la barra es la unificada.</li>
+      <li>Título acortado a «Artesanos y comida», que cabe en una línea en los dos idiomas.</li>
+    </ul>
+
+    <h3>Estructura</h3>
+    <ul>
+      <li>App bar con icono de filtro a la derecha.</li>
+      <li>Título grande dentro del cuerpo, no en la app bar.</li>
+      <li>Grid de dos columnas: foto arriba, nombre en terracota, descripción de una o dos líneas y, cuando el dato existe, una línea de ubicación con pin.</li>
+      <li>Franja promocional al pie, sobre la barra de navegación.</li>
+    </ul>
+
+    <h3 class="abierta">El problema estructural, sin resolver</h3>
+    <p class="abierta">Hay una pantalla diseñada y una feature <code>artisans</code> en el repo, pero ninguno de los cinco tabs le corresponde. Aquí se dibuja dentro de Explorar solo para poder mostrarla. Opciones: sub-sección dentro de Explorar, convertir Explorar en un hub con dos secciones, o reemplazar un tab. <strong>Decidirlo antes de implementar.</strong></p>
+
+    <h3 class="abierta">Sin decidir</h3>
+    <ul>
+      <li class="abierta">Qué filtra el icono de filtro: lo más probable es separar artesanía de comida, pero no está acordado.</li>
+      <li class="abierta">Si la tarjeta abre un detalle — esa pantalla no está diseñada.</li>
+    </ul>
+
+    <h3>Bloqueante real</h3>
+    <p>Todo el contenido de esta pantalla es de relleno. No hay fotos ni contactos de artesanos: hay que levantarlos en campo. Es lo que mantiene esta feature en el puesto 5 de prioridad.</p>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     7. PERFIL — sin definir
+     ══════════════════════════════════════════════════════════ -->
+<section class="pantalla">
+  <div class="tel">
+    <div class="scroll">
+      <div class="status"><span>9:41</span><span>▂▄▆ ᯤ ▮</span></div>
+      <div class="appbar"><span class="volver"></span><h1>Perfil</h1><span class="der"></span></div>
+
+      <div class="perfil-wrap">
+        <div class="sin-decidir">
+          <span class="badge gris">SIN DECIDIR</span>
+          <h2>Esta pantalla no está diseñada</h2>
+          <p>El tab existe porque se acordaron cinco tabs, pero nunca se definió qué contiene. Sin cuentas de usuario en la V1, lo que queda son ajustes.</p>
+          <p>Candidatos mencionados, ninguno acordado:</p>
+          <ul>
+            <li>Idioma <span>ES / EN</span></li>
+            <li>Guardados <span>¿existe la función?</span></li>
+            <li>Acerca de Pujilí Vive <span>—</span></li>
+            <li>Contacto <span>—</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <div><span class="ic">⌂</span>Inicio</div>
+      <div><span class="ic">◎</span>Explorar</div>
+      <div><span class="ic">▤</span>Calendario</div>
+      <div><span class="ic">◈</span>Mapa</div>
+      <div class="on"><span class="ic">☻</span>Perfil</div>
+    </nav>
+  </div>
+
+  <div class="notas">
+    <h2>Perfil</h2>
+    <span class="tab sin">tab Perfil · sin feature</span>
+
+    <p>Se deja el marco vacío a propósito. Rellenarlo con ajustes inventados daría la impresión de que hay una decisión tomada donde no la hay.</p>
+
+    <h3>Provisional en el repo</h3>
+    <p>Hoy el tab apunta a la página de artesanos. Eso es un parche del scaffold y hay que deshacerlo.</p>
+
+    <h3 class="abierta">Sin decidir</h3>
+    <ul>
+      <li class="abierta">Si existen favoritos o guardados. Un mock viejo mostraba un tab «Guardados» que se descartó junto con su barra, pero la función en sí nunca se descartó ni se aprobó.</li>
+      <li class="abierta">Si el idioma se cambia dentro de la app o se hereda del sistema.</li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     NOTAS TRANSVERSALES
+     ══════════════════════════════════════════════════════════ -->
+<section class="pantalla" style="grid-template-columns:1fr">
+  <div class="notas" style="max-width:760px">
+    <h2>Reglas que valen en todas las pantallas</h2>
+
+    <h3>Navegación</h3>
+    <p>Una sola barra inferior, definida en el shell, idéntica en las cinco secciones: Inicio · Explorar · Calendario · Mapa · Perfil. Las pantallas de detalle se empujan dentro del tab activo, así que el tab no cambia al abrir un detalle.</p>
+
+    <h3>Color</h3>
+    <p>Paleta del traje del Danzante de Pujilí: terracota <code>#B5502E</code> como primario, dorado <code>#C8993A</code> para acentos y encabezados, verde profundo <code>#1F4A3A</code> como secundario, crema <code>#F6EBD3</code> de fondo. El fondo crema en vez de blanco es deliberado: quita el aire clínico sin competir con la fotografía.</p>
+
+    <h3>Adorno</h3>
+    <p>Los motivos textiles andinos van en bordes, cintas y franjas. Nunca de fondo debajo de texto que haya que leer. Un solo elemento decorativo por pantalla como máximo.</p>
+
+    <h3>Tono de los textos</h3>
+    <p>Descripciones de una o dos líneas, en segunda persona y con verbo al frente: «Descubre», «Saborea», «Prueba». Los títulos son el nombre real del lugar o del plato, sin adjetivos de folleto. Los botones dicen lo que pasa al tocarlos.</p>
+
+    <h3>Idioma y moneda</h3>
+    <p>Todo texto de interfaz sale de los <code>.arb</code>; todo texto de contenido es bilingüe en el JSON vía <code>LocalizedText</code>. Nada hardcodeado. Los costos, siempre en dólares.</p>
+
+    <h3>Vacíos y errores</h3>
+    <p>Un estado vacío dice qué hacer a continuación, no solo que no hay nada. Un error dice qué pasó y ofrece reintentar. Ninguno de los dos se disculpa ni tumba la pantalla entera si el fallo es de una sola sección.</p>
+
+    <h3 class="abierta">Pendiente transversal</h3>
+    <ul>
+      <li class="abierta">La familia tipográfica. Aquí se usa el stack del sistema porque no hay decisión.</li>
+      <li class="abierta">Modo oscuro: no se habló, y la paleta crema no tiene equivalente oscuro definido.</li>
+    </ul>
+  </div>
+</section>
+
+</div>
+</body>
+</html>
