@@ -1,53 +1,97 @@
-# Flavors en iOS (pasos en Xcode)
+# Flavors en iOS
 
-En Android los flavors se configuran por código (`build.gradle.kts`). En
-iOS hay que crearlos en **Xcode**, porque implica configuraciones y
-esquemas dentro del `.xcodeproj` (editarlo a mano es riesgoso).
+En Android los flavors se declaran en `build.gradle.kts`. iOS **no tiene
+flavors**: se replican con **build configurations + schemes** dentro del
+`.xcodeproj`.
 
-> Haz esto una sola vez. Después, `flutter run --flavor dev -t lib/core/flavors/main_dev.dart`
-> usará el esquema `dev`.
+> **Ya está hecho y versionado.** No hay que repetir nada en Xcode. Este
+> documento explica cómo está montado y cómo verificarlo.
 
-## 1. Abrir el proyecto
-
-```bash
-open ios/Runner.xcworkspace
-```
-
-## 2. Duplicar configuraciones
-
-En **Runner (proyecto) → Info → Configurations**, duplica cada
-configuración para cada flavor:
-
-- `Debug`   → `Debug-dev`, `Debug-prod`
-- `Release` → `Release-dev`, `Release-prod`
-- `Profile` → `Profile-dev`, `Profile-prod`
-
-## 3. Bundle id por flavor
-
-En **Runner (target) → Build Settings → Packaging → Product Bundle
-Identifier**, ajusta por configuración:
-
-- `*-dev`  → `ec.gob.pujili.pujiliVive.dev`
-- `*-prod` → `ec.gob.pujili.pujiliVive`
-
-(Opcional: **Product Name** distinto para ver "Pujilí Vive Dev".)
-
-## 4. Crear los esquemas
-
-**Product → Scheme → Manage Schemes… → +**. Crea `dev` y `prod` (marca
-*Shared*). En cada uno, **Edit Scheme…** y asigna la configuración
-correcta a Run/Test/Profile/Archive (p. ej. `dev` → `Debug-dev` /
-`Release-dev`).
-
-## 5. Probar
+## Cómo ejecutar
 
 ```bash
-flutter run   --flavor dev  -t lib/core/flavors/main_dev.dart
-flutter build ios --flavor prod -t lib/core/flavors/main_prod.dart --no-codesign
+flutter run --flavor dev  -t lib/core/flavors/main_dev.dart
+flutter run --flavor prod -t lib/core/flavors/main_prod.dart
+# o, más corto:
+make run-dev
+make run-prod
 ```
 
-Flutter mapea `--flavor dev` al esquema `dev`. Si el nombre del esquema no
-coincide con el flavor, el build falla indicándolo.
+> Con flavors activos, **`--flavor` es obligatorio**. Sin él Flutter falla
+> con `You must specify a --flavor option to select one of the available
+> schemes.`
+
+## Cómo está montado
+
+### Las 9 build configurations
+
+A las 3 originales (que **no se borran**) se les suman 6:
+
+| Configuración | Bundle id | Nombre visible |
+| --- | --- | --- |
+| `Debug-dev`, `Release-dev`, `Profile-dev` | `ec.gob.pujili.pujiliVive.dev` | `Pujili Vive Dev` |
+| `Debug-prod`, `Release-prod`, `Profile-prod` | `ec.gob.pujili.pujiliVive` | `Pujili Vive` |
+| `Debug`, `Release`, `Profile` (originales) | `ec.gob.pujili.pujiliVive` | `Pujili Vive` |
+
+**El nombre importa literalmente.** Flutter busca `<Modo>-<flavor>`: con
+`--flavor dev` espera `Debug-dev`, `Release-dev` y `Profile-dev`.
+
+### Los 2 schemes (marcados como *Shared*, por eso se versionan)
+
+| Scheme | Run / Test / Analyze | Profile | Archive |
+| --- | --- | --- | --- |
+| `dev` | `Debug-dev` | `Profile-dev` | `Release-dev` |
+| `prod` | `Debug-prod` | `Profile-prod` | `Release-prod` |
+
+**El nombre del scheme debe coincidir exactamente con el valor de
+`--flavor`.** Si no estuviera marcado como *Shared*, no se versionaría y
+el resto del equipo no lo tendría.
+
+### El nombre visible: `APP_DISPLAY_NAME`
+
+No se usa `PRODUCT_NAME`, porque también bautiza el binario y el `.app`, y
+un nombre con espacios confunde a las herramientas de Flutter. En su lugar
+hay un *User-Defined Setting* `APP_DISPLAY_NAME` con un valor por
+configuración, y `ios/Runner/Info.plist` lo referencia:
+
+```xml
+<key>CFBundleDisplayName</key>
+<string>$(APP_DISPLAY_NAME)</string>
+```
+
+### El `Podfile` declara las 9 configuraciones
+
+```ruby
+project 'Runner', {
+  'Debug' => :debug, 'Profile' => :release, 'Release' => :release,
+  'Debug-dev' => :debug, 'Profile-dev' => :release, 'Release-dev' => :release,
+  'Debug-prod' => :debug, 'Profile-prod' => :release, 'Release-prod' => :release,
+}
+```
+
+Sin esto, CocoaPods no sabe cuáles son debug y cuáles release, y genera
+los `xcconfig` de los Pods con los ajustes equivocados.
+
+> Tras tocar configuraciones hay que **regenerar los pods**
+> (`cd ios && pod install`), o el build falla con errores de framework no
+> encontrado.
+
+## Verificación
+
+```bash
+flutter build ios --simulator --flavor dev  -t lib/core/flavors/main_dev.dart  --debug
+plutil -extract CFBundleDisplayName raw build/ios/iphonesimulator/Runner.app/Info.plist
+plutil -extract CFBundleIdentifier  raw build/ios/iphonesimulator/Runner.app/Info.plist
+```
+
+Comprobado: `dev` → `Pujili Vive Dev` / `...pujiliVive.dev`, y `prod` →
+`Pujili Vive` / `...pujiliVive`. Las dos apps conviven en el simulador.
+
+## Firma
+
+`flutter build ios --simulator` no firma nada, así que sirve para
+comprobar que compila sin cuenta de Apple. Para dispositivo físico o para
+archivar hace falta un `DEVELOPMENT_TEAM` válido en las 9 configuraciones.
 
 ## Referencia
 
