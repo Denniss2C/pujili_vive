@@ -95,8 +95,8 @@ jobs:
       - name: Dependencias
         run: flutter pub get
 
-      - name: APK de debug
-        run: flutter build apk --debug
+      - name: APK de debug (prod)
+        run: flutter build apk --flavor prod -t lib/core/flavors/main_prod.dart --debug
 
       - uses: actions/upload-artifact@v7
         with:

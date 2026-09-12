@@ -98,3 +98,21 @@ CI en verde y al menos una aprobación. El historial de cambios está en
 
 > **Licencia:** software propietario. Todos los derechos reservados. Ver
 > [`LICENSE`](./LICENSE).
+
+## Ambientes (flavors) y comandos
+
+Este proyecto usa flavors **dev/prod**, así que `flutter run` a secas ya no
+aplica: usa el flavor y su entrypoint (o el Makefile / `.vscode/launch.json`).
+
+```bash
+make run-dev          # flutter run --flavor dev  -t lib/core/flavors/main_dev.dart
+make run-prod         # flutter run --flavor prod -t lib/core/flavors/main_prod.dart
+make check            # formato + análisis + tests (igual que el CI)
+make aab-prod         # App Bundle de producción
+make help             # todos los atajos
+```
+
+Documentación: [`docs/FLAVORS.md`](./docs/FLAVORS.md),
+[`docs/IOS_FLAVORS.md`](./docs/IOS_FLAVORS.md),
+[`docs/RELEASE_ANDROID.md`](./docs/RELEASE_ANDROID.md),
+[`docs/MAPS_SETUP.md`](./docs/MAPS_SETUP.md).
