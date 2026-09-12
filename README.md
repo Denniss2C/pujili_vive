@@ -116,3 +116,8 @@ Documentación: [`docs/FLAVORS.md`](./docs/FLAVORS.md),
 [`docs/IOS_FLAVORS.md`](./docs/IOS_FLAVORS.md),
 [`docs/RELEASE_ANDROID.md`](./docs/RELEASE_ANDROID.md),
 [`docs/MAPS_SETUP.md`](./docs/MAPS_SETUP.md).
+
+**Diseño:** [`docs/MOCKS.html`](./docs/MOCKS.html) — mockups de referencia
+de las 7 pantallas. Se abre en el navegador, y también se lee como texto.
+Marca con línea punteada los datos de relleno, con recuadro terracota lo
+que no entra en la V1 y con recuadro gris lo que está sin decidir.
