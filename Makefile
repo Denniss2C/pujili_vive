@@ -6,7 +6,8 @@
 FLUTTER := flutter
 
 .PHONY: help setup format format-check analyze test coverage check \
-        run-dev run-prod apk-dev apk-prod aab-prod web clean
+        run-dev run-prod apk-dev apk-prod aab-prod web clean \
+        doctor version outdated verify-signing
 
 help: ## Muestra esta ayuda
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -52,4 +53,23 @@ web: ## Build web
 
 clean: ## Limpia artefactos de build
 	$(FLUTTER) clean
+
+doctor: ## Verifica el entorno de desarrollo
+	$(FLUTTER) doctor -v
+
+version: ## Version de la app y del SDK
+	@grep '^version:' pubspec.yaml
+	@$(FLUTTER) --version | head -1
+
+# El proyecto no usa Dependabot a proposito (ver CHANGELOG). La revision
+# de versiones es manual: conviene hacerla cada pocos meses y antes de
+# cada envio a las tiendas.
+outdated: ## Revisa dependencias desactualizadas
+	$(FLUTTER) pub outdated
+
+# Un AAB firmado con la clave de debug lo rechaza Play Store, y el build
+# NO avisa: sin key.properties la firma cae a debug en silencio.
+verify-signing: ## Comprueba con que clave se firmo el ultimo AAB
+	keytool -printcert -jarfile \
+		build/app/outputs/bundle/prodRelease/app-prod-release.aab
 

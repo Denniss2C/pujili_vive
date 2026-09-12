@@ -8,6 +8,16 @@ y el proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 ## [Unreleased]
 
 ### Added
+- Flavors `dev` / `prod`: entrypoints, `FlavorConfig`, productFlavors de
+  Gradle, `Makefile`, `.vscode/launch.json` y documentacion.
+- Nombre distinto en el lanzador por flavor (`resValue` + `@string/app_name`):
+  "Pujili Vive Dev" y "Pujili Vive" conviven en el mismo dispositivo.
+- Cinta "DEV" en pantalla para no confundir la build que se esta probando.
+- Firma de release condicional via `android/key.properties` (opcional).
+- Targets `doctor`, `version`, `outdated` y `verify-signing` en el Makefile.
+
+
+### Added
 - Políticas de repositorio: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`,
   `SECURITY.md`, `LICENSE` (propietaria) y `project_rules/`.
 - CI de GitHub Actions (formato, análisis y tests).

@@ -19,35 +19,26 @@ keyAlias=upload
 keyPassword=********
 ```
 
-Y engancha la firma en `android/app/build.gradle.kts` (reemplazando el
-`signingConfig` de debug que hay hoy en `buildTypes.release`). Patrón:
+Eso es **todo lo que hay que hacer**: la firma ya está enganchada en
+`android/app/build.gradle.kts` y es **condicional**.
 
-```kotlin
-import java.io.FileInputStream
-import java.util.Properties
+- **Con** `key.properties` → el release se firma con tu keystore.
+- **Sin** `key.properties` → cae a la clave de debug, para que quien no
+  tenga el keystore pueda compilar release igualmente y el build no se
+  rompa para nadie.
 
-val keystoreProperties = Properties()
-val keystorePropertiesFile = rootProject.file("key.properties")
-if (keystorePropertiesFile.exists()) {
-    FileInputStream(keystorePropertiesFile).use { keystoreProperties.load(it) }
-}
+> ⚠️ Esa comodidad tiene un filo: **un AAB firmado con debug lo rechaza
+> Play Store, y el build no avisa.** Verifica siempre antes de subir:
+>
+> ```bash
+> make verify-signing
+> ```
+>
+> Debe aparecer tu `Owner`, **no** `CN=Android Debug`.
 
-android {
-    signingConfigs {
-        create("release") {
-            keyAlias = keystoreProperties["keyAlias"] as String?
-            keyPassword = keystoreProperties["keyPassword"] as String?
-            storeFile = (keystoreProperties["storeFile"] as String?)?.let { file(it) }
-            storePassword = keystoreProperties["storePassword"] as String?
-        }
-    }
-    buildTypes {
-        release {
-            signingConfig = signingConfigs.getByName("release")
-        }
-    }
-}
-```
+> ⚠️ Perder el `.jks` o su contraseña **impide publicar actualizaciones
+> para siempre**. Guarda copia en dos sitios y la contraseña en un
+> gestor.
 
 ## 2. Maps API key
 
