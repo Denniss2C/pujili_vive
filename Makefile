@@ -7,7 +7,7 @@ FLUTTER := flutter
 
 .PHONY: help setup format format-check analyze test coverage check \
         run-dev run-prod apk-dev apk-prod aab-prod web clean \
-        doctor version outdated verify-signing
+        doctor version outdated verify-signing ios-dev ios-prod pods
 
 help: ## Muestra esta ayuda
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -47,6 +47,19 @@ apk-prod: ## APK release (prod)
 
 aab-prod: ## App Bundle release (prod) para Play Store
 	$(FLUTTER) build appbundle --flavor prod -t lib/core/flavors/main_prod.dart --release
+
+ios-dev: ## Compila iOS para simulador (dev, sin firmar)
+	$(FLUTTER) build ios --simulator --flavor dev \
+		-t lib/core/flavors/main_dev.dart --debug
+
+ios-prod: ## Compila iOS para dispositivo (prod, sin firmar)
+	$(FLUTTER) build ios --flavor prod \
+		-t lib/core/flavors/main_prod.dart --release --no-codesign
+
+# Tras tocar las build configurations de Xcode hay que regenerar los
+# pods, o el build falla con errores de framework no encontrado.
+pods: setup ## Reinstala los CocoaPods de iOS
+	cd ios && pod install
 
 web: ## Build web
 	$(FLUTTER) build web
