@@ -19,7 +19,8 @@
 - [ ] Datos prácticos verificados (horarios, cómo llegar, contactos).
 
 ## Fase 2 — Features scaffold → completas
-- [ ] `calendar`: fiestas y eventos (diferenciador clave).
+- [x] `calendar`: fiestas y eventos (diferenciador clave). Falta el
+      detalle de evento, que no esta diseñado (pregunta abierta nº 6).
 - [ ] `artisans`: feature propia (hoy comparte pantalla con "Perfil").
 - [ ] `home`: contenido de bienvenida real.
 - [ ] Migrar cada scaffold al patrón de `attractions`
