@@ -25,6 +25,12 @@
 
   "calendarTitle": "Festival Calendar",
   "searchEvents": "Search events...",
+  "calendarEmptyTitle": "No festivals yet",
+  "calendarEmptyBody": "Once the canton publishes its calendar, you will see it here.",
+  "calendarNoResultsTitle": "We could not find that festival",
+  "calendarNoResultsBody": "Try another name, or clear the search to see the whole calendar.",
+  "errorTitle": "Something went wrong",
+  "retry": "Try again",
 
   "artisansTitle": "Artisans & Gastronomy",
 
