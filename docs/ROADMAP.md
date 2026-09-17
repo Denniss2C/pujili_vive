@@ -22,7 +22,8 @@
 - [x] `calendar`: fiestas y eventos (diferenciador clave). Falta el
       detalle de evento, que no esta diseñado (pregunta abierta nº 6).
 - [ ] `artisans`: feature propia (hoy comparte pantalla con "Perfil").
-- [ ] `home`: contenido de bienvenida real.
+- [x] `home`: contenido de bienvenida real. Sin buscador (pregunta
+      abierta nº 3) ni carrusel artesanal (bloqueado por contenido).
 - [ ] Migrar cada scaffold al patrón de `attractions`
       (ver [`project_rules/08_folder_structure.md`](../project_rules/08_folder_structure.md)).
 

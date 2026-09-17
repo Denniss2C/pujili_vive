@@ -31,6 +31,8 @@
   "calendarNoResultsBody": "Try another name, or clear the search to see the whole calendar.",
   "errorTitle": "Something went wrong",
   "retry": "Try again",
+  "seeFestival": "See the festival",
+  "loadFailed": "This section could not be loaded.",
 
   "artisansTitle": "Artisans & Gastronomy",
 

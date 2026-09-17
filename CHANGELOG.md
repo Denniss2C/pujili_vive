@@ -8,6 +8,12 @@ y el proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 ## [Unreleased]
 
 ### Added
+- Feature `home`: escaparate del calendario. Cuenta regresiva en vivo a la
+  proxima fiesta, carrusel "Que visitar" y cabecera con el nombre de la
+  app. Cada seccion falla por separado: si el calendario revienta, los
+  atractivos siguen en pie.
+- `ShellCubit`: el tab activo pasa de `setState` a un cubit, porque otras
+  pantallas necesitan cambiarlo (Inicio manda al Calendario y a Explorar).
 - Fotos reales de los 6 atractivos en `assets/images/`. Hasta ahora el
   JSON apuntaba a archivos que no existian y la app pintaba un icono de
   marcador: es la primera vez que se ven fotos de verdad.

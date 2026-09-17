@@ -9,6 +9,8 @@ import '../../features/calendar/data/repositories/calendar_repository_impl.dart'
 import '../../features/calendar/domain/repositories/calendar_repository.dart';
 import '../../features/calendar/domain/usecases/get_festival_events.dart';
 import '../../features/calendar/presentation/bloc/calendar_bloc.dart';
+import '../../features/home/presentation/bloc/home_bloc.dart';
+import '../../shell/shell_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -16,6 +18,12 @@ Future<void> initDependencies() async {
   // Bloc
   sl.registerFactory(() => AttractionsBloc(getAttractions: sl()));
   sl.registerFactory(() => CalendarBloc(getFestivalEvents: sl()));
+  sl.registerFactory(
+    () => HomeBloc(getFestivalEvents: sl(), getAttractions: sl()),
+  );
+
+  // El tab activo del shell vive toda la sesion, no por pantalla.
+  sl.registerLazySingleton(ShellCubit.new);
 
   // Use cases
   sl.registerLazySingleton(() => GetAttractions(sl()));

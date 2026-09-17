@@ -8,6 +8,8 @@ import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
 import 'features/attractions/presentation/bloc/attractions_bloc.dart';
 import 'features/calendar/presentation/bloc/calendar_bloc.dart';
+import 'features/home/presentation/bloc/home_bloc.dart';
+import 'shell/shell_cubit.dart';
 import 'l10n/app_localizations.dart';
 import 'shell/main_shell.dart';
 
@@ -30,6 +32,8 @@ class PujiliViveApp extends StatelessWidget {
         BlocProvider(
           create: (_) => sl<CalendarBloc>()..add(const LoadFestivalEvents()),
         ),
+        BlocProvider(create: (_) => sl<HomeBloc>()..add(const LoadHome())),
+        BlocProvider(create: (_) => sl<ShellCubit>()),
       ],
       child: MaterialApp(
         // El titulo viene del flavor: en dev aparece "(Dev)" en el
