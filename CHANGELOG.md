@@ -8,6 +8,11 @@ y el proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 ## [Unreleased]
 
 ### Added
+- Fotos reales de los 6 atractivos en `assets/images/`. Hasta ahora el
+  JSON apuntaba a archivos que no existian y la app pintaba un icono de
+  marcador: es la primera vez que se ven fotos de verdad.
+- Tests que validan el asset de atractivos: ids unicos, textos bilingues
+  completos y que **cada foto referenciada exista en disco**.
 - Flavors `dev` / `prod`: entrypoints, `FlavorConfig`, productFlavors de
   Gradle, `Makefile`, `.vscode/launch.json` y documentacion.
 - Nombre distinto en el lanzador por flavor (`resValue` + `@string/app_name`):

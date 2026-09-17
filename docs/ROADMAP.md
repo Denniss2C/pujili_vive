@@ -15,7 +15,7 @@
 - [ ] Cargar la Google Maps API key (ver [`MAPS_SETUP.md`](./MAPS_SETUP.md)).
 - [ ] Reemplazar el placeholder de `map_page.dart` por `GoogleMap` con pines
       de los atractivos.
-- [ ] Fotos reales de Pujilí en `assets/images/` (comprimidas).
+- [x] Fotos reales de Pujilí en `assets/images/` (comprimidas).
 - [ ] Datos prácticos verificados (horarios, cómo llegar, contactos).
 
 ## Fase 2 — Features scaffold → completas
