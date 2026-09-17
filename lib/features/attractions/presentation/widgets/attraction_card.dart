@@ -26,12 +26,18 @@ class AttractionCard extends StatelessWidget {
           children: [
             AspectRatio(
               aspectRatio: 16 / 9,
-              child: Container(
+              child: ColoredBox(
                 color: AppColors.gold.withValues(alpha: 0.25),
                 child: attraction.images.isNotEmpty
                     ? Image.asset(
                         attraction.images.first,
                         fit: BoxFit.cover,
+                        // Sin cacheWidth, Flutter decodifica la foto a su
+                        // tamaño original y la deja entera en memoria: una
+                        // imagen de 2554 px ocupa ~19 MB de RAM para
+                        // pintarse en una tarjeta de 360 dp. Se acota al
+                        // ancho real del dispositivo en pixeles fisicos.
+                        cacheWidth: _cacheWidth(context),
                         errorBuilder: (_, __, ___) => const Center(
                           child: Icon(Icons.image_outlined, size: 40),
                         ),
@@ -84,5 +90,13 @@ class AttractionCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  /// Ancho al que decodificar la foto: el de la pantalla en pixeles
+  /// fisicos. La tarjeta ocupa el ancho completo menos los margenes, asi
+  /// que decodificar mas es tirar memoria.
+  int _cacheWidth(BuildContext context) {
+    final media = MediaQuery.of(context);
+    return (media.size.width * media.devicePixelRatio).round();
   }
 }
