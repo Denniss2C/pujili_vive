@@ -8,6 +8,12 @@ y el proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 ## [Unreleased]
 
 ### Added
+- Feature `calendar`: el calendario de fiestas, diferenciador del producto.
+  Linea de tiempo agrupada por mes, dos jerarquias de tarjeta
+  (destacada / normal), busqueda bilingue e insensible a tildes, y estados
+  vacios distintos para "no hay fiestas" y "la busqueda no encontro nada".
+- Arbol de tests de `calendar` (24 tests en total, antes habia 1), incluido
+  uno que valida el asset real que se empaqueta.
 - Flavors `dev` / `prod`: entrypoints, `FlavorConfig`, productFlavors de
   Gradle, `Makefile`, `.vscode/launch.json` y documentacion.
 - Nombre distinto en el lanzador por flavor (`resValue` + `@string/app_name`):

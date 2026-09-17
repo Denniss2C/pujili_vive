@@ -25,6 +25,12 @@
 
   "calendarTitle": "Calendario de Fiestas",
   "searchEvents": "Buscar eventos...",
+  "calendarEmptyTitle": "Todavía no hay fiestas",
+  "calendarEmptyBody": "Cuando se publique el calendario del cantón, lo verás aquí.",
+  "calendarNoResultsTitle": "No encontramos esa fiesta",
+  "calendarNoResultsBody": "Prueba con otro nombre o borra la búsqueda para ver todo el calendario.",
+  "errorTitle": "Algo salió mal",
+  "retry": "Reintentar",
 
   "artisansTitle": "Artesanos y Gastronomía",
 

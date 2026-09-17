@@ -1,0 +1,66 @@
+[
+  {
+    "id": "corpus-christi-danzantes",
+    "title": {
+      "es": "Corpus Christi: Danzantes de Pujilí",
+      "en": "Corpus Christi: Dancers of Pujilí"
+    },
+    "shortDescription": {
+      "es": "La fiesta mayor del cantón. Patrimonio Cultural Inmaterial.",
+      "en": "The canton's greatest festival. Intangible Cultural Heritage."
+    },
+    "startDate": "2027-05-27",
+    "isHighlighted": true,
+    "location": {
+      "es": "Plaza central, Pujilí",
+      "en": "Main square, Pujilí"
+    },
+    "images": []
+  },
+  {
+    "id": "octava-corpus-christi",
+    "title": {
+      "es": "La Octava de Corpus Christi",
+      "en": "The Octave of Corpus Christi"
+    },
+    "shortDescription": {
+      "es": "Cierre de la fiesta, con procesiones y música tradicional.",
+      "en": "Closing of the festival, with processions and traditional music."
+    },
+    "startDate": "2027-06-04",
+    "isHighlighted": true,
+    "location": {
+      "es": "Plaza central, Pujilí",
+      "en": "Main square, Pujilí"
+    },
+    "images": []
+  },
+  {
+    "id": "virgen-del-carmen",
+    "title": {
+      "es": "Fiesta de la Virgen del Carmen",
+      "en": "Feast of the Virgin of Carmen"
+    },
+    "shortDescription": {
+      "es": "Feria gastronómica y artesanal.",
+      "en": "Food and crafts fair."
+    },
+    "startDate": "2027-07-16",
+    "isHighlighted": false,
+    "images": []
+  },
+  {
+    "id": "san-lorenzo",
+    "title": {
+      "es": "Fiesta de San Lorenzo",
+      "en": "Feast of Saint Lawrence"
+    },
+    "shortDescription": {
+      "es": "Desfile cívico y comparsas.",
+      "en": "Civic parade and street troupes."
+    },
+    "startDate": "2027-08-10",
+    "isHighlighted": false,
+    "images": []
+  }
+]

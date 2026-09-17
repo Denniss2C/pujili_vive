@@ -7,6 +7,7 @@ import 'core/flavors/flavor_config.dart';
 import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
 import 'features/attractions/presentation/bloc/attractions_bloc.dart';
+import 'features/calendar/presentation/bloc/calendar_bloc.dart';
 import 'l10n/app_localizations.dart';
 import 'shell/main_shell.dart';
 
@@ -25,6 +26,9 @@ class PujiliViveApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (_) => sl<AttractionsBloc>()..add(const LoadAttractions()),
+        ),
+        BlocProvider(
+          create: (_) => sl<CalendarBloc>()..add(const LoadFestivalEvents()),
         ),
       ],
       child: MaterialApp(
