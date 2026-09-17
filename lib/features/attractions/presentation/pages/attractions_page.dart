@@ -5,6 +5,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/attraction_category.dart';
 import '../bloc/attractions_bloc.dart';
 import '../widgets/attraction_card.dart';
+import 'attraction_detail_page.dart';
 
 class AttractionsPage extends StatelessWidget {
   const AttractionsPage({super.key});
@@ -67,6 +68,10 @@ class AttractionsPage extends StatelessWidget {
                     itemBuilder: (context, i) => AttractionCard(
                       attraction: state.filtered[i],
                       languageCode: lang,
+                      onTap: () => AttractionDetailPage.open(
+                        context,
+                        state.filtered[i],
+                      ),
                     ),
                   ),
                 ),

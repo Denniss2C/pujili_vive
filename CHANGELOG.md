@@ -8,6 +8,21 @@ y el proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 ## [Unreleased]
 
 ### Added
+- Detalle de atractivo: foto a sangre, datos practicos y boton "Como
+  llegar", que abre la app de mapas del telefono con la ruta. Es el nodo
+  de convergencia de la app y hasta ahora no existia: el horario y el
+  costo estaban en el JSON pero ninguna pantalla los mostraba.
+- Cada tab tiene su propio `Navigator`: el detalle se abre dentro del tab
+  activo, con la barra inferior visible. Volver a tocar el tab activo
+  regresa a su raiz.
+
+### Changed
+- `schedule` y `cost` de `Attraction` pasan a ser opcionales. Si faltan,
+  el detalle oculta la columna.
+
+### Fixed
+- `ShellCubit` estaba registrado como singleton pero lo provee un
+  `BlocProvider(create:)`, que lo cierra al desmontarse. Pasa a factory.
 - Feature `home`: escaparate del calendario. Cuenta regresiva en vivo a la
   proxima fiesta, carrusel "Que visitar" y cabecera con el nombre de la
   app. Cada seccion falla por separado: si el calendario revienta, los

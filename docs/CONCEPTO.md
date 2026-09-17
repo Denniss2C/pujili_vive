@@ -348,7 +348,7 @@ Se abre empujada sobre el tab desde el que se entró (Explorar, Inicio o Mapa).
 | Acción | Destino | Marca |
 |---|---|---|
 | Botón de retroceso | Vuelve a la pantalla anterior | `[DECIDIDO]` |
-| "Cómo llegar" | **Sin decidir**: abrir el tab Mapa centrado en el atractivo, o lanzar la app de mapas nativa con las coordenadas. Ver Preguntas abiertas. | `[PROPUESTA]` |
+| "Cómo llegar" | Lanza la **app de mapas del teléfono** con indicaciones hasta las coordenadas: Apple Maps en iOS, Google Maps en el resto. Da la ruta paso a paso real, cosa que un pin dentro de la app no puede. Decidido el 2026-09-17. | `[DECIDIDO]` |
 | Tocar una foto de la galería | Visor a pantalla completa | `[PROPUESTA]` |
 
 **Datos:** una `Attraction` completa: `name`, `category`, `description`,
@@ -628,7 +628,7 @@ que el tab no cambia al abrir un detalle.
      │      ┌───▼──────────▼──────────▼────┐
      └─────►│  Detalle de atractivo (4.3)  │
             └───────────┬──────────────────┘
-                        │ "Cómo llegar" → destino sin decidir
+                        │ "Cómo llegar" → app de mapas del teléfono
                         ▼
                    (Mapa o app nativa)
 
@@ -679,8 +679,8 @@ con este documento.
 | `category` | AttractionCategory | | Ver 6.3 |
 | `latitude` | double | | |
 | `longitude` | double | | |
-| `schedule` | String? | `[PROPUESTA]` ⇄ | Opcional; no todo atractivo tiene horario |
-| `cost` | String? | `[PROPUESTA]` ⇄ | En USD. "Entrada libre" es un valor válido |
+| `schedule` | LocalizedText? | `[DECIDIDO]` ⇄ | Opcional; no todo atractivo tiene horario. Si falta, el detalle oculta la columna |
+| `cost` | LocalizedText? | `[DECIDIDO]` ⇄ | Opcional, en USD. "Entrada libre" es un valor válido, no una ausencia |
 | `locationLabel` | LocalizedText? | ⇄ | "Pujilí, Cotopaxi" |
 | `photos` | List\<String\> | | La primera es la de portada |
 
@@ -904,8 +904,9 @@ Todo lo que quedó sin decidir. **Preferir preguntar antes que rellenar.**
 9. **Distancias**: ¿son valores fijos desde el centro de Pujilí (dato en el JSON)
    o calculadas desde la ubicación real del usuario? Esto decide si la app pide
    permiso de geolocalización, lo cual cambia el onboarding.
-10. **"Cómo llegar"**: ¿abre el tab Mapa centrado en el atractivo, o lanza la app
-    de mapas nativa con las coordenadas?
+10. ~~**"Cómo llegar"**: ¿abre el tab Mapa centrado en el atractivo, o lanza la app
+    de mapas nativa con las coordenadas?~~ **Resuelta (2026-09-17):** lanza la
+    app de mapas del teléfono. Ver 4.3.
 11. **Rutas temáticas**: ¿son solo un filtro de pines, o un recorrido ordenado con
     trazado dibujado sobre el mapa? El nombre "Ruta" sugiere lo segundo; el
     diseño solo resuelve lo primero.

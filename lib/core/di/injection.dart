@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+
 import '../../features/attractions/data/datasources/attractions_local_datasource.dart';
 import '../../features/attractions/data/repositories/attractions_repository_impl.dart';
 import '../../features/attractions/domain/repositories/attractions_repository.dart';
@@ -11,6 +12,7 @@ import '../../features/calendar/domain/usecases/get_festival_events.dart';
 import '../../features/calendar/presentation/bloc/calendar_bloc.dart';
 import '../../features/home/presentation/bloc/home_bloc.dart';
 import '../../shell/shell_cubit.dart';
+import '../services/maps_launcher.dart';
 
 final sl = GetIt.instance;
 
@@ -22,8 +24,14 @@ Future<void> initDependencies() async {
     () => HomeBloc(getFestivalEvents: sl(), getAttractions: sl()),
   );
 
-  // El tab activo del shell vive toda la sesion, no por pantalla.
-  sl.registerLazySingleton(ShellCubit.new);
+  // Factory y no singleton: lo provee un BlocProvider(create:), que CIERRA
+  // el cubit al desmontarse. Con un singleton, un segundo montaje de la
+  // app recibiria un cubit ya cerrado. Sigue durando toda la sesion porque
+  // el provider vive en la raiz.
+  sl.registerFactory(ShellCubit.new);
+
+  // Servicios de plataforma.
+  sl.registerLazySingleton<MapsLauncher>(UrlMapsLauncher.new);
 
   // Use cases
   sl.registerLazySingleton(() => GetAttractions(sl()));
