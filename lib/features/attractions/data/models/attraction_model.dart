@@ -10,10 +10,10 @@ class AttractionModel extends Attraction {
     required super.category,
     required super.latitude,
     required super.longitude,
-    required super.schedule,
-    required super.cost,
     required super.location,
     required super.images,
+    super.schedule,
+    super.cost,
   });
 
   factory AttractionModel.fromJson(Map<String, dynamic> json) {
@@ -26,13 +26,19 @@ class AttractionModel extends Attraction {
       category: AttractionCategory.fromString(json['category'] as String),
       latitude: (json['latitude'] as num).toDouble(),
       longitude: (json['longitude'] as num).toDouble(),
-      schedule:
-          LocalizedText.fromJson(json['schedule'] as Map<String, dynamic>),
-      cost: LocalizedText.fromJson(json['cost'] as Map<String, dynamic>),
+      schedule: _optionalText(json['schedule']),
+      cost: _optionalText(json['cost']),
       location:
           LocalizedText.fromJson(json['location'] as Map<String, dynamic>),
       images:
           (json['images'] as List<dynamic>).map((e) => e as String).toList(),
     );
+  }
+
+  /// Un campo bilingue opcional. Ausente o `null` en el JSON -> `null`.
+  static LocalizedText? _optionalText(Object? raw) {
+    return raw == null
+        ? null
+        : LocalizedText.fromJson(raw as Map<String, dynamic>);
   }
 }

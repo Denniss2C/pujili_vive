@@ -79,15 +79,22 @@ leer los documentos:
 
 Las 4 categorías sí coinciden: `cultural`, `religious`, `nature`, `crafts`.
 
-### Lo único que sí exige tocar el modelo: `schedule` y `cost`
+### Coordenadas imprecisas: afectan a "Cómo llegar"
 
-Ambos documentos asumen que son **opcionales** (*"un mirador no tiene
-horario; si falta el dato, la columna se oculta"*), y `CONCEPTO.md` §6.2
-los lista como `String?`. Pero hoy en el repo son **obligatorios y no
-nulos**, tanto en la entity como en el JSON.
+"Cómo llegar" abre la app de mapas con las coordenadas del JSON, así que
+**la ruta es tan buena como el dato**. Dos atractivos tienen coordenadas
+que son minutos de arco enteros pasados a decimal, lo que da hasta
+**~1,8 km de error**:
 
-Ese comportamiento no se puede implementar sin hacerlos anulables. Está
-marcado `[PROPUESTA]`, así que decidir antes de tocar el detalle.
+| Atractivo | Coordenadas | Equivale a |
+| --- | --- | --- |
+| Santuario del Niño de Isinche | `-0.9667, -78.7000` | 0°58′ S, 78°42′ O |
+| Talleres de cerámica La Victoria | `-0.9333, -78.6667` | 0°56′ S, 78°40′ O |
+
+Comprobado en el simulador: con la del santuario, Apple Maps traza la ruta
+a "Pujili" genérico, no al santuario. **Levantarlas en campo** (un pin en
+Google Maps sobre el sitio real basta) antes de publicar. No se corrigen a
+ojo: una coordenada inventada es peor que una imprecisa.
 
 ### Datos que el modelo todavía no tiene
 

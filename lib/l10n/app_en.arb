@@ -48,5 +48,6 @@
   "detailLocation": "Location",
   "detailFree": "Free entry",
   "detailHowToGet": "How to get there",
-  "detailCategory": "Category"
+  "detailCategory": "Category",
+  "mapsOpenFailed": "We could not find a maps app to open the route."
 }
