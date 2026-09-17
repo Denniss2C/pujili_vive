@@ -117,7 +117,22 @@ Documentación: [`docs/FLAVORS.md`](./docs/FLAVORS.md),
 [`docs/RELEASE_ANDROID.md`](./docs/RELEASE_ANDROID.md),
 [`docs/MAPS_SETUP.md`](./docs/MAPS_SETUP.md).
 
-**Diseño:** [`docs/MOCKS.html`](./docs/MOCKS.html) — mockups de referencia
-de las 7 pantallas. Se abre en el navegador, y también se lee como texto.
-Marca con línea punteada los datos de relleno, con recuadro terracota lo
-que no entra en la V1 y con recuadro gris lo que está sin decidir.
+### Producto y diseño
+
+Empieza por aquí si vas a implementar una pantalla:
+
+- [`docs/CONCEPTO.md`](./docs/CONCEPTO.md) — **el qué y el porqué**: la
+  idea, los usuarios, el alcance de la V1, el modelo de datos, la
+  prioridad de features y 20 preguntas abiertas numeradas. Cada afirmación
+  va marcada `[DECIDIDO]` o `[PROPUESTA]`.
+- [`docs/MOCKS.html`](./docs/MOCKS.html) — **la composición visual** de las
+  7 pantallas. Se abre en el navegador y también se lee como texto. Marca
+  con línea punteada los datos de relleno, con recuadro terracota lo que no
+  entra en la V1 y con recuadro gris lo que está sin decidir.
+
+Donde los dos discrepen gana el más específico: `CONCEPTO.md` manda en el
+producto, `MOCKS.html` en la composición. **En los nombres de campo manda
+el código**, no los documentos (ver `CONCEPTO.md` §6.2).
+
+El contraste de ambos con el estado real del repo está en
+[`docs/ROADMAP.md`](./docs/ROADMAP.md), sección *Antes de implementar*.
