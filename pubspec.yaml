@@ -7,32 +7,28 @@ environment:
   sdk: ^3.5.0
 
 dependencies:
-  flutter:
-    sdk: flutter
-  flutter_localizations:
-    sdk: flutter
-  intl: any
-
-  # State management
-  flutter_bloc: ^8.1.6
+  dartz: ^0.10.1
   equatable: ^2.0.5
 
-  # Functional error handling
-  dartz: ^0.10.1
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^8.1.6
+  flutter_localizations:
+    sdk: flutter
 
-  # Dependency injection
   get_it: ^9.2.1
 
-  # Maps
   google_maps_flutter: ^2.9.0
+  intl: any
+
   # "Cómo llegar" abre la app de mapas del teléfono con las coordenadas.
   url_launcher: ^6.3.2
 
 dev_dependencies:
+  bloc_test: ^9.1.7
+  flutter_lints: ^6.0.0
   flutter_test:
     sdk: flutter
-  flutter_lints: ^6.0.0
-  bloc_test: ^9.1.7
   mocktail: ^1.0.4
 
 flutter:
