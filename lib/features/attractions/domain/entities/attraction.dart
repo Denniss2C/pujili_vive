@@ -9,8 +9,14 @@ class Attraction extends Equatable {
   final AttractionCategory category;
   final double latitude;
   final double longitude;
-  final LocalizedText schedule;
-  final LocalizedText cost;
+
+  /// Opcional: no todo atractivo tiene horario (un mirador no lo tiene).
+  /// Si falta, el detalle oculta esa columna en vez de escribir
+  /// "No disponible" (docs/CONCEPTO.md §4.3).
+  final LocalizedText? schedule;
+
+  /// Opcional, en USD. "Entrada libre" es un valor valido, no una ausencia.
+  final LocalizedText? cost;
   final LocalizedText location;
   final List<String> images;
 
@@ -21,10 +27,10 @@ class Attraction extends Equatable {
     required this.category,
     required this.latitude,
     required this.longitude,
-    required this.schedule,
-    required this.cost,
     required this.location,
     required this.images,
+    this.schedule,
+    this.cost,
   });
 
   @override

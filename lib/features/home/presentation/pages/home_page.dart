@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shell/shell_cubit.dart';
+import '../../../attractions/presentation/pages/attraction_detail_page.dart';
 import '../bloc/home_bloc.dart';
 import '../widgets/attraction_mini_card.dart';
 import '../widgets/next_event_card.dart';
@@ -67,10 +68,11 @@ class HomePage extends StatelessWidget {
                     itemBuilder: (context, i) => AttractionMiniCard(
                       attraction: state.attractions[i],
                       languageCode: lang,
-                      // El detalle de atractivo no existe todavia, asi que
-                      // se lleva al tab Explorar en vez de no hacer nada.
-                      onTap: () =>
-                          context.read<ShellCubit>().select(ShellTab.explore),
+                      // Se abre dentro del tab Inicio: el tab no cambia.
+                      onTap: () => AttractionDetailPage.open(
+                        context,
+                        state.attractions[i],
+                      ),
                     ),
                   ),
                 ),
