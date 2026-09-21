@@ -52,6 +52,8 @@
   "detailHowToGet": "How to get there",
   "detailCategory": "Category",
   "detailDate": "Date",
+  "eventNow": "Now",
+  "eventUntil": "Until",
   "eventHighlighted": "Featured festival",
   "mapsOpenFailed": "We could not find a maps app to open the route.",
 

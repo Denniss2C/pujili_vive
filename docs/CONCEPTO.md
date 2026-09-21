@@ -380,16 +380,24 @@ Se abre empujada sobre el tab desde el que se entró (Explorar, Inicio o Mapa).
 4. **Encabezado de mes** repetido a lo largo del scroll ("Junio 2027"), con el
    nombre del mes en dorado y el año en terracota. El año va en caja baja, no en
    versalitas.
-5. **Tarjetas de evento** enganchadas a la línea. Hay **dos jerarquías visuales
-   distintas**:
-   - **Evento destacado** (Corpus Christi y su Octava): tarjeta con **borde
-     doble decorado**, un **medallón circular** sobre la línea de tiempo (con un
-     motivo de cáliz/sol), foto rectangular a la izquierda, bloque de fecha en
-     color sólido ("27 / JUN") y a la derecha título y descripción.
-   - **Evento normal**: sin borde, nodo pequeño en la línea, **foto circular**,
-     bloque de fecha, título y descripción.
-6. Los eventos siguen agrupados por mes a medida que se hace scroll. Las fechas
-   que hoy aparecen en el diseño son de relleno: ninguna está verificada.
+5. **Tarjetas de evento** enganchadas a la línea. Hay **tres tratamientos**, y
+   el que manda es el reloj (`[DECIDIDO]` 2026-09-21):
+   - **Ocurriendo ahora**: tarjeta **blanca** con marco dorado, sombra, nodo
+     grande en la línea, foto rectangular y la etiqueta "AHORA". Es el único
+     caso que pinta blanco.
+   - **Destacada y aún no empieza**: marco dorado **sin relleno**, nodo
+     mediano. Distingue la importancia del evento de que esté ocurriendo, que
+     son dos cosas distintas.
+   - **Ya terminó**: la tarjeta se **atenúa** pero se queda en la lista.
+   - **El resto**: sin borde, nodo pequeño, **foto circular**.
+6. Los eventos siguen agrupados por mes a medida que se hace scroll. El bloque
+   de fecha lleva **también la hora**, porque hay dos fiestas al día y el día
+   solo ya no las distingue.
+
+> **El blanco cambió de significado.** Antes lo ponía `isHighlighted` y era
+> fijo en el JSON. Ahora significa "esto está pasando ahora mismo" y la
+> pantalla se repinta sola cada 30 s, así que una fiesta pasa a blanca al
+> llegar su hora y se atenúa al terminar sin que nadie toque nada.
 
 **Esquema de layout:**
 
@@ -730,16 +738,31 @@ prioritaria.
 | `id` | String | | |
 | `title` | LocalizedText | ⇄ | |
 | `description` | LocalizedText | ⇄ | Una o dos líneas |
-| `startDate` | DateTime | | Alimenta el countdown de Inicio |
-| `endDate` | DateTime? | | Fiestas de varios días |
+| `startDate` | DateTime | | **Con hora.** Alimenta el countdown de Inicio |
+| `endDate` | DateTime? | | **Con hora.** `null` = dura el día entero, que era la semántica cuando las fechas no llevaban hora |
 | `photo` | String | | |
-| `isHighlighted` | bool | | Corpus Christi y la Octava van en `true`; cambia el tratamiento visual de la tarjeta (ver 4.4) |
+| `isHighlighted` | bool | | "Esta fiesta importa más que las otras". Marco dorado sin relleno; **ya no pinta la tarjeta de blanco** (ver 4.4) |
 | `locationLabel` | LocalizedText? | ⇄ | Dónde ocurre |
 
-**Contenido de referencia del diseño** (no validado como dataset final):
-Corpus Christi — Danzantes de Pujilí (destacado, declarado Patrimonio Cultural
-Inmaterial) · La Octava de Corpus Christi (destacado) · Fiesta de la Virgen del
-Carmen · Fiesta de San Lorenzo.
+**Estado en vivo.** La entidad calcula en qué punto está respecto al reloj:
+`upcoming`, `inProgress` o `past`. Es lo que decide el aspecto de la tarjeta
+(ver 4.4) y lo que usa Inicio para no llamar "próximo evento" a algo que ya
+terminó.
+
+> ### ⚠️ El dataset actual es una simulación
+>
+> `assets/data/festival_events.json` es hoy un **programa inventado de 15
+> días** —30 fiestas, dos por día, del 21 de septiembre al 5 de octubre de
+> 2026— hecho para poder ver el comportamiento en vivo sin esperar meses.
+>
+> **Las fiestas reales del cantón son dos al año:** el **Corpus Christi en
+> junio** y las **cantonales en octubre**. Antes de publicar hay que
+> sustituir este programa por el real, con fechas verificadas.
+>
+> Como las fechas son fijas y el tiempo pasa, el programa envejece: dentro de
+> unas semanas todas sus fiestas estarán atenuadas. Es esperado. Ningún test
+> depende de la fecha de hoy, precisamente para que eso no ponga el CI en
+> rojo.
 
 **Ojo con el Corpus Christi:** es fiesta móvil, su fecha depende de la Pascua. El
 dataset no puede asumir un día fijo anual.
@@ -914,8 +937,11 @@ Todo lo que quedó sin decidir. **Preferir preguntar antes que rellenar.**
    placeholder "Buscar experiencias…", pero no se definió qué indexa
    (¿atractivos? ¿eventos? ¿artesanos? ¿todo?) ni cómo se presentan los
    resultados.
-4. ¿Qué pasa con los **eventos pasados** en el calendario: se ocultan, se atenúan,
-   o se agrupan aparte?
+4. ~~¿Qué pasa con los **eventos pasados** en el calendario?~~ **Resuelta
+   (2026-09-21):** se **atenúan** y se quedan en la lista. Ocultarlos vaciaría
+   el calendario según avanza la fiesta y no dejaría volver a consultar lo que
+   hubo; agruparlos aparte rompería el orden cronológico, que es lo que hace
+   legible una línea de tiempo.
 5. ¿Se involucra al **Municipio / GAD de Pujilí** como fuente o validador de
    contenido? No hay contacto ni acuerdo.
 
@@ -972,8 +998,11 @@ Todo lo que quedó sin decidir. **Preferir preguntar antes que rellenar.**
     oscuro definido.
 16. **Tratamiento visual de eventos destacados** (`isHighlighted`): el diseño lo
     resuelve con doble marco, medallón sobre la línea de tiempo y foto
-    rectangular frente a foto circular. Falta confirmar si ese nivel de
-    ornamentación se mantiene o se simplifica.
+    rectangular frente a foto circular. **Parcialmente resuelta
+    (2026-09-21):** esa ornamentación (relleno blanco, foto rectangular, nodo
+    grande) pasó a significar "ocurriendo ahora"; lo destacado se quedó con un
+    marco dorado sin relleno. Si el medallón con motivo de cáliz/sol se dibuja
+    o no sigue abierto: necesita un icono que no existe.
 17. **Estilo del mapa**: para acercarse al diseño haría falta un *map style*
     JSON personalizado sobre Google Maps. No se decidió si vale la pena el esfuerzo o
     se usa el estilo por defecto. **Hoy usa el estilo por defecto**, que es lo

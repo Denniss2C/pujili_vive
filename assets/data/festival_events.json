@@ -1,66 +1,572 @@
 [
   {
-    "id": "corpus-christi-danzantes",
+    "id": "pregon-de-fiestas",
     "title": {
-      "es": "Corpus Christi: Danzantes de Pujilí",
-      "en": "Corpus Christi: Dancers of Pujilí"
+      "es": "Pregón de Fiestas",
+      "en": "Festival Proclamation"
     },
     "shortDescription": {
-      "es": "La fiesta mayor del cantón. Patrimonio Cultural Inmaterial.",
-      "en": "The canton's greatest festival. Intangible Cultural Heritage."
+      "es": "Arranca el programa con el desfile de pregoneros y la banda del cantón.",
+      "en": "The programme opens with the town criers' parade and the canton band."
     },
-    "startDate": "2027-05-27",
+    "startDate": "2026-09-21T10:00:00",
+    "endDate": "2026-09-21T14:00:00",
     "isHighlighted": true,
     "location": {
-      "es": "Plaza central, Pujilí",
+      "es": "Plaza Central, Pujilí",
       "en": "Main square, Pujilí"
     },
     "images": []
   },
   {
-    "id": "octava-corpus-christi",
+    "id": "noche-bandas-pueblo",
     "title": {
-      "es": "La Octava de Corpus Christi",
-      "en": "The Octave of Corpus Christi"
+      "es": "Noche de Bandas de Pueblo",
+      "en": "Village Bands Night"
     },
     "shortDescription": {
-      "es": "Cierre de la fiesta, con procesiones y música tradicional.",
-      "en": "Closing of the festival, with processions and traditional music."
+      "es": "Bandas de las parroquias tocan hasta la medianoche en la plaza.",
+      "en": "Parish bands play in the square until midnight."
     },
-    "startDate": "2027-06-04",
-    "isHighlighted": true,
+    "startDate": "2026-09-21T17:30:00",
+    "endDate": "2026-09-21T22:00:00",
+    "isHighlighted": false,
     "location": {
-      "es": "Plaza central, Pujilí",
+      "es": "Plaza Central, Pujilí",
       "en": "Main square, Pujilí"
     },
     "images": []
   },
   {
-    "id": "virgen-del-carmen",
+    "id": "feria-artesanal-victoria",
     "title": {
-      "es": "Fiesta de la Virgen del Carmen",
-      "en": "Feast of the Virgin of Carmen"
+      "es": "Feria Artesanal de La Victoria",
+      "en": "La Victoria Crafts Fair"
     },
     "shortDescription": {
-      "es": "Feria gastronómica y artesanal.",
-      "en": "Food and crafts fair."
+      "es": "Los alfareros bajan al centro con cerámica de La Victoria.",
+      "en": "Potters bring La Victoria ceramics down to the town centre."
     },
-    "startDate": "2027-07-16",
+    "startDate": "2026-09-22T09:00:00",
+    "endDate": "2026-09-22T14:00:00",
     "isHighlighted": false,
+    "location": {
+      "es": "Parque Central, Pujilí",
+      "en": "Central park, Pujilí"
+    },
     "images": []
   },
   {
-    "id": "san-lorenzo",
+    "id": "festival-musica-andina",
     "title": {
-      "es": "Fiesta de San Lorenzo",
-      "en": "Feast of Saint Lawrence"
+      "es": "Festival de Música Andina",
+      "en": "Andean Music Festival"
     },
     "shortDescription": {
-      "es": "Desfile cívico y comparsas.",
-      "en": "Civic parade and street troupes."
+      "es": "Rondadores, quenas y charangos de agrupaciones de Cotopaxi.",
+      "en": "Panpipes, quenas and charangos from Cotopaxi ensembles."
     },
-    "startDate": "2027-08-10",
+    "startDate": "2026-09-22T17:30:00",
+    "endDate": "2026-09-22T22:00:00",
     "isHighlighted": false,
+    "location": {
+      "es": "Plaza Central, Pujilí",
+      "en": "Main square, Pujilí"
+    },
+    "images": []
+  },
+  {
+    "id": "concurso-ceramica",
+    "title": {
+      "es": "Concurso de Cerámica",
+      "en": "Ceramics Contest"
+    },
+    "shortDescription": {
+      "es": "Los talleres compiten por la mejor pieza del año.",
+      "en": "Workshops compete for the best piece of the year."
+    },
+    "startDate": "2026-09-23T10:00:00",
+    "endDate": "2026-09-23T14:00:00",
+    "isHighlighted": false,
+    "location": {
+      "es": "La Victoria, Pujilí",
+      "en": "La Victoria, Pujilí"
+    },
+    "images": []
+  },
+  {
+    "id": "teatro-popular",
+    "title": {
+      "es": "Teatro Popular en la Plaza",
+      "en": "Street Theatre in the Square"
+    },
+    "shortDescription": {
+      "es": "Grupos locales representan escenas de la vida del cantón.",
+      "en": "Local groups stage scenes from life in the canton."
+    },
+    "startDate": "2026-09-23T17:30:00",
+    "endDate": "2026-09-23T22:00:00",
+    "isHighlighted": false,
+    "location": {
+      "es": "Plaza Central, Pujilí",
+      "en": "Main square, Pujilí"
+    },
+    "images": []
+  },
+  {
+    "id": "misa-de-fiesta",
+    "title": {
+      "es": "Misa de Fiesta",
+      "en": "Festival Mass"
+    },
+    "shortDescription": {
+      "es": "Misa mayor en la Iglesia Matriz, con coro y banda.",
+      "en": "High mass at the Matriz Church, with choir and band."
+    },
+    "startDate": "2026-09-24T09:30:00",
+    "endDate": "2026-09-24T14:00:00",
+    "isHighlighted": false,
+    "location": {
+      "es": "Iglesia Matriz, Pujilí",
+      "en": "Matriz Church, Pujilí"
+    },
+    "images": []
+  },
+  {
+    "id": "eleccion-reina",
+    "title": {
+      "es": "Elección de la Reina de Pujilí",
+      "en": "Crowning of the Queen of Pujilí"
+    },
+    "shortDescription": {
+      "es": "Las candidatas de las parroquias compiten por la corona del cantón.",
+      "en": "Candidates from every parish compete for the canton's crown."
+    },
+    "startDate": "2026-09-24T17:30:00",
+    "endDate": "2026-09-24T23:00:00",
+    "isHighlighted": true,
+    "location": {
+      "es": "Coliseo Municipal, Pujilí",
+      "en": "Municipal arena, Pujilí"
+    },
+    "images": []
+  },
+  {
+    "id": "feria-gastronomica",
+    "title": {
+      "es": "Feria Gastronómica: Hornado y Cuy",
+      "en": "Food Fair: Hornado and Cuy"
+    },
+    "shortDescription": {
+      "es": "Los platos que hicieron famoso al cantón, servidos en la plaza.",
+      "en": "The dishes that made the canton famous, served in the square."
+    },
+    "startDate": "2026-09-25T10:00:00",
+    "endDate": "2026-09-25T14:00:00",
+    "isHighlighted": false,
+    "location": {
+      "es": "Plaza Central, Pujilí",
+      "en": "Main square, Pujilí"
+    },
+    "images": []
+  },
+  {
+    "id": "baile-popular",
+    "title": {
+      "es": "Baile Popular",
+      "en": "Open-Air Dance"
+    },
+    "shortDescription": {
+      "es": "Orquesta en vivo y baile abierto hasta la madrugada.",
+      "en": "Live orchestra and dancing until the small hours."
+    },
+    "startDate": "2026-09-25T17:30:00",
+    "endDate": "2026-09-25T23:30:00",
+    "isHighlighted": false,
+    "location": {
+      "es": "Parque Central, Pujilí",
+      "en": "Central park, Pujilí"
+    },
+    "images": []
+  },
+  {
+    "id": "desfile-civico",
+    "title": {
+      "es": "Desfile Cívico Estudiantil",
+      "en": "Students' Civic Parade"
+    },
+    "shortDescription": {
+      "es": "Los colegios del cantón desfilan por la calle principal.",
+      "en": "The canton's schools parade down the main street."
+    },
+    "startDate": "2026-09-26T09:00:00",
+    "endDate": "2026-09-26T14:00:00",
+    "isHighlighted": false,
+    "location": {
+      "es": "Calle Belisario Quevedo, Pujilí",
+      "en": "Belisario Quevedo street, Pujilí"
+    },
+    "images": []
+  },
+  {
+    "id": "festival-danza-folclorica",
+    "title": {
+      "es": "Festival de Danza Folclórica",
+      "en": "Folk Dance Festival"
+    },
+    "shortDescription": {
+      "es": "Comparsas de toda la provincia con trajes tradicionales.",
+      "en": "Troupes from across the province in traditional dress."
+    },
+    "startDate": "2026-09-26T17:30:00",
+    "endDate": "2026-09-26T22:00:00",
+    "isHighlighted": false,
+    "location": {
+      "es": "Plaza Central, Pujilí",
+      "en": "Main square, Pujilí"
+    },
+    "images": []
+  },
+  {
+    "id": "feria-dominical-ampliada",
+    "title": {
+      "es": "Feria Dominical Ampliada",
+      "en": "Extended Sunday Market"
+    },
+    "shortDescription": {
+      "es": "La feria de siempre, esta vez ocupando todo el centro.",
+      "en": "The usual market, this time filling the whole town centre."
+    },
+    "startDate": "2026-09-27T08:00:00",
+    "endDate": "2026-09-27T14:00:00",
+    "isHighlighted": false,
+    "location": {
+      "es": "Mercado y calles del centro, Pujilí",
+      "en": "Market and town centre, Pujilí"
+    },
+    "images": []
+  },
+  {
+    "id": "toros-de-pueblo",
+    "title": {
+      "es": "Toros de Pueblo",
+      "en": "Village Bullfight"
+    },
+    "shortDescription": {
+      "es": "Toros populares en la plaza, sin muerte del animal.",
+      "en": "Village-style bullfight in the square; the bull is not killed."
+    },
+    "startDate": "2026-09-27T17:00:00",
+    "endDate": "2026-09-27T22:00:00",
+    "isHighlighted": false,
+    "location": {
+      "es": "Plaza de Toros, Pujilí",
+      "en": "Bullring, Pujilí"
+    },
+    "images": []
+  },
+  {
+    "id": "encuentro-tejedores",
+    "title": {
+      "es": "Encuentro de Tejedores",
+      "en": "Weavers' Gathering"
+    },
+    "shortDescription": {
+      "es": "Telares en vivo y venta directa de los tejedores del cantón.",
+      "en": "Live looms and direct sales from the canton's weavers."
+    },
+    "startDate": "2026-09-28T10:00:00",
+    "endDate": "2026-09-28T14:00:00",
+    "isHighlighted": false,
+    "location": {
+      "es": "Casa de la Cultura, Pujilí",
+      "en": "House of Culture, Pujilí"
+    },
+    "images": []
+  },
+  {
+    "id": "serenata-a-pujili",
+    "title": {
+      "es": "Serenata a Pujilí",
+      "en": "Serenade to Pujilí"
+    },
+    "shortDescription": {
+      "es": "Los músicos del cantón cantan a su tierra en la víspera.",
+      "en": "The canton's musicians sing to their home town on the eve."
+    },
+    "startDate": "2026-09-28T17:30:00",
+    "endDate": "2026-09-28T22:00:00",
+    "isHighlighted": false,
+    "location": {
+      "es": "Plaza Central, Pujilí",
+      "en": "Main square, Pujilí"
+    },
+    "images": []
+  },
+  {
+    "id": "juegos-tradicionales",
+    "title": {
+      "es": "Juegos Tradicionales",
+      "en": "Traditional Games"
+    },
+    "shortDescription": {
+      "es": "Trompos, cocos y ollas encantadas para los más pequeños.",
+      "en": "Spinning tops, marbles and piñatas for the little ones."
+    },
+    "startDate": "2026-09-29T09:00:00",
+    "endDate": "2026-09-29T14:00:00",
+    "isHighlighted": false,
+    "location": {
+      "es": "Parque Central, Pujilí",
+      "en": "Central park, Pujilí"
+    },
+    "images": []
+  },
+  {
+    "id": "noche-de-coplas",
+    "title": {
+      "es": "Noche de Coplas",
+      "en": "Night of Coplas"
+    },
+    "shortDescription": {
+      "es": "Cantores improvisan coplas picarescas sobre el cantón.",
+      "en": "Singers improvise mischievous verses about the canton."
+    },
+    "startDate": "2026-09-29T17:30:00",
+    "endDate": "2026-09-29T22:00:00",
+    "isHighlighted": false,
+    "location": {
+      "es": "Plaza Central, Pujilí",
+      "en": "Main square, Pujilí"
+    },
+    "images": []
+  },
+  {
+    "id": "exposicion-mascaras",
+    "title": {
+      "es": "Exposición de Máscaras del Danzante",
+      "en": "Danzante Mask Exhibition"
+    },
+    "shortDescription": {
+      "es": "Las máscaras y los trajes del Danzante, de cerca.",
+      "en": "The Danzante's masks and costumes, up close."
+    },
+    "startDate": "2026-09-30T10:00:00",
+    "endDate": "2026-09-30T14:00:00",
+    "isHighlighted": false,
+    "location": {
+      "es": "Casa de la Cultura, Pujilí",
+      "en": "House of Culture, Pujilí"
+    },
+    "images": []
+  },
+  {
+    "id": "concierto-musica-nacional",
+    "title": {
+      "es": "Concierto de Música Nacional",
+      "en": "National Music Concert"
+    },
+    "shortDescription": {
+      "es": "Pasillos, sanjuanitos y albazos con orquesta.",
+      "en": "Pasillos, sanjuanitos and albazos with a full orchestra."
+    },
+    "startDate": "2026-09-30T17:30:00",
+    "endDate": "2026-09-30T22:00:00",
+    "isHighlighted": false,
+    "location": {
+      "es": "Coliseo Municipal, Pujilí",
+      "en": "Municipal arena, Pujilí"
+    },
+    "images": []
+  },
+  {
+    "id": "romeria-isinche",
+    "title": {
+      "es": "Romería al Santuario de Isinche",
+      "en": "Pilgrimage to Isinche Sanctuary"
+    },
+    "shortDescription": {
+      "es": "Caminata de peregrinos desde el centro hasta el santuario.",
+      "en": "Pilgrims walk from the town centre to the sanctuary."
+    },
+    "startDate": "2026-10-01T09:00:00",
+    "endDate": "2026-10-01T14:00:00",
+    "isHighlighted": false,
+    "location": {
+      "es": "Santuario del Niño de Isinche",
+      "en": "Sanctuary of El Niño de Isinche"
+    },
+    "images": []
+  },
+  {
+    "id": "noche-comparsas",
+    "title": {
+      "es": "Noche Cultural de Comparsas",
+      "en": "Cultural Night of Troupes"
+    },
+    "shortDescription": {
+      "es": "Las comparsas ensayan en público antes del concurso.",
+      "en": "The troupes rehearse in public before the contest."
+    },
+    "startDate": "2026-10-01T17:30:00",
+    "endDate": "2026-10-01T22:30:00",
+    "isHighlighted": false,
+    "location": {
+      "es": "Plaza Central, Pujilí",
+      "en": "Main square, Pujilí"
+    },
+    "images": []
+  },
+  {
+    "id": "feria-emprendedores",
+    "title": {
+      "es": "Feria de Emprendedores",
+      "en": "Small Business Fair"
+    },
+    "shortDescription": {
+      "es": "Negocios del cantón muestran lo que hacen durante el año.",
+      "en": "Local businesses show what they make the rest of the year."
+    },
+    "startDate": "2026-10-02T10:00:00",
+    "endDate": "2026-10-02T14:00:00",
+    "isHighlighted": false,
+    "location": {
+      "es": "Parque Central, Pujilí",
+      "en": "Central park, Pujilí"
+    },
+    "images": []
+  },
+  {
+    "id": "verbena-popular",
+    "title": {
+      "es": "Verbena Popular",
+      "en": "Street Party"
+    },
+    "shortDescription": {
+      "es": "Comida, música y juegos en las calles del centro.",
+      "en": "Food, music and games through the town centre streets."
+    },
+    "startDate": "2026-10-02T17:30:00",
+    "endDate": "2026-10-02T23:30:00",
+    "isHighlighted": false,
+    "location": {
+      "es": "Calles del centro, Pujilí",
+      "en": "Town centre streets, Pujilí"
+    },
+    "images": []
+  },
+  {
+    "id": "concurso-danzante",
+    "title": {
+      "es": "Concurso del Danzante de Pujilí",
+      "en": "Danzante of Pujilí Contest"
+    },
+    "shortDescription": {
+      "es": "El corazón de la fiesta: los danzantes compiten por el primer puesto.",
+      "en": "The heart of the festival: danzantes compete for first place."
+    },
+    "startDate": "2026-10-03T09:00:00",
+    "endDate": "2026-10-03T14:00:00",
+    "isHighlighted": true,
+    "location": {
+      "es": "Plaza Central, Pujilí",
+      "en": "Main square, Pujilí"
+    },
+    "images": []
+  },
+  {
+    "id": "quema-de-castillos",
+    "title": {
+      "es": "Quema de Castillos",
+      "en": "Fireworks Castles"
+    },
+    "shortDescription": {
+      "es": "Castillos de pólvora y vaca loca al caer la noche.",
+      "en": "Firework towers and the 'vaca loca' after nightfall."
+    },
+    "startDate": "2026-10-03T17:30:00",
+    "endDate": "2026-10-03T22:00:00",
+    "isHighlighted": false,
+    "location": {
+      "es": "Plaza Central, Pujilí",
+      "en": "Main square, Pujilí"
+    },
+    "images": []
+  },
+  {
+    "id": "sesion-solemne",
+    "title": {
+      "es": "Sesión Solemne de Cantonización",
+      "en": "Solemn Cantonisation Session"
+    },
+    "shortDescription": {
+      "es": "El acto oficial por el aniversario del cantón.",
+      "en": "The official ceremony for the canton's anniversary."
+    },
+    "startDate": "2026-10-04T09:00:00",
+    "endDate": "2026-10-04T14:00:00",
+    "isHighlighted": true,
+    "location": {
+      "es": "Salón de la Ciudad, Pujilí",
+      "en": "City Hall, Pujilí"
+    },
+    "images": []
+  },
+  {
+    "id": "desfile-de-la-alegria",
+    "title": {
+      "es": "Desfile de la Alegría",
+      "en": "Parade of Joy"
+    },
+    "shortDescription": {
+      "es": "Carros alegóricos y comparsas por toda la ciudad.",
+      "en": "Floats and troupes right across the town."
+    },
+    "startDate": "2026-10-04T16:00:00",
+    "endDate": "2026-10-04T22:00:00",
+    "isHighlighted": false,
+    "location": {
+      "es": "Calles del centro, Pujilí",
+      "en": "Town centre streets, Pujilí"
+    },
+    "images": []
+  },
+  {
+    "id": "feria-de-despedida",
+    "title": {
+      "es": "Feria de Despedida",
+      "en": "Farewell Fair"
+    },
+    "shortDescription": {
+      "es": "Último día de puestos artesanales y comida.",
+      "en": "Last day of craft stalls and food."
+    },
+    "startDate": "2026-10-05T10:00:00",
+    "endDate": "2026-10-05T14:00:00",
+    "isHighlighted": false,
+    "location": {
+      "es": "Plaza Central, Pujilí",
+      "en": "Main square, Pujilí"
+    },
+    "images": []
+  },
+  {
+    "id": "misa-de-clausura",
+    "title": {
+      "es": "Misa de Clausura y Bendición",
+      "en": "Closing Mass and Blessing"
+    },
+    "shortDescription": {
+      "es": "Cierre del programa con la bendición del cantón.",
+      "en": "The programme closes with the blessing of the canton."
+    },
+    "startDate": "2026-10-05T17:30:00",
+    "endDate": "2026-10-05T22:00:00",
+    "isHighlighted": true,
+    "location": {
+      "es": "Iglesia Matriz, Pujilí",
+      "en": "Matriz Church, Pujilí"
+    },
     "images": []
   }
 ]
