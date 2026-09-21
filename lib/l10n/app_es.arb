@@ -52,6 +52,8 @@
   "detailHowToGet": "Cómo llegar",
   "detailCategory": "Categoría",
   "detailDate": "Fecha",
+  "eventNow": "Ahora",
+  "eventUntil": "Hasta las",
   "eventHighlighted": "Fiesta destacada",
   "mapsOpenFailed": "No encontramos una app de mapas para abrir la ruta.",
 
