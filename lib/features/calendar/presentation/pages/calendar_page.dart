@@ -6,6 +6,7 @@ import '../../domain/entities/festival_event.dart';
 import '../bloc/calendar_bloc.dart';
 import '../widgets/festival_event_card.dart';
 import '../widgets/month_header.dart';
+import 'festival_event_detail_page.dart';
 
 /// El calendario de fiestas: el diferenciador del producto
 /// (ver `docs/CONCEPTO.md` §8).
@@ -157,7 +158,12 @@ class _Timeline extends StatelessWidget {
             if (row.month != null) {
               return MonthHeader(date: row.month!);
             }
-            return FestivalEventCard(event: row.event!, languageCode: lang);
+            return FestivalEventCard(
+              event: row.event!,
+              languageCode: lang,
+              // Se abre dentro del tab Calendario: el tab no cambia.
+              onTap: () => FestivalEventDetailPage.open(context, row.event!),
+            );
           },
         ),
       ],

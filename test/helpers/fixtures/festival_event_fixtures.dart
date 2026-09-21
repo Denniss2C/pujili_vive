@@ -10,15 +10,23 @@ FestivalEvent buildEvent({
   String descEs = 'Descripción de prueba',
   String descEn = 'Test description',
   DateTime? startDate,
+  DateTime? endDate,
   bool isHighlighted = false,
+  String? locationEs,
+  String? locationEn,
+  List<String> images = const [],
 }) {
   return FestivalEvent(
     id: id,
     title: LocalizedText(es: titleEs, en: titleEn),
     shortDescription: LocalizedText(es: descEs, en: descEn),
     startDate: startDate ?? DateTime(2027, 5, 27),
+    endDate: endDate,
     isHighlighted: isHighlighted,
-    images: const [],
+    location: locationEs == null
+        ? null
+        : LocalizedText(es: locationEs, en: locationEn ?? locationEs),
+    images: images,
   );
 }
 

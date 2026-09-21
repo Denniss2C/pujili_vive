@@ -11,15 +11,15 @@ import 'shell_cubit.dart';
 
 /// Contenedor principal con la barra de navegación inferior UNIFICADA.
 /// Los 5 tabs son idénticos en toda la app (Inicio, Explorar, Calendario,
-/// Mapa, Perfil), resolviendo la inconsistencia del diseño original.
+/// Mapa, Artesanos), resolviendo la inconsistencia del diseño original.
 ///
 /// **Cada tab tiene su propio `Navigator`.** Es lo que permite que un
 /// detalle se abra *dentro* del tab activo, con la barra inferior visible
 /// y sin cambiar de tab (`docs/CONCEPTO.md` §7.6, `[DECIDIDO]`). Con un
 /// solo navegador, cualquier `push` taparia la barra entera.
 ///
-/// El tab activo lo lleva [ShellCubit], no un `setState`: otras pantallas
-/// necesitan cambiarlo (Inicio manda al Calendario).
+/// El tab activo lo lleva [ShellCubit], no un `setState`: la franja
+/// "Ver fiestas" de Artesanos tendra que cambiarlo (`CONCEPTO.md` §4.6).
 class MainShell extends StatefulWidget {
   const MainShell({super.key});
 
@@ -33,9 +33,8 @@ class _MainShellState extends State<MainShell> {
     AttractionsPage(),
     CalendarPage(),
     MapPage(),
-    // Perfil apunta a Artesanos como parche del scaffold. Es provisional
-    // y hay que deshacerlo: ni el tab Perfil esta definido ni Artesanos
-    // tiene tab propio (docs/CONCEPTO.md, preguntas abiertas 1 y 8).
+    // Quinto tab: Artesanos, no Perfil. Ya no es un parche del scaffold
+    // sino la decision de `CONCEPTO.md` §4.6 (pregunta resuelta nº 8).
     ArtisansPage(),
   ];
 
@@ -108,9 +107,9 @@ class _MainShellState extends State<MainShell> {
                   label: l.navMap,
                 ),
                 BottomNavigationBarItem(
-                  icon: const Icon(Icons.person_outline),
-                  activeIcon: const Icon(Icons.person),
-                  label: l.navProfile,
+                  icon: const Icon(Icons.storefront_outlined),
+                  activeIcon: const Icon(Icons.storefront),
+                  label: l.navArtisans,
                 ),
               ],
             ),

@@ -30,16 +30,22 @@ presentation (UI + BLoC)  ──▶  domain (entidades, usecases, repos abstract
 lib/
   core/         theme (paleta Danzante), error, usecases (contrato base), di (get_it), constants
   features/
-    attractions/  FEATURE DE REFERENCIA — completa (data/domain/presentation + BLoC)
-    home/         scaffold
-    calendar/     scaffold  (diferenciador clave)
-    map/          scaffold  (Google Maps)
+    attractions/  FEATURE DE REFERENCIA — completa (data/domain/presentation + BLoC),
+                  lista y detalle con "Cómo llegar"
+    calendar/     completa (diferenciador clave), lista y detalle de fiesta
+    home/         completa (solo presentation: consume calendar y attractions)
+    map/          completa (solo presentation: consume attractions)
+    settings/     completa (idioma persistido + acerca de)
     artisans/     scaffold
-  shell/        MainShell — navegación inferior unificada (5 tabs)
+  core/flavors/ FlavorConfig + entrypoints main_dev / main_prod
+  core/widgets/ armazon comun de las pantallas de detalle
+  shell/        MainShell — navegación inferior unificada (5 tabs),
+                un Navigator por tab, y ShellCubit para el tab activo
   l10n/         app_es.arb / app_en.arb (+ generados, gitignored)
 assets/
-  data/attractions.json   6 atractivos acordados, bilingüe
-  images/                 fotos reales de Pujilí
+  data/attractions.json      6 atractivos acordados, bilingüe
+  data/festival_events.json  fiestas del calendario, bilingüe
+  images/                    fotos reales de Pujilí
 ```
 
 ## 4. Estado actual
@@ -47,16 +53,21 @@ assets/
 | Área | Estado |
 | --- | --- |
 | `attractions` | ✅ Completa (domain/data/presentation + BLoC). Plantilla de referencia. |
-| `home`, `calendar`, `map`, `artisans` | 🟡 Scaffold. Migrar al patrón de `attractions` al ganar lógica. |
-| Contenido real | 🟡 Faltan fotos y datos prácticos verificados. |
-| Google Maps | 🟡 Falta cargar la API key y reemplazar el placeholder de `map_page.dart` por el widget `GoogleMap` con pines. |
-| Tab "Perfil" | 🟡 Apunta temporalmente a `ArtisansPage`; crear su feature. |
-| Tests | 🟡 Solo `widget_test.dart`. Empezar por el árbol de tests de `attractions`. |
+| `calendar` | ✅ Completa, con el árbol de tests entero y el detalle de fiesta. |
+| `home` | ✅ Completa. Solo `presentation`: no tiene domain ni data propios porque no tiene datos propios, compone los de `calendar` y `attractions`. |
+| `map` | ✅ Completa. Solo `presentation`: consume el `AttractionsBloc` de la raíz, con su propio filtro de ruta para no arrastrar el de Explorar. |
+| `settings` | ✅ Completa (domain/data/presentation). Idioma persistido con `shared_preferences`. |
+| `artisans` | 🟡 Scaffold: una página de 17 líneas, sin domain ni data. Bloqueada por contenido (pregunta abierta nº 18). |
+| Contenido real | 🟡 Fotos de atractivos ✅. Faltan datos prácticos verificados, las coordenadas de dos atractivos y todo el contenido de artesanos. |
+| Google Maps | 🟡 La pantalla está hecha; **falta la API key**. Sin ella el área del mapa sale en blanco, pero el build no se rompe y el sheet con la lista sigue funcionando. |
+| Quinto tab | ✅ Es Artesanos. Ajustes salió de la barra y se abre desde el engranaje de Inicio (preguntas resueltas nº 8 y nº 1). |
+| Flavors y firma | ✅ `dev` / `prod` en Android e iOS, con `make aab-prod`. Falta generar el keystore real. |
+| Tests | 🟡 99 tests. `calendar`, `home` y el shell cubiertos; a `attractions` le faltan usecase, repositorio y bloc. |
 
 ## 5. Decisiones de diseño
 
 - Navegación inferior **unificada** en `shell/main_shell.dart` (5 tabs:
-  Inicio, Explorar, Calendario, Mapa, Perfil).
+  Inicio, Explorar, Calendario, Mapa, Artesanos).
 - Todo texto visible sale de los `.arb` (nada hardcodeado) para soportar
   ES/EN desde el MVP.
 - Los atractivos del JSON son los 6 acordados (Isinche, Plaza/Iglesia
@@ -68,4 +79,6 @@ assets/
 - Reglas de código y arquitectura: [`project_rules/`](../project_rules/)
 - Configuración de Google Maps: [`MAPS_SETUP.md`](./MAPS_SETUP.md)
 - Publicación Android: [`RELEASE_ANDROID.md`](./RELEASE_ANDROID.md)
+- Qué sigue y qué bloquea cada fase: [`ROADMAP.md`](./ROADMAP.md)
+- El producto, con sus 20 preguntas abiertas: [`CONCEPTO.md`](./CONCEPTO.md)
 - Ambientes dev/prod: [`FLAVORS.md`](./FLAVORS.md)

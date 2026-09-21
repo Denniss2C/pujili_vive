@@ -3,8 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../shell/shell_cubit.dart';
 import '../../../attractions/presentation/pages/attraction_detail_page.dart';
+import '../../../calendar/presentation/pages/festival_event_detail_page.dart';
+import '../../../settings/presentation/pages/settings_page.dart';
 import '../bloc/home_bloc.dart';
 import '../widgets/attraction_mini_card.dart';
 import '../widgets/next_event_card.dart';
@@ -19,6 +20,9 @@ import '../widgets/next_event_card.dart';
 /// - El carrusel **"Ruta artesanal"**. Necesita `ArtisanItem`, que no
 ///   existe, y su contenido esta bloqueado hasta levantar fotos y datos
 ///   en campo (`docs/CONCEPTO.md` §6.5).
+///
+/// El engranaje de la cabecera abre Ajustes, que dejo de ser un tab
+/// (`docs/CONCEPTO.md` §4.7, pregunta resuelta nº 1).
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -48,8 +52,13 @@ class HomePage extends StatelessWidget {
                 NextEventCard(
                   event: state.nextEvent!,
                   languageCode: lang,
-                  onSeeFestival: () =>
-                      context.read<ShellCubit>().select(ShellTab.calendar),
+                  // Lleva al detalle de la fiesta, no al tab Calendario
+                  // (`docs/CONCEPTO.md` §4.1): mandar a la lista obligaba
+                  // a buscar a mano la fiesta que la tarjeta ya nombra.
+                  onSeeFestival: () => FestivalEventDetailPage.open(
+                    context,
+                    state.nextEvent!,
+                  ),
                 )
               else if (state.eventsFailed)
                 _SectionError(message: l.loadFailed),
@@ -109,14 +118,31 @@ class _Hero extends StatelessWidget {
       ),
       child: SafeArea(
         bottom: false,
-        child: Text(
-          l.appName,
-          style: const TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.w800,
-            color: AppColors.gold,
-            letterSpacing: -0.5,
-          ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Text(
+              l.appName,
+              style: const TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.w800,
+                color: AppColors.gold,
+                letterSpacing: -0.5,
+              ),
+            ),
+            // Ajustes cuelga de aqui porque dejo de ser un tab: su slot
+            // en la barra se lo quedo Artesanos (`CONCEPTO.md` §4.7).
+            Positioned(
+              top: 0,
+              right: 4,
+              child: IconButton(
+                onPressed: () => SettingsPage.open(context),
+                icon: const Icon(Icons.settings_outlined),
+                color: AppColors.gold,
+                tooltip: l.settingsTitle,
+              ),
+            ),
+          ],
         ),
       ),
     );

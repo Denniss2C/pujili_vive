@@ -24,7 +24,7 @@ void main() {
       ShellTab.explore,
       ShellTab.calendar,
       ShellTab.map,
-      ShellTab.profile,
+      ShellTab.artisans,
     ]);
     expect(ShellTab.calendar.index, 2);
   });

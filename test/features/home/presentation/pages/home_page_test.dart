@@ -4,9 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:pujili_vive/features/calendar/presentation/pages/festival_event_detail_page.dart';
 import 'package:pujili_vive/features/home/presentation/bloc/home_bloc.dart';
 import 'package:pujili_vive/features/home/presentation/pages/home_page.dart';
 import 'package:pujili_vive/features/home/presentation/widgets/next_event_card.dart';
+import 'package:pujili_vive/features/settings/presentation/cubit/locale_cubit.dart';
+import 'package:pujili_vive/features/settings/presentation/pages/settings_page.dart';
 import 'package:pujili_vive/l10n/app_localizations.dart';
 import 'package:pujili_vive/shell/shell_cubit.dart';
 
@@ -15,33 +18,43 @@ import '../../../../helpers/fixtures/festival_event_fixtures.dart';
 class _MockHomeBloc extends MockBloc<HomeEvent, HomeState>
     implements HomeBloc {}
 
+class _MockLocaleCubit extends MockCubit<Locale?> implements LocaleCubit {}
+
 void main() {
   late _MockHomeBloc bloc;
   late ShellCubit shell;
+  late _MockLocaleCubit locale;
 
   setUp(() {
     bloc = _MockHomeBloc();
     shell = ShellCubit();
+    locale = _MockLocaleCubit();
+    when(() => locale.state).thenReturn(null);
   });
 
   tearDown(() => shell.close());
 
+  /// Los providers van ENCIMA del MaterialApp, como en `main.dart`. Si
+  /// se cuelgan del `home`, una pantalla empujada con `Navigator.push`
+  /// queda fuera de su alcance y el test falla por como esta montado,
+  /// no por como se comporta la app.
   Widget wrap() {
-    return MaterialApp(
-      locale: const Locale('es'),
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<HomeBloc>.value(value: bloc),
+        BlocProvider<ShellCubit>.value(value: shell),
+        BlocProvider<LocaleCubit>.value(value: locale),
       ],
-      supportedLocales: const [Locale('es'), Locale('en')],
-      home: MultiBlocProvider(
-        providers: [
-          BlocProvider<HomeBloc>.value(value: bloc),
-          BlocProvider<ShellCubit>.value(value: shell),
+      child: const MaterialApp(
+        locale: Locale('es'),
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
         ],
-        child: const HomePage(),
+        supportedLocales: [Locale('es'), Locale('en')],
+        home: HomePage(),
       ),
     );
   }
@@ -89,8 +102,9 @@ void main() {
     expect(find.text('Qué visitar'), findsOneWidget);
   });
 
-  testWidgets('"Ver la fiesta" cambia al tab Calendario', (tester) async {
+  testWidgets('"Ver la fiesta" abre el detalle de esa fiesta', (tester) async {
     final futura = buildEvent(
+      titleEs: 'Corpus Christi: Danzantes de Pujilí',
       startDate: DateTime.now().add(const Duration(days: 30)),
     );
     when(() => bloc.state).thenReturn(
@@ -105,11 +119,15 @@ void main() {
     await tester.pumpWidget(wrap());
     await tester.pump();
 
-    expect(shell.state, ShellTab.home);
     await tester.tap(find.text('Ver la fiesta'));
-    await tester.pump();
+    await tester.pumpAndSettle();
 
-    expect(shell.state, ShellTab.calendar);
+    // Va al detalle de LA fiesta que nombra la tarjeta, no a la lista
+    // del calendario, donde habria que volver a buscarla (CONCEPTO §4.1).
+    expect(find.byType(FestivalEventDetailPage), findsOneWidget);
+    expect(find.text('Corpus Christi: Danzantes de Pujilí'), findsOneWidget);
+    // Y no cambia de tab: el detalle se abre dentro de Inicio.
+    expect(shell.state, ShellTab.home);
   });
 
   testWidgets('el fallo de una seccion no tumba el resto de la pantalla',
@@ -129,5 +147,23 @@ void main() {
     expect(find.text('No se pudo cargar esta sección.'), findsOneWidget);
     // "Que visitar" sigue ahi pese al error del calendario.
     expect(find.text('Qué visitar'), findsOneWidget);
+  });
+
+  testWidgets('el engranaje de la cabecera abre Ajustes', (tester) async {
+    // Ajustes dejo de ser un tab: si no se llega desde aqui, no se llega.
+    when(() => bloc.state).thenReturn(
+      const HomeLoaded(
+        upcomingEvents: [],
+        eventsFailed: false,
+        attractions: [],
+        attractionsFailed: false,
+      ),
+    );
+
+    await tester.pumpWidget(wrap());
+    await tester.tap(find.byIcon(Icons.settings_outlined));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(SettingsPage), findsOneWidget);
   });
 }

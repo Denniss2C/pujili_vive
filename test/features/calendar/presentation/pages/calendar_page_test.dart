@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pujili_vive/features/calendar/presentation/bloc/calendar_bloc.dart';
 import 'package:pujili_vive/features/calendar/presentation/pages/calendar_page.dart';
+import 'package:pujili_vive/features/calendar/presentation/pages/festival_event_detail_page.dart';
 import 'package:pujili_vive/features/calendar/presentation/widgets/festival_event_card.dart';
 import 'package:pujili_vive/features/calendar/presentation/widgets/month_header.dart';
 import 'package:pujili_vive/l10n/app_localizations.dart';
@@ -58,6 +59,23 @@ void main() {
     expect(find.byType(MonthHeader), findsNWidgets(3));
     expect(find.byType(FestivalEventCard), findsNWidgets(3));
     expect(find.text('Corpus Christi: Danzantes de Pujilí'), findsOneWidget);
+  });
+
+  testWidgets('tocar una tarjeta abre el detalle de esa fiesta',
+      (tester) async {
+    final events = [corpusChristi, sanLorenzo];
+    when(() => bloc.state)
+        .thenReturn(CalendarLoaded(all: events, filtered: events));
+
+    await tester.pumpWidget(wrap());
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Fiesta de San Lorenzo'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(FestivalEventDetailPage), findsOneWidget);
+    // La que se toco, no la primera de la lista.
+    expect(find.text('Desfile cívico y comparsas.'), findsOneWidget);
   });
 
   testWidgets('una busqueda sin resultados explica que hacer', (tester) async {

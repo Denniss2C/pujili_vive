@@ -11,6 +11,12 @@ import '../../features/calendar/domain/repositories/calendar_repository.dart';
 import '../../features/calendar/domain/usecases/get_festival_events.dart';
 import '../../features/calendar/presentation/bloc/calendar_bloc.dart';
 import '../../features/home/presentation/bloc/home_bloc.dart';
+import '../../features/settings/data/datasources/settings_local_datasource.dart';
+import '../../features/settings/data/repositories/settings_repository_impl.dart';
+import '../../features/settings/domain/repositories/settings_repository.dart';
+import '../../features/settings/domain/usecases/get_language_code.dart';
+import '../../features/settings/domain/usecases/save_language_code.dart';
+import '../../features/settings/presentation/cubit/locale_cubit.dart';
 import '../../shell/shell_cubit.dart';
 import '../services/maps_launcher.dart';
 
@@ -30,12 +36,19 @@ Future<void> initDependencies() async {
   // el provider vive en la raiz.
   sl.registerFactory(ShellCubit.new);
 
+  // Mismo motivo que ShellCubit: lo cierra el BlocProvider de la raiz.
+  sl.registerFactory(
+    () => LocaleCubit(getLanguageCode: sl(), saveLanguageCode: sl()),
+  );
+
   // Servicios de plataforma.
   sl.registerLazySingleton<MapsLauncher>(UrlMapsLauncher.new);
 
   // Use cases
   sl.registerLazySingleton(() => GetAttractions(sl()));
   sl.registerLazySingleton(() => GetFestivalEvents(sl()));
+  sl.registerLazySingleton(() => GetLanguageCode(sl()));
+  sl.registerLazySingleton(() => SaveLanguageCode(sl()));
 
   // Repository
   sl.registerLazySingleton<AttractionsRepository>(
@@ -46,11 +59,18 @@ Future<void> initDependencies() async {
     () => CalendarRepositoryImpl(localDataSource: sl()),
   );
 
+  sl.registerLazySingleton<SettingsRepository>(
+    () => SettingsRepositoryImpl(localDataSource: sl()),
+  );
+
   // Data sources
   sl.registerLazySingleton<AttractionsLocalDataSource>(
     () => AttractionsLocalDataSourceImpl(),
   );
   sl.registerLazySingleton<CalendarLocalDataSource>(
     () => CalendarLocalDataSourceImpl(),
+  );
+  sl.registerLazySingleton<SettingsLocalDataSource>(
+    () => SettingsLocalDataSourceImpl(),
   );
 }

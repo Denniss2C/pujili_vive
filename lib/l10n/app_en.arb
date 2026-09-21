@@ -14,7 +14,7 @@
   "navExplore": "Explore",
   "navCalendar": "Calendar",
   "navMap": "Map",
-  "navProfile": "Profile",
+  "navArtisans": "Artisans",
 
   "attractionsTitle": "Tourist Attractions",
   "filterAll": "All",
@@ -37,6 +37,8 @@
   "artisansTitle": "Artisans & Gastronomy",
 
   "mapTitle": "Interactive Map",
+  "routeAll": "All",
+  "mapRouteEmpty": "No places on this route yet.",
   "routeArtisan": "Artisan Route",
   "routeReligious": "Religious Route",
   "routeNature": "Nature Route",
@@ -49,5 +51,16 @@
   "detailFree": "Free entry",
   "detailHowToGet": "How to get there",
   "detailCategory": "Category",
-  "mapsOpenFailed": "We could not find a maps app to open the route."
+  "detailDate": "Date",
+  "eventHighlighted": "Featured festival",
+  "mapsOpenFailed": "We could not find a maps app to open the route.",
+
+  "settingsTitle": "Settings",
+  "settingsLanguage": "Language",
+  "settingsLanguageSystem": "Phone default",
+  "settingsLanguageEs": "Español",
+  "settingsLanguageEn": "English",
+  "settingsAbout": "About",
+  "settingsVersion": "Version",
+  "settingsAboutBody": "Tourism guide for the Pujilí canton, Cotopaxi. Festivals and attractions work offline."
 }

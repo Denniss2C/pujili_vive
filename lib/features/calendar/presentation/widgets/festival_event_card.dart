@@ -12,10 +12,15 @@ class FestivalEventCard extends StatelessWidget {
   final FestivalEvent event;
   final String languageCode;
 
+  /// Abre el detalle de la fiesta. Obligatorio: una tarjeta que no lleva
+  /// a ningun sitio fue el hueco que dejo esta pantalla al nacer.
+  final VoidCallback onTap;
+
   const FestivalEventCard({
     super.key,
     required this.event,
     required this.languageCode,
+    required this.onTap,
   });
 
   @override
@@ -29,52 +34,58 @@ class FestivalEventCard extends StatelessWidget {
           _TimelineNode(highlighted: highlighted),
           const SizedBox(width: 12),
           Expanded(
-            child: Container(
-              margin: const EdgeInsets.only(bottom: 14),
-              padding: EdgeInsets.all(highlighted ? 10 : 0),
-              decoration: highlighted
-                  ? BoxDecoration(
-                      color: AppColors.cardBackground,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: AppColors.gold, width: 2),
-                      boxShadow: const [
-                        BoxShadow(color: AppColors.shadow, blurRadius: 10),
-                      ],
-                    )
-                  : null,
-              child: Row(
-                children: [
-                  _Photo(event: event, highlighted: highlighted),
-                  const SizedBox(width: 12),
-                  _DateBlock(date: event.startDate),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          event.title.resolve(languageCode),
-                          style: const TextStyle(
-                            fontSize: 15.5,
-                            fontWeight: FontWeight.bold,
-                            height: 1.2,
-                            color: AppColors.textDark,
+            // Pulsable la tarjeta, no el nodo de la linea de tiempo: el
+            // nodo es adorno de la linea y pertenece a la lista entera.
+            child: InkWell(
+              onTap: onTap,
+              borderRadius: BorderRadius.circular(12),
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 14),
+                padding: EdgeInsets.all(highlighted ? 10 : 0),
+                decoration: highlighted
+                    ? BoxDecoration(
+                        color: AppColors.cardBackground,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: AppColors.gold, width: 2),
+                        boxShadow: const [
+                          BoxShadow(color: AppColors.shadow, blurRadius: 10),
+                        ],
+                      )
+                    : null,
+                child: Row(
+                  children: [
+                    _Photo(event: event, highlighted: highlighted),
+                    const SizedBox(width: 12),
+                    _DateBlock(date: event.startDate),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            event.title.resolve(languageCode),
+                            style: const TextStyle(
+                              fontSize: 15.5,
+                              fontWeight: FontWeight.bold,
+                              height: 1.2,
+                              color: AppColors.textDark,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 3),
-                        Text(
-                          event.shortDescription.resolve(languageCode),
-                          style: const TextStyle(
-                            fontSize: 12.5,
-                            height: 1.35,
-                            color: AppColors.textDark,
+                          const SizedBox(height: 3),
+                          Text(
+                            event.shortDescription.resolve(languageCode),
+                            style: const TextStyle(
+                              fontSize: 12.5,
+                              height: 1.35,
+                              color: AppColors.textDark,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
