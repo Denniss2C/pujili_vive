@@ -14,7 +14,7 @@
   "navExplore": "Explorar",
   "navCalendar": "Calendario",
   "navMap": "Mapa",
-  "navProfile": "Perfil",
+  "navArtisans": "Artesanos",
 
   "attractionsTitle": "Atractivos Turísticos",
   "filterAll": "Todos",
@@ -37,6 +37,8 @@
   "artisansTitle": "Artesanos y Gastronomía",
 
   "mapTitle": "Mapa Interactivo",
+  "routeAll": "Todas",
+  "mapRouteEmpty": "Esta ruta todavía no tiene lugares.",
   "routeArtisan": "Ruta del artesano",
   "routeReligious": "Ruta religiosa",
   "routeNature": "Ruta natural",
@@ -49,5 +51,16 @@
   "detailFree": "Entrada libre",
   "detailHowToGet": "Cómo llegar",
   "detailCategory": "Categoría",
-  "mapsOpenFailed": "No encontramos una app de mapas para abrir la ruta."
+  "detailDate": "Fecha",
+  "eventHighlighted": "Fiesta destacada",
+  "mapsOpenFailed": "No encontramos una app de mapas para abrir la ruta.",
+
+  "settingsTitle": "Ajustes",
+  "settingsLanguage": "Idioma",
+  "settingsLanguageSystem": "El del teléfono",
+  "settingsLanguageEs": "Español",
+  "settingsLanguageEn": "English",
+  "settingsAbout": "Acerca de",
+  "settingsVersion": "Versión",
+  "settingsAboutBody": "Guía de turismo del cantón Pujilí, Cotopaxi. Las fiestas y los atractivos se consultan sin conexión."
 }

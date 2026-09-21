@@ -21,6 +21,9 @@ dependencies:
   google_maps_flutter: ^2.9.0
   intl: any
 
+  # El idioma elegido en Ajustes sobrevive al cierre de la app.
+  shared_preferences: ^2.3.3
+
   # "Cómo llegar" abre la app de mapas del teléfono con las coordenadas.
   url_launcher: ^6.3.2
 

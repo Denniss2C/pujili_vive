@@ -133,7 +133,12 @@ decidirse.
 ### Barra de navegación real — `[DECIDIDO]`
 
 Cinco tabs, iguales en toda la app: **Inicio · Explorar · Calendario · Mapa ·
-Perfil**.
+Artesanos**.
+
+El quinto tab era Perfil. Desde 2026-09-21 lo ocupa Artesanos (pregunta
+resuelta nº 8) y los ajustes se abren desde la cabecera de Inicio (nº 1).
+**En el código el cambio todavía no está hecho:** `ShellTab` sigue nombrando
+el quinto tab `profile`.
 
 ---
 
@@ -444,6 +449,21 @@ mes: `title`, `description`, `startDate`, `photo`, `isHighlighted`.
 
 ### 4.5. Mapa (`map`) — tab **Mapa**
 
+> **Implementada (2026-09-21)**, con tres diferencias respecto a lo que
+> sigue, todas por falta de material y no por criterio:
+>
+> 1. **Una cuarta opción en el selector, "Todas"**, y es la inicial. El
+>    diseño dibuja tres rutas, pero `Attraction` tiene cuatro categorías:
+>    la Plaza e Iglesia Matriz y la Feria Dominical son `cultural` y sin
+>    esa opción quedarían invisibles en el mapa.
+> 2. **Pines de color, no ilustrados.** El cántaro, la cúpula y la
+>    montaña necesitan iconos dibujados que no existen.
+> 3. **Sin distancias** en las filas del sheet: no hay campo y depende de
+>    la pregunta abierta nº 9.
+>
+> Y **falta cargar la API key** (`docs/MAPS_SETUP.md`). Sin ella el área
+> del mapa sale en blanco; el sheet sigue funcionando.
+
 **Qué ve el usuario, de arriba abajo:**
 
 1. **App bar** con retroceso y título "Mapa".
@@ -522,10 +542,11 @@ el icono del pin, y pertenencia a una o más `ThematicRoute`.
 
 ---
 
-### 4.6. Artesanos y comida (`artisans`) — tab **sin resolver**
+### 4.6. Artesanos y comida (`artisans`) — tab **Artesanos**
 
-`[PROPUESTA]` Es la única pantalla definida que **no tiene un tab propio** en la
-barra de cinco. Ver Preguntas abiertas antes de implementarla.
+`[DECIDIDO]` Ocupa el quinto tab, el que era Perfil (pregunta resuelta nº 8).
+Lo que sigue bloqueándola no es la navegación sino el **contenido**: no hay
+fotos ni contactos reales levantados en campo (pregunta abierta nº 18).
 
 **Qué ve el usuario, de arriba abajo:**
 
@@ -596,15 +617,18 @@ fotos ni contactos reales levantados, y ese es el bloqueante de esta feature.
 
 ---
 
-### 4.7. Perfil (`profile`) — tab **Perfil**
+### 4.7. Ajustes (`settings`) — **ya no es un tab**
 
-`[PROPUESTA]` **No hay diseño ni contenido definido para este tab.** En
-`MOCKS.html` aparece como un marco vacío a propósito. Está en
-la barra de navegación porque se acordaron cinco tabs, pero no se decidió qué
-contiene. Sin cuentas de usuario en la V1, lo que queda son ajustes: cambio de
-idioma, acerca de, contacto. Ver Preguntas abiertas antes de construirlo. En el
-scaffold actual apunta temporalmente a la página de artesanos, lo cual es
-provisional y hay que deshacer.
+`[DECIDIDO]` (2026-09-21) Perfil deja de ser un tab: sin cuentas de usuario no
+hay perfil que mostrar. Su slot en la barra pasa a Artesanos (§4.6) y lo que
+sobrevive es una pantalla de **ajustes mínimos** —idioma, acerca de,
+contacto— que se abre desde un icono de engranaje en la cabecera de Inicio.
+
+Favoritos **no** entra: es la pregunta abierta nº 2 y necesita persistencia
+local, que la app todavía no tiene.
+
+En el código el parche sigue en pie: el quinto tab se llama `profile` y apunta
+a `ArtisansPage`. Deshacerlo es parte de esta decisión, no un arreglo aparte.
 
 ---
 
@@ -620,10 +644,10 @@ que el tab no cambia al abrir un detalle.
                     └──────┬───────┘
      ┌──────────┬──────────┼──────────┬──────────┐
      │          │          │          │          │
-  ┌──▼───┐  ┌───▼────┐ ┌───▼─────┐ ┌──▼──┐  ┌────▼───┐
-  │Inicio│  │Explorar│ │Calendario│ │Mapa │  │ Perfil │
-  └──┬───┘  └───┬────┘ └───┬─────┘ └──┬──┘  └────────┘
-     │          │          │          │       (sin definir)
+  ┌──▼───┐  ┌───▼────┐ ┌───▼─────┐ ┌──▼──┐  ┌────▼─────┐
+  │Inicio│  │Explorar│ │Calendario│ │Mapa │  │Artesanos │
+  └──┬───┘  └───┬────┘ └───┬─────┘ └──┬──┘  └──────────┘
+     │          │          │          │      (bloqueada: sin contenido)
      │          │          │          │
      │      ┌───▼──────────▼──────────▼────┐
      └─────►│  Detalle de atractivo (4.3)  │
@@ -632,9 +656,10 @@ que el tab no cambia al abrir un detalle.
                         ▼
                    (Mapa o app nativa)
 
-  Inicio ──(card de evento)──► Detalle de evento  [pantalla no diseñada]
-  Inicio ──(Ruta Artesanal)──► Detalle de artesano [pantalla no diseñada]
-  Artesanos y Gastronomía (4.6) ─► tab sin resolver
+  Inicio ──(engranaje)─────► Ajustes (4.7)          [pendiente]
+  Inicio ──("Ver la fiesta")─► Detalle de evento     ✅ hecho
+  Calendario ──(tarjeta)────► Detalle de evento     ✅ hecho
+  Inicio ──(Ruta Artesanal)─► Detalle de artesano   [pantalla no diseñada]
 ```
 
 `[PROPUESTA]` El **detalle de atractivo es el nodo de convergencia** de la app:
@@ -850,14 +875,17 @@ competitiva: necesario para no verse incompleto, pero no es la razón por la que
 alguien se descarga la app. Si hay que recortar, se recorta de abajo hacia
 arriba de esta lista, nunca el calendario.
 
+Estado a 2026-09-21. Solo queda Artesanos, y no por código: le falta el
+contenido de campo (pregunta abierta nº 18).
+
 | # | Feature | Estado | Por qué esa posición | Marca |
 |---|---|---|---|---|
-| 1 | **Calendar** (calendario de fiestas) | Scaffold vacío | El diferenciador. Es el contenido que nadie más tiene y el que justifica la app | `[DECIDIDO]` |
-| 2 | **Home** con countdown al próximo evento | Scaffold vacío | Es el escaparate del diferenciador. Un calendario que no se ve al abrir la app no diferencia nada | `[PROPUESTA]` |
-| 3 | **Attractions** (lista + detalle) | Completa | Ya hecha; es la plantilla arquitectónica del resto | `[DECIDIDO]` |
-| 4 | **Map** con pines y rutas temáticas | Placeholder | Alto valor de uso ("cómo llego"), pero es la más cara: API key, estilo, permisos, rendimiento | `[PROPUESTA]` |
-| 5 | **Artisans** (artesanos y gastronomía) | Scaffold vacío | Bloqueada por contenido real: sin fotos ni contactos levantados en campo no hay pantalla que valga | `[PROPUESTA]` |
-| 6 | **Profile** | No definida | Sin cuentas de usuario, su contenido es mínimo. No puede bloquear a nadie | `[PROPUESTA]` |
+| 1 | **Calendar** (calendario de fiestas) | ✅ Completa, con detalle de evento | El diferenciador. Es el contenido que nadie más tiene y el que justifica la app | `[DECIDIDO]` |
+| 2 | **Home** con countdown al próximo evento | ✅ Completa | Es el escaparate del diferenciador. Un calendario que no se ve al abrir la app no diferencia nada | `[PROPUESTA]` |
+| 3 | **Attractions** (lista + detalle) | ✅ Completa | Ya hecha; es la plantilla arquitectónica del resto | `[DECIDIDO]` |
+| 4 | **Map** con pines y rutas temáticas | ✅ Hecha — **falta la API key** | Alto valor de uso ("cómo llego"), pero es la más cara: API key, estilo, permisos, rendimiento | `[PROPUESTA]` |
+| 5 | **Artisans** (artesanos y gastronomía) | 🟡 Scaffold vacío, ya con tab asignado (nº 8) | Bloqueada por contenido real: sin fotos ni contactos levantados en campo no hay pantalla que valga | `[PROPUESTA]` |
+| 6 | ~~**Profile**~~ → **Ajustes** | ✅ Hecha; ya no es tab | Sin cuentas de usuario, su contenido es mínimo. No puede bloquear a nadie | `[DECIDIDO]` |
 | 7 | **Ads** (AdMob + espacios vendidos) | No empezada | Es V2 por definición. Monetizar antes de tener usuarios es ruido | `[DECIDIDO]` |
 
 `[DECIDIDO]` **Patrón de implementación obligatorio:** cada feature nueva replica
@@ -873,9 +901,12 @@ Todo lo que quedó sin decidir. **Preferir preguntar antes que rellenar.**
 
 ### Producto y alcance
 
-1. ¿Qué contiene el tab **Perfil**? Sin login, las opciones son ajustes (idioma,
-   acerca de, contacto, favoritos). Ninguna fue acordada. Hoy el tab existe en la
-   barra sin destino propio.
+1. ~~¿Qué contiene el tab **Perfil**?~~ **Resuelta (2026-09-21):** Perfil
+   **deja de ser un tab**. Su slot en la barra pasa a Artesanos (ver nº 8) y lo
+   que queda —**ajustes mínimos**: idioma, acerca de, contacto— se abre desde un
+   icono de engranaje en la cabecera de Inicio. Sin cuentas de usuario no hay
+   perfil que mostrar, y un tab de cinco no se gasta en tres ajustes. Favoritos
+   sigue fuera: es la nº 2 y no se ha decidido. **Pendiente de implementar.**
 2. ¿Hay **favoritos / guardados**? Un diseño temprano mostraba un tab
    "Guardados" que se descartó junto con su barra, pero nunca se decidió si la
    funcionalidad en sí entra o no.
@@ -890,28 +921,45 @@ Todo lo que quedó sin decidir. **Preferir preguntar antes que rellenar.**
 
 ### Pantallas faltantes
 
-6. **Detalle de evento**: se navega hacia ella desde Inicio y desde Calendario,
-   pero no está diseñada. ¿Reutiliza el layout del detalle de atractivo?
+6. ~~**Detalle de evento**: ¿reutiliza el layout del detalle de atractivo?~~
+   **Resuelta (2026-09-21):** sí, lo reutiliza. El armazón común (portada,
+   panel crema, cinta, fila de datos) se extrajo a
+   `lib/core/widgets/detail_layout.dart` y lo comparten las dos pantallas.
+   Cambia lo que muestra: fecha y ubicación en vez de horario, costo y
+   ubicación; píldora dorada si la fiesta es destacada; y **sin botón "Cómo
+   llegar"**, porque `FestivalEvent` no tiene coordenadas y una ruta hacia un
+   punto inventado es peor que no ofrecerla. **Implementada.**
 7. **Detalle de artesano / plato**: mismo caso desde el grid de Artesanos.
-8. **¿En qué tab vive Artesanos y Gastronomía?** Es la contradicción estructural
-   más importante del diseño actual: hay una pantalla definida y una feature en
-   el repo, pero ninguno de los cinco tabs le corresponde claramente. Opciones:
-   sub-sección dentro de Explorar, reemplazar un tab, o convertir Explorar en un
-   hub con secciones.
+8. ~~**¿En qué tab vive Artesanos y Gastronomía?**~~ **Resuelta (2026-09-21):**
+   **ocupa el slot del tab Perfil**, que se queda sin contenido propio (nº 1).
+   De las tres opciones era la única que no tocaba una feature ya terminada:
+   meterla en Explorar mezclaba dos modelos de datos en una pantalla, y
+   convertir Explorar en un hub rehacía la navegación de `attractions`. Además
+   el parche del scaffold ya apuntaba ahí, así que deshacerlo y decidirlo son
+   el mismo trabajo. **Pendiente de implementar.**
 
 ### Comportamiento
 
 9. **Distancias**: ¿son valores fijos desde el centro de Pujilí (dato en el JSON)
    o calculadas desde la ubicación real del usuario? Esto decide si la app pide
-   permiso de geolocalización, lo cual cambia el onboarding.
+   permiso de geolocalización, lo cual cambia el onboarding. **Sigue abierta**:
+   el mapa ya está hecho y sus filas muestran solo la categoría, sin distancia.
+   La app no pide ubicación.
 10. ~~**"Cómo llegar"**: ¿abre el tab Mapa centrado en el atractivo, o lanza la app
     de mapas nativa con las coordenadas?~~ **Resuelta (2026-09-17):** lanza la
     app de mapas del teléfono. Ver 4.3.
 11. **Rutas temáticas**: ¿son solo un filtro de pines, o un recorrido ordenado con
     trazado dibujado sobre el mapa? El nombre "Ruta" sugiere lo segundo; el
-    diseño solo resuelve lo primero.
-12. **Tocar un pin**: ¿expande el bottom sheet en ese lugar, muestra una card
-    flotante, o navega directo al detalle?
+    diseño solo resuelve lo primero. **Implementado como filtro** (2026-09-21),
+    que es lo único que el diseño resuelve; si además debe ser un recorrido
+    dibujado, sigue sin decidirse y necesitaría una entidad `ThematicRoute`
+    con datos, no el enumerado que hay hoy.
+12. ~~**Tocar un pin**: ¿expande el sheet, muestra una card flotante, o navega
+    al detalle?~~ **Resuelta (2026-09-21):** ninguna de las tres. Abre la
+    ventana de información nativa de Google Maps, con el nombre y la
+    ubicación. Es la opción que no inventa interfaz: las tres del diseño
+    seguían sin decidirse y cualquiera de ellas habría sido una elección a
+    ciegas. Si más adelante se quiere una, esta no estorba.
 13. **Icono de filtro** en Artesanos: lo más probable es que separe artesanía de
     comida, pero no está acordado. (En Mapa se retiró: duplicaba el selector de
     rutas.)
@@ -928,7 +976,8 @@ Todo lo que quedó sin decidir. **Preferir preguntar antes que rellenar.**
     ornamentación se mantiene o se simplifica.
 17. **Estilo del mapa**: para acercarse al diseño haría falta un *map style*
     JSON personalizado sobre Google Maps. No se decidió si vale la pena el esfuerzo o
-    se usa el estilo por defecto.
+    se usa el estilo por defecto. **Hoy usa el estilo por defecto**, que es lo
+    que se ve mientras no se decida.
 
 ### Contenido
 
