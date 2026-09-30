@@ -930,9 +930,13 @@ Todo lo que quedó sin decidir. **Preferir preguntar antes que rellenar.**
    icono de engranaje en la cabecera de Inicio. Sin cuentas de usuario no hay
    perfil que mostrar, y un tab de cinco no se gasta en tres ajustes. Favoritos
    sigue fuera: es la nº 2 y no se ha decidido. **Pendiente de implementar.**
-2. ¿Hay **favoritos / guardados**? Un diseño temprano mostraba un tab
-   "Guardados" que se descartó junto con su barra, pero nunca se decidió si la
-   funcionalidad en sí entra o no.
+2. ~~¿Hay **favoritos / guardados**?~~ **Resuelta (2026-09-29):** sí, y ya está
+   implementada. Un corazón en el detalle de atractivo y en el de fiesta, y una
+   pantalla "Guardados" detrás del corazón de la cabecera de Inicio —no un tab,
+   que los cinco están tomados—. Guarda **ids, no copias**: los objetos se
+   resuelven contra los datos vivos, así que un guardado nunca enseña
+   información vieja. Salió barato porque la persistencia ya estaba montada
+   para el idioma.
 3. ¿Existe **búsqueda global** desde Inicio? El buscador está dibujado con
    placeholder "Buscar experiencias…", pero no se definió qué indexa
    (¿atractivos? ¿eventos? ¿artesanos? ¿todo?) ni cómo se presentan los

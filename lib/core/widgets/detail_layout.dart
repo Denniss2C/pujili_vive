@@ -15,7 +15,17 @@ class DetailScaffold extends StatelessWidget {
   final Widget cover;
   final Widget panel;
 
-  const DetailScaffold({super.key, required this.cover, required this.panel});
+  /// Control opcional en la esquina superior derecha de la portada, al
+  /// otro lado del boton de retroceso. Hoy lo usa el corazon de
+  /// guardados; queda generico para no atar `core/` a esa feature.
+  final Widget? action;
+
+  const DetailScaffold({
+    super.key,
+    required this.cover,
+    required this.panel,
+    this.action,
+  });
 
   static const double _coverHeight = 250;
 
@@ -40,6 +50,7 @@ class DetailScaffold extends StatelessWidget {
                 child: panel,
               ),
               const Positioned(top: 0, left: 0, child: _BackButton()),
+              if (action != null) Positioned(top: 0, right: 0, child: action!),
             ],
           ),
         ],

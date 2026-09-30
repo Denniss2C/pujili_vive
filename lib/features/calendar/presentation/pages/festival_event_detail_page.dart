@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/detail_layout.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../favorites/domain/entities/favorite_ref.dart';
+import '../../../favorites/presentation/widgets/favorite_button.dart';
 import '../../domain/entities/event_status.dart';
 import '../../domain/entities/festival_event.dart';
 
@@ -62,6 +64,7 @@ class FestivalEventDetailPage extends StatelessWidget {
         // fiesta no cambie de cara al abrirla.
         fallbackIcon: Icons.celebration_outlined,
       ),
+      action: FavoriteButton(favorite: FavoriteRef.festival(event.id)),
       panel: DetailPanel(
         children: [
           // Que este ocurriendo pesa mas que que sea destacada: si las

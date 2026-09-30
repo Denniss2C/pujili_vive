@@ -94,6 +94,9 @@ falta el contenido.
       el mecanismo está (`make aab-prod`, `make verify-signing`, firma
       condicional vía `android/key.properties`). **Falta generar el keystore
       real**, que no se versiona.
+- [x] Icono de app y splash nativo con marca propia. La marca es de
+      **relleno**: cumple para no salir con el icono de Flutter, pero
+      conviene una identidad de verdad antes de publicar.
 - [ ] Ficha de Play Store / App Store.
 
 ## Antes de implementar

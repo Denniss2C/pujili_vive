@@ -5,6 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../attractions/presentation/pages/attraction_detail_page.dart';
 import '../../../calendar/presentation/pages/festival_event_detail_page.dart';
+import '../../../favorites/presentation/pages/favorites_page.dart';
 import '../../../settings/presentation/pages/settings_page.dart';
 import '../bloc/home_bloc.dart';
 import '../widgets/attraction_mini_card.dart';
@@ -121,25 +122,53 @@ class _Hero extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Text(
-              l.appName,
-              style: const TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.w800,
-                color: AppColors.gold,
-                letterSpacing: -0.5,
-              ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // La misma marca que el icono y el splash: que la app se
+                // reconozca por dentro igual que en el lanzador.
+                Image.asset(
+                  'assets/brand/logo.png',
+                  width: 52,
+                  height: 52,
+                  cacheWidth: 156,
+                  errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  l.appName,
+                  style: const TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.gold,
+                    letterSpacing: -0.5,
+                  ),
+                ),
+              ],
             ),
             // Ajustes cuelga de aqui porque dejo de ser un tab: su slot
             // en la barra se lo quedo Artesanos (`CONCEPTO.md` §4.7).
             Positioned(
               top: 0,
               right: 4,
-              child: IconButton(
-                onPressed: () => SettingsPage.open(context),
-                icon: const Icon(Icons.settings_outlined),
-                color: AppColors.gold,
-                tooltip: l.settingsTitle,
+              // Guardados y Ajustes cuelgan de aqui porque los cinco tabs
+              // estan tomados (`CONCEPTO.md` §4.7).
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    onPressed: () => FavoritesPage.open(context),
+                    icon: const Icon(Icons.favorite_border),
+                    color: AppColors.gold,
+                    tooltip: l.savedTitle,
+                  ),
+                  IconButton(
+                    onPressed: () => SettingsPage.open(context),
+                    icon: const Icon(Icons.settings_outlined),
+                    color: AppColors.gold,
+                    tooltip: l.settingsTitle,
+                  ),
+                ],
               ),
             ),
           ],

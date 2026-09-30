@@ -6,30 +6,41 @@ import 'package:mocktail/mocktail.dart';
 import 'package:pujili_vive/core/services/maps_launcher.dart';
 import 'package:pujili_vive/features/attractions/domain/entities/attraction.dart';
 import 'package:pujili_vive/features/attractions/presentation/pages/attraction_detail_page.dart';
+import 'package:pujili_vive/features/favorites/presentation/cubit/favorites_cubit.dart';
 import 'package:pujili_vive/l10n/app_localizations.dart';
 
+import '../../../../helpers/favorites_cubit_helper.dart';
 import '../../../../helpers/fixtures/attraction_fixtures.dart';
 
 class _MockMapsLauncher extends Mock implements MapsLauncher {}
 
 void main() {
   late _MockMapsLauncher launcher;
+  late FavoritesCubit favorites;
 
-  setUp(() => launcher = _MockMapsLauncher());
+  setUp(() {
+    launcher = _MockMapsLauncher();
+    favorites = buildFavoritesCubit();
+  });
+
+  tearDown(() => favorites.close());
 
   Widget wrap(Attraction attraction) {
     return RepositoryProvider<MapsLauncher>.value(
       value: launcher,
-      child: MaterialApp(
-        locale: const Locale('es'),
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [Locale('es'), Locale('en')],
-        home: AttractionDetailPage(attraction: attraction),
+      child: BlocProvider<FavoritesCubit>.value(
+        value: favorites,
+        child: MaterialApp(
+          locale: const Locale('es'),
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [Locale('es'), Locale('en')],
+          home: AttractionDetailPage(attraction: attraction),
+        ),
       ),
     );
   }

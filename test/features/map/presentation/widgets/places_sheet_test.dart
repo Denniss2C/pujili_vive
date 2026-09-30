@@ -7,28 +7,38 @@ import 'package:pujili_vive/core/services/maps_launcher.dart';
 import 'package:pujili_vive/features/attractions/domain/entities/attraction.dart';
 import 'package:pujili_vive/features/attractions/domain/entities/attraction_category.dart';
 import 'package:pujili_vive/features/attractions/presentation/pages/attraction_detail_page.dart';
+import 'package:pujili_vive/features/favorites/presentation/cubit/favorites_cubit.dart';
 import 'package:pujili_vive/features/map/presentation/widgets/places_sheet.dart';
 import 'package:pujili_vive/l10n/app_localizations.dart';
 
+import '../../../../helpers/favorites_cubit_helper.dart';
 import '../../../../helpers/fixtures/attraction_fixtures.dart';
 
 class _MockMapsLauncher extends Mock implements MapsLauncher {}
 
 void main() {
+  late FavoritesCubit favorites;
+
+  setUp(() => favorites = buildFavoritesCubit());
+  tearDown(() => favorites.close());
+
   Widget wrap(List<Attraction> places) {
     return RepositoryProvider<MapsLauncher>(
       create: (_) => _MockMapsLauncher(),
-      child: MaterialApp(
-        locale: const Locale('es'),
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [Locale('es'), Locale('en')],
-        home: Scaffold(
-          body: Stack(children: [PlacesSheet(places: places)]),
+      child: BlocProvider<FavoritesCubit>.value(
+        value: favorites,
+        child: MaterialApp(
+          locale: const Locale('es'),
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [Locale('es'), Locale('en')],
+          home: Scaffold(
+            body: Stack(children: [PlacesSheet(places: places)]),
+          ),
         ),
       ),
     );
