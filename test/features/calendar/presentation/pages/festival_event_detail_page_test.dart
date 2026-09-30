@@ -1,25 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pujili_vive/core/widgets/detail_layout.dart';
 import 'package:pujili_vive/features/calendar/domain/entities/festival_event.dart';
 import 'package:pujili_vive/features/calendar/presentation/pages/festival_event_detail_page.dart';
+import 'package:pujili_vive/features/favorites/presentation/cubit/favorites_cubit.dart';
 import 'package:pujili_vive/l10n/app_localizations.dart';
 
+import '../../../../helpers/favorites_cubit_helper.dart';
 import '../../../../helpers/fixtures/festival_event_fixtures.dart';
 
 void main() {
+  late FavoritesCubit favorites;
+
+  setUp(() => favorites = buildFavoritesCubit());
+  tearDown(() => favorites.close());
+
   Widget wrap(FestivalEvent event, {Locale locale = const Locale('es')}) {
-    return MaterialApp(
-      locale: locale,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [Locale('es'), Locale('en')],
-      home: FestivalEventDetailPage(event: event),
+    return BlocProvider<FavoritesCubit>.value(
+      value: favorites,
+      child: MaterialApp(
+        locale: locale,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [Locale('es'), Locale('en')],
+        home: FestivalEventDetailPage(event: event),
+      ),
     );
   }
 

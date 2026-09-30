@@ -10,6 +10,12 @@ import '../../features/calendar/data/repositories/calendar_repository_impl.dart'
 import '../../features/calendar/domain/repositories/calendar_repository.dart';
 import '../../features/calendar/domain/usecases/get_festival_events.dart';
 import '../../features/calendar/presentation/bloc/calendar_bloc.dart';
+import '../../features/favorites/data/datasources/favorites_local_datasource.dart';
+import '../../features/favorites/data/repositories/favorites_repository_impl.dart';
+import '../../features/favorites/domain/repositories/favorites_repository.dart';
+import '../../features/favorites/domain/usecases/get_favorites.dart';
+import '../../features/favorites/domain/usecases/save_favorites.dart';
+import '../../features/favorites/presentation/cubit/favorites_cubit.dart';
 import '../../features/home/presentation/bloc/home_bloc.dart';
 import '../../features/settings/data/datasources/settings_local_datasource.dart';
 import '../../features/settings/data/repositories/settings_repository_impl.dart';
@@ -40,6 +46,9 @@ Future<void> initDependencies() async {
   sl.registerFactory(
     () => LocaleCubit(getLanguageCode: sl(), saveLanguageCode: sl()),
   );
+  sl.registerFactory(
+    () => FavoritesCubit(getFavorites: sl(), saveFavorites: sl()),
+  );
 
   // Servicios de plataforma.
   sl.registerLazySingleton<MapsLauncher>(UrlMapsLauncher.new);
@@ -49,6 +58,8 @@ Future<void> initDependencies() async {
   sl.registerLazySingleton(() => GetFestivalEvents(sl()));
   sl.registerLazySingleton(() => GetLanguageCode(sl()));
   sl.registerLazySingleton(() => SaveLanguageCode(sl()));
+  sl.registerLazySingleton(() => GetFavorites(sl()));
+  sl.registerLazySingleton(() => SaveFavorites(sl()));
 
   // Repository
   sl.registerLazySingleton<AttractionsRepository>(
@@ -63,6 +74,10 @@ Future<void> initDependencies() async {
     () => SettingsRepositoryImpl(localDataSource: sl()),
   );
 
+  sl.registerLazySingleton<FavoritesRepository>(
+    () => FavoritesRepositoryImpl(localDataSource: sl()),
+  );
+
   // Data sources
   sl.registerLazySingleton<AttractionsLocalDataSource>(
     () => AttractionsLocalDataSourceImpl(),
@@ -72,5 +87,8 @@ Future<void> initDependencies() async {
   );
   sl.registerLazySingleton<SettingsLocalDataSource>(
     () => SettingsLocalDataSourceImpl(),
+  );
+  sl.registerLazySingleton<FavoritesLocalDataSource>(
+    () => FavoritesLocalDataSourceImpl(),
   );
 }

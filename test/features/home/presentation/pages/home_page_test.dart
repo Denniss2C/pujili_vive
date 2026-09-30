@@ -5,6 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pujili_vive/features/calendar/presentation/pages/festival_event_detail_page.dart';
+import 'package:pujili_vive/features/favorites/presentation/cubit/favorites_cubit.dart';
 import 'package:pujili_vive/features/home/presentation/bloc/home_bloc.dart';
 import 'package:pujili_vive/features/home/presentation/pages/home_page.dart';
 import 'package:pujili_vive/features/home/presentation/widgets/next_event_card.dart';
@@ -13,6 +14,7 @@ import 'package:pujili_vive/features/settings/presentation/pages/settings_page.d
 import 'package:pujili_vive/l10n/app_localizations.dart';
 import 'package:pujili_vive/shell/shell_cubit.dart';
 
+import '../../../../helpers/favorites_cubit_helper.dart';
 import '../../../../helpers/fixtures/festival_event_fixtures.dart';
 
 class _MockHomeBloc extends MockBloc<HomeEvent, HomeState>
@@ -24,15 +26,20 @@ void main() {
   late _MockHomeBloc bloc;
   late ShellCubit shell;
   late _MockLocaleCubit locale;
+  late FavoritesCubit favorites;
 
   setUp(() {
     bloc = _MockHomeBloc();
     shell = ShellCubit();
     locale = _MockLocaleCubit();
     when(() => locale.state).thenReturn(null);
+    favorites = buildFavoritesCubit();
   });
 
-  tearDown(() => shell.close());
+  tearDown(() {
+    shell.close();
+    favorites.close();
+  });
 
   /// Los providers van ENCIMA del MaterialApp, como en `main.dart`. Si
   /// se cuelgan del `home`, una pantalla empujada con `Navigator.push`
@@ -44,6 +51,7 @@ void main() {
         BlocProvider<HomeBloc>.value(value: bloc),
         BlocProvider<ShellCubit>.value(value: shell),
         BlocProvider<LocaleCubit>.value(value: locale),
+        BlocProvider<FavoritesCubit>.value(value: favorites),
       ],
       child: const MaterialApp(
         locale: Locale('es'),

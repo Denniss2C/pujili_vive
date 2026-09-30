@@ -36,6 +36,7 @@ lib/
     home/         completa (solo presentation: consume calendar y attractions)
     map/          completa (solo presentation: consume attractions)
     settings/     completa (idioma persistido + acerca de)
+    favorites/    completa (guardados, persistidos)
     artisans/     scaffold
   core/flavors/ FlavorConfig + entrypoints main_dev / main_prod
   core/widgets/ armazon comun de las pantallas de detalle
@@ -45,6 +46,7 @@ lib/
 assets/
   data/attractions.json      6 atractivos acordados, bilingüe
   data/festival_events.json  programa SIMULADO de 15 días, bilingüe
+  brand/                     icono y logo (marca de relleno)
   images/                    fotos reales de Pujilí
 ```
 
@@ -57,13 +59,15 @@ assets/
 | `home` | ✅ Completa. Solo `presentation`: no tiene domain ni data propios porque no tiene datos propios, compone los de `calendar` y `attractions`. |
 | `map` | ✅ Completa. Solo `presentation`: consume el `AttractionsBloc` de la raíz, con su propio filtro de ruta para no arrastrar el de Explorar. |
 | `settings` | ✅ Completa (domain/data/presentation). Idioma persistido con `shared_preferences`. |
+| `favorites` | ✅ Completa (domain/data/presentation). Guarda ids y los resuelve contra los datos vivos. |
+| Marca | 🟡 Icono y splash propios, con una marca de **relleno** generada. Sustituible sin tocar código. |
 | `artisans` | 🟡 Scaffold: una página de 17 líneas, sin domain ni data. Bloqueada por contenido (pregunta abierta nº 18). |
 | Contenido del calendario | 🟡 **Simulado**: 30 fiestas inventadas del 21 sep al 5 oct de 2026, para poder ver el estado en vivo. Las reales son Corpus (junio) y cantonales (octubre). |
 | Contenido real | 🟡 Fotos de atractivos ✅. Faltan datos prácticos verificados, las coordenadas de dos atractivos y todo el contenido de artesanos. |
 | Google Maps | 🟡 La pantalla está hecha; **falta la API key**. Sin ella el área del mapa sale en blanco, pero el build no se rompe y el sheet con la lista sigue funcionando. |
 | Quinto tab | ✅ Es Artesanos. Ajustes salió de la barra y se abre desde el engranaje de Inicio (preguntas resueltas nº 8 y nº 1). |
 | Flavors y firma | ✅ `dev` / `prod` en Android e iOS, con `make aab-prod`. Falta generar el keystore real. |
-| Tests | 🟡 120 tests. `calendar`, `home` y el shell cubiertos; a `attractions` le faltan usecase, repositorio y bloc. |
+| Tests | 🟡 133 tests. `calendar`, `home` y el shell cubiertos; a `attractions` le faltan usecase, repositorio y bloc. |
 
 ## 5. Decisiones de diseño
 

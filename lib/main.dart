@@ -9,6 +9,7 @@ import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
 import 'features/attractions/presentation/bloc/attractions_bloc.dart';
 import 'features/calendar/presentation/bloc/calendar_bloc.dart';
+import 'features/favorites/presentation/cubit/favorites_cubit.dart';
 import 'features/home/presentation/bloc/home_bloc.dart';
 import 'features/settings/presentation/cubit/locale_cubit.dart';
 import 'l10n/app_localizations.dart';
@@ -43,6 +44,7 @@ class PujiliViveApp extends StatelessWidget {
           // resuelve, la app usa el idioma del telefono, que es el mismo
           // valor por defecto que si no hubiera preferencia.
           BlocProvider(create: (_) => sl<LocaleCubit>()..load()),
+          BlocProvider(create: (_) => sl<FavoritesCubit>()..load()),
         ],
         child: BlocBuilder<LocaleCubit, Locale?>(
           builder: (context, locale) => MaterialApp(

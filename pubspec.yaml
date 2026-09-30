@@ -29,7 +29,13 @@ dependencies:
 
 dev_dependencies:
   bloc_test: ^9.1.7
+
+  # Generan iconos y splash nativos a partir de la marca. Son de
+  # desarrollo: se ejecutan a mano y escupen recursos al proyecto; no
+  # entran en el binario.
+  flutter_launcher_icons: ^0.14.1
   flutter_lints: ^6.0.0
+  flutter_native_splash: ^2.4.1
   flutter_test:
     sdk: flutter
   mocktail: ^1.0.4
@@ -39,5 +45,26 @@ flutter:
   generate: true
 
   assets:
+    - assets/brand/
     - assets/data/
     - assets/images/
+
+# Marca: `dart run flutter_launcher_icons` regenera los iconos.
+flutter_launcher_icons:
+  image_path: assets/brand/icon.png
+  android: true
+  ios: true
+  # iOS rechaza iconos con canal alfa al subir a la App Store.
+  remove_alpha_ios: true
+  # Android recorta el icono adaptativo, asi que el primer plano lleva
+  # margen y el fondo es el verde de la paleta.
+  adaptive_icon_background: "#1F4A3A"
+  adaptive_icon_foreground: assets/brand/icon_foreground.png
+
+# Splash: `dart run flutter_native_splash:create` regenera los recursos.
+flutter_native_splash:
+  color: "#1F4A3A"
+  image: assets/brand/logo.png
+  android_12:
+    color: "#1F4A3A"
+    image: assets/brand/icon_foreground.png

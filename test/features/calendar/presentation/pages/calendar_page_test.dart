@@ -9,8 +9,10 @@ import 'package:pujili_vive/features/calendar/presentation/pages/calendar_page.d
 import 'package:pujili_vive/features/calendar/presentation/pages/festival_event_detail_page.dart';
 import 'package:pujili_vive/features/calendar/presentation/widgets/festival_event_card.dart';
 import 'package:pujili_vive/features/calendar/presentation/widgets/month_header.dart';
+import 'package:pujili_vive/features/favorites/presentation/cubit/favorites_cubit.dart';
 import 'package:pujili_vive/l10n/app_localizations.dart';
 
+import '../../../../helpers/favorites_cubit_helper.dart';
 import '../../../../helpers/fixtures/festival_event_fixtures.dart';
 
 class _MockCalendarBloc extends MockBloc<CalendarEvent, CalendarState>
@@ -18,22 +20,34 @@ class _MockCalendarBloc extends MockBloc<CalendarEvent, CalendarState>
 
 void main() {
   late _MockCalendarBloc bloc;
+  late FavoritesCubit favorites;
 
-  setUp(() => bloc = _MockCalendarBloc());
+  setUp(() {
+    bloc = _MockCalendarBloc();
+    favorites = buildFavoritesCubit();
+  });
+
+  tearDown(() => favorites.close());
 
   Widget wrap() {
-    return MaterialApp(
-      locale: const Locale('es'),
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
+    // Los providers van ENCIMA del MaterialApp, como en `main.dart`: si
+    // se cuelgan del `home`, el detalle que se empuja queda fuera de su
+    // alcance y el test falla por como esta montado, no por la app.
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<CalendarBloc>.value(value: bloc),
+        BlocProvider<FavoritesCubit>.value(value: favorites),
       ],
-      supportedLocales: const [Locale('es'), Locale('en')],
-      home: BlocProvider<CalendarBloc>.value(
-        value: bloc,
-        child: const CalendarPage(),
+      child: const MaterialApp(
+        locale: Locale('es'),
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: [Locale('es'), Locale('en')],
+        home: CalendarPage(),
       ),
     );
   }
@@ -41,18 +55,24 @@ void main() {
   /// Igual que [wrap] pero con el reloj bajo control, para poder ver
   /// como cambian las tarjetas segun avanza el dia.
   Widget wrapAt(DateTime Function() now) {
-    return MaterialApp(
-      locale: const Locale('es'),
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
+    // Los providers van ENCIMA del MaterialApp, como en `main.dart`: si
+    // se cuelgan del `home`, el detalle que se empuja queda fuera de su
+    // alcance y el test falla por como esta montado, no por la app.
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<CalendarBloc>.value(value: bloc),
+        BlocProvider<FavoritesCubit>.value(value: favorites),
       ],
-      supportedLocales: const [Locale('es'), Locale('en')],
-      home: BlocProvider<CalendarBloc>.value(
-        value: bloc,
-        child: CalendarPage(now: now),
+      child: MaterialApp(
+        locale: const Locale('es'),
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [Locale('es'), Locale('en')],
+        home: CalendarPage(now: now),
       ),
     );
   }

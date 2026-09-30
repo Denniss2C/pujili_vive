@@ -5,6 +5,8 @@ import '../../../../core/services/maps_launcher.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/detail_layout.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../favorites/domain/entities/favorite_ref.dart';
+import '../../../favorites/presentation/widgets/favorite_button.dart';
 import '../../domain/entities/attraction.dart';
 import '../../domain/entities/attraction_category.dart';
 
@@ -46,6 +48,7 @@ class AttractionDetailPage extends StatelessWidget {
         images: attraction.images,
         fallbackIcon: Icons.image_outlined,
       ),
+      action: FavoriteButton(favorite: FavoriteRef.attraction(attraction.id)),
       panel: DetailPanel(
         children: [
           Text(

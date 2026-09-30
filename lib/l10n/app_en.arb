@@ -64,5 +64,13 @@
   "settingsLanguageEn": "English",
   "settingsAbout": "About",
   "settingsVersion": "Version",
-  "settingsAboutBody": "Tourism guide for the Pujilí canton, Cotopaxi. Festivals and attractions work offline."
+  "settingsAboutBody": "Tourism guide for the Pujilí canton, Cotopaxi. Festivals and attractions work offline.",
+
+  "savedTitle": "Saved",
+  "savedEmptyTitle": "Nothing saved yet",
+  "savedEmptyBody": "Tap the heart on an attraction or a festival to keep it here.",
+  "savedAttractions": "Attractions",
+  "savedFestivals": "Festivals",
+  "saveAction": "Save",
+  "unsaveAction": "Remove from saved"
 }

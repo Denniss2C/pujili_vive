@@ -64,5 +64,13 @@
   "settingsLanguageEn": "English",
   "settingsAbout": "Acerca de",
   "settingsVersion": "Versión",
-  "settingsAboutBody": "Guía de turismo del cantón Pujilí, Cotopaxi. Las fiestas y los atractivos se consultan sin conexión."
+  "settingsAboutBody": "Guía de turismo del cantón Pujilí, Cotopaxi. Las fiestas y los atractivos se consultan sin conexión.",
+
+  "savedTitle": "Guardados",
+  "savedEmptyTitle": "Todavía no has guardado nada",
+  "savedEmptyBody": "Toca el corazón en un atractivo o en una fiesta y lo tendrás aquí.",
+  "savedAttractions": "Atractivos",
+  "savedFestivals": "Fiestas",
+  "saveAction": "Guardar",
+  "unsaveAction": "Quitar de guardados"
 }

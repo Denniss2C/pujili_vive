@@ -8,6 +8,23 @@ y el proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 ## [Unreleased]
 
 ### Added
+- **Marca propia**: icono de app en Android e iOS y splash nativo, en vez
+  del icono azul de Flutter y el splash blanco de la plantilla. La marca
+  es el tocado de plumas del Danzante sobre la mascara, dibujada con la
+  paleta del proyecto. Es un **placeholder honesto**: sirve para dejar de
+  parecer un proyecto sin estrenar y se sustituye sin tocar codigo.
+- La misma marca en la cabecera de Inicio, para que la app se reconozca
+  por dentro igual que en el lanzador.
+- Feature `favorites`: corazon en el detalle de atractivo y de fiesta, y
+  pantalla "Guardados" detras del corazon de la cabecera de Inicio. No es
+  un tab: los cinco estan tomados.
+- Guardados almacena **ids, no copias**, asi que nunca enseña datos
+  viejos y un guardado huerfano —si el atractivo desaparece del JSON—
+  simplemente deja de aparecer en vez de quedar como ficha rota.
+- `InMemoryFavoritesRepository` en los helpers de test: un repositorio que
+  funciona de verdad, para que un test pueda tocar el corazon y comprobar
+  el resultado sin programar respuestas una por una.
+
 - El calendario esta **vivo**: mira el reloj y una fiesta pasa sola a
   tarjeta blanca cuando le llega su hora, y se atenua cuando termina, sin
   que el usuario toque nada. La lista se repinta cada 30 s.
