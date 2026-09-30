@@ -1,4 +1,3 @@
-import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pujili_vive/features/map/presentation/pages/map_page.dart';
 
@@ -33,13 +32,5 @@ void main() {
       bounds.northEast.longitude - bounds.southWest.longitude,
       closeTo(0.01, 1e-9),
     );
-  });
-
-  test('devuelve el rectangulo que entiende la camara de flutter_map', () {
-    // `fitCamera` solo acepta el LatLngBounds de flutter_map. Si esta
-    // funcion devolviera otro tipo, el encuadre no compilaria.
-    final bounds = boundsOf([buildAttraction()]);
-
-    expect(bounds, isA<LatLngBounds>());
   });
 }

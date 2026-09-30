@@ -172,6 +172,10 @@ y el proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
   regenerar (esta maquina no tiene aceptada la licencia de Xcode y
   `pod install` la exige). Se rehace solo en el proximo `make pods` o
   build de iOS.
+- `NSLocationWhenInUseUsageDescription` del `Info.plist` de iOS, que
+  prometia "usar tu ubicacion para mostrarte los atractivos mas cercanos".
+  La app nunca lo hizo. Un proposito de ubicacion declarado va a la
+  etiqueta de privacidad de la App Store y lo pregunta la revision.
 - Permisos `ACCESS_FINE_LOCATION` y `ACCESS_COARSE_LOCATION` del manifest
   de Android. Eran herencia de `google_maps_flutter` y la app **nunca
   pidio la ubicacion**: no hay boton de "mi ubicacion" (depende de la
@@ -181,6 +185,25 @@ y el proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
   Los bumps que ya habia propuesto quedan aplicados en `main`.
 
 ### Fixed
+- **El mapa encuadraba pines detras de su propio sheet.** El encuadre
+  dejaba 64 px de margen por los cuatro lados, pero el sheet "Explorar
+  lugares" cubre el 45 % de abajo: los pines del sur quedaban tapados, sin
+  poder verse ni tocarse. Ahora el margen inferior descuenta lo que el
+  sheet ocupa. Venia de la version con Google (`newLatLngBounds(bounds,
+  64)` tenia el mismo margen uniforme); lo descubrio uno de los tests
+  nuevos, que no existia porque con Google la pantalla no se podia probar.
+- Los pines señalaban ~6 px por encima de su sitio —unos 115 m con el zoom
+  de arranque—: los iconos de Material dejan margen dentro de su caja, asi
+  que la punta dibujada no llegaba al borde por el que se ancla el pin.
+- Alejar el mapa con dos dedos podia llegar a ver el mundo entero, donde la
+  proyeccion repite el planeta a los lados y cada pin se clonaba **con su
+  misma Key**, reventando la pantalla en debug con "Duplicate keys found".
+  Ahora hay suelo de zoom, que ademas evita pedir teselas de medio planeta
+  a un servidor donado.
+- El giro con dos dedos queda desactivado. `flutter_map` lo trae activado y
+  no hay brujula para deshacerlo, asi que un giro accidental dejaba el mapa
+  torcido sin vuelta atras, con los pines inclinados apuntando a otro
+  sitio.
 - El sheet del mapa envolvia sus filas en un `DecoratedBox` con fondo, que
   tapa el fondo y el ink de los `ListTile`: al tocarlas no se veia nada.
   Pasa a `Material`, que ademas da la sombra.

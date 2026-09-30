@@ -2,7 +2,9 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pujili_vive/core/services/maps_launcher.dart';
 import 'package:pujili_vive/features/attractions/domain/entities/attraction_category.dart';
@@ -45,6 +47,16 @@ void main() {
     category: AttractionCategory.crafts,
     latitude: -0.9601,
     longitude: -78.6999,
+  );
+
+  /// El Quilotoa esta a ~25 km del casco urbano y es el caso que obliga a
+  /// encuadrar: con un zoom fijo sobre Pujili se queda fuera de pantalla.
+  final quilotoa = buildAttraction(
+    id: 'quilotoa',
+    nameEs: 'Laguna del Quilotoa',
+    category: AttractionCategory.nature,
+    latitude: -0.8583,
+    longitude: -78.9061,
   );
 
   setUp(() {
@@ -112,6 +124,61 @@ void main() {
     await tester.pumpWidget(wrap());
     await tester.pump();
 
-    expect(find.textContaining('OpenStreetMap'), findsOneWidget);
+    // Se exige la cadena entera, no un trozo: "contributors" nombra a
+    // quienes aportan los datos y es justo lo que reclama la licencia.
+    expect(find.text('© OpenStreetMap contributors'), findsOneWidget);
+  });
+
+  testWidgets('cambiar de ruta deja solo los pines de esa ruta',
+      (tester) async {
+    await tester.pumpWidget(wrap());
+    await tester.pump();
+
+    await tester.tap(find.text('Ruta del artesano'));
+    await tester.pump();
+
+    expect(find.byKey(const Key('map-pin-ceramica')), findsOneWidget);
+    expect(find.byKey(const Key('map-pin-plaza-matriz')), findsNothing);
+  });
+
+  testWidgets('una ruta sin lugares no deja pines ni revienta', (tester) async {
+    // Ninguno de los dos lugares es religioso. El mapa se queda donde
+    // estaba a proposito: mover la camara sin nada que encuadrar seria
+    // desorientar al usuario.
+    await tester.pumpWidget(wrap());
+    await tester.pump();
+
+    await tester.tap(find.text('Ruta religiosa'));
+    await tester.pump();
+
+    expect(find.byKey(const Key('map-pin-ceramica')), findsNothing);
+    expect(find.byKey(const Key('map-pin-plaza-matriz')), findsNothing);
+    expect(find.text('Esta ruta todavía no tiene lugares.'), findsOneWidget);
+  });
+
+  testWidgets('la camara encuadra el Quilotoa, a 25 km del casco urbano',
+      (tester) async {
+    // Esto es lo unico que prueba el encuadre de verdad: `boundsOf` se
+    // prueba sola, pero si el encuadre inicial dejara de aplicarse, el
+    // mapa se quedaria con el zoom fijo sobre Pujili y nadie se enteraria.
+    when(() => bloc.state).thenReturn(
+      AttractionsLoaded(all: [plaza, quilotoa], filtered: [plaza, quilotoa]),
+    );
+
+    await tester.pumpWidget(wrap());
+    await tester.pump();
+
+    final camera = MapCamera.of(tester.element(find.byType(MarkerLayer)));
+
+    expect(
+      camera.visibleBounds.contains(const LatLng(-0.9578, -78.6967)),
+      isTrue,
+      reason: 'la Plaza Matriz deberia quedar encuadrada',
+    );
+    expect(
+      camera.visibleBounds.contains(const LatLng(-0.8583, -78.9061)),
+      isTrue,
+      reason: 'el Quilotoa deberia quedar encuadrado',
+    );
   });
 }

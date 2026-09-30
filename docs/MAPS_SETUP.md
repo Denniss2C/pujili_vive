@@ -23,7 +23,21 @@ la app cumple así:
 | Identificarse con un `User-Agent` propio | `userAgentPackageName: 'ec.gob.pujili.pujili_vive'` en el `TileLayer` |
 | No usar subdominios (`{s}.tile...`) | La URL no los lleva |
 | Acreditar a OpenStreetMap de forma visible | El crédito se pinta arriba a la derecha del mapa, y hay un test que falla si alguien lo borra |
-| Tráfico moderado, sin descargas masivas | La app solo pide las teselas que el usuario mira; no precarga ni guarda regiones |
+| Tráfico moderado, sin descargas masivas | No descarga regiones ni guarda teselas en disco. **Con un matiz:** el shell monta los cinco tabs en un `IndexedStack`, así que el mapa se construye al arrancar y pide sus primeras teselas aunque nadie abra el tab. Ver la nota de abajo |
+
+### Pendiente: el mapa se monta al arrancar
+
+`MainShell` pone los cinco tabs en un `IndexedStack`, que construye y mide
+todos sus hijos a la vez. El mapa, por tanto, resuelve su primer juego de
+teselas en cuanto arranca la app, lo abra el usuario o no. No es una
+descarga masiva —son las teselas de una pantalla—, pero es tráfico sobre un
+servidor donado y datos móviles gastados por gente que quizá nunca entre al
+mapa.
+
+Viene de antes de este cambio (con Google el tab se montaba igual), pero
+ahora importa más. Arreglarlo es montar el tab de forma perezosa en
+`MainShell`: recordar qué tabs se han visitado y devolver un
+`SizedBox.shrink()` para los que no. También acortaría el arranque.
 
 **Al ejecutar en modo debug, `flutter_map` imprime un aviso** recordando esa
 política. Es del paquete, no de la app: está detrás de `kDebugMode`, así que

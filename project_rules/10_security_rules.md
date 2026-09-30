@@ -8,13 +8,13 @@
 ## 1. Secretos y credenciales
 
 ### Prohibido
-- ❌ Hardcodear la Google Maps API key, tokens o contraseñas.
+- ❌ Hardcodear claves de API, tokens o contraseñas.
 - ❌ Commitear `local.properties`, `key.properties`, `*.jks`, `.env`.
 - ❌ Dejar la key real en `AppDelegate.swift` o `web/index.html` al hacer commit.
 
 ### Obligatorio
-- ✅ Maps API key en `android/local.properties` (local) y desde el secret
-  `MAPS_API_KEY` en CI.
+- ✅ El mapa **no usa credenciales**: teselas de OpenStreetMap, sin key
+  (ver [`docs/MAPS_SETUP.md`](../docs/MAPS_SETUP.md)).
 - ✅ Restringir la key por plataforma y por API en Google Cloud Console.
 - ✅ La app compila y corre **sin** la key (mapa en blanco).
 

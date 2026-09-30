@@ -19,11 +19,14 @@ void main() {
     // del resto de la app; este test evita que se deslice un color
     // suelto cuando se añada una categoria.
     // `Color` redefine `==`, asi que el Set no puede ser constante.
+    //
+    // Crema y blanco quedan **fuera** a proposito, aunque esten en la
+    // paleta: el crema es el fondo del propio mapa y se parece al relleno
+    // de tierra de las teselas, asi que un pin crema seria invisible.
     final palette = <Color>{
       AppColors.terracotta,
       AppColors.gold,
       AppColors.deepGreen,
-      AppColors.cream,
       AppColors.textDark,
     };
 

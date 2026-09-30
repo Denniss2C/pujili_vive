@@ -67,7 +67,7 @@ assets/
 | Mapa | ✅ `flutter_map` sobre teselas de OpenStreetMap: sin API key, sin cuenta de Google Cloud y sin secretos en el CI. Funciona recién clonado el repo. Las teselas son un servicio donado con condiciones de uso ([`MAPS_SETUP.md`](./MAPS_SETUP.md)). |
 | Quinto tab | ✅ Es Artesanos. Ajustes salió de la barra y se abre desde el engranaje de Inicio (preguntas resueltas nº 8 y nº 1). |
 | Flavors y firma | ✅ `dev` / `prod` en Android e iOS, con `make aab-prod`. Falta generar el keystore real. |
-| Tests | 🟡 139 tests. El mapa entra por fin en la suite: `FlutterMap` es Flutter puro, mientras `GoogleMap` era una *platform view* que no pintaba en un test. `calendar`, `home`, `map` y el shell cubiertos; a `attractions` le faltan usecase, repositorio y bloc. |
+| Tests | 🟡 141 tests. El mapa entra por fin en la suite: `FlutterMap` es Flutter puro, mientras `GoogleMap` era una *platform view* que no pintaba en un test. `calendar`, `home`, `map` y el shell cubiertos; a `attractions` le faltan usecase, repositorio y bloc. |
 
 ## 5. Decisiones de diseño
 

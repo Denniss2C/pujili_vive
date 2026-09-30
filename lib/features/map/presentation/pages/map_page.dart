@@ -43,41 +43,12 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   ThematicRoute _route = ThematicRoute.all;
-  final MapController _controller = MapController();
 
-  /// `fitCamera` necesita que el mapa exista: llamarlo antes de que
-  /// `FlutterMap` se monte lanza. `onMapReady` levanta esta bandera.
-  bool _ready = false;
-
-  /// Casco urbano de Pujili. Es el centro de arranque y el que se usa
-  /// cuando no hay nada que encuadrar (`CONCEPTO.md` §4.5, Estados: la
-  /// app debe ser usable sin conceder ubicacion).
-  static const _pujili = LatLng(-0.9578, -78.6967);
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _onRouteChanged(ThematicRoute route, List<Attraction> all) {
+  /// La pagina solo decide **que ruta** se mira. Donde apunta la camara lo
+  /// decide `_Map`, que es quien conoce su propio tamaño: sin el alto no
+  /// se puede saber cuanto tapa el sheet.
+  void _onRouteChanged(ThematicRoute route) {
     setState(() => _route = route);
-    _fitTo(_route.filter(all));
-  }
-
-  /// Encuadra los pines visibles.
-  ///
-  /// Hace falta porque el Quilotoa esta a ~25 km del casco urbano: un
-  /// zoom fijo sobre Pujili lo dejaria siempre fuera de pantalla.
-  void _fitTo(List<Attraction> places) {
-    if (!_ready || places.isEmpty) return;
-
-    _controller.fitCamera(
-      CameraFit.bounds(
-        bounds: boundsOf(places),
-        padding: const EdgeInsets.all(64),
-      ),
-    );
   }
 
   @override
@@ -102,20 +73,12 @@ class _MapPageState extends State<MapPage> {
             children: [
               RouteSelector(
                 active: _route,
-                onChanged: (route) => _onRouteChanged(route, state.all),
+                onChanged: _onRouteChanged,
               ),
               Expanded(
                 child: Stack(
                   children: [
-                    _Map(
-                      places: places,
-                      initial: _pujili,
-                      controller: _controller,
-                      onReady: () {
-                        _ready = true;
-                        _fitTo(places);
-                      },
-                    ),
+                    _Map(route: _route, places: places),
                     PlacesSheet(places: places),
                   ],
                 ),
@@ -126,6 +89,29 @@ class _MapPageState extends State<MapPage> {
       ),
     );
   }
+}
+
+/// Encuadre de camara que deja visibles todos los lugares.
+///
+/// **El margen de abajo no es simetrico a proposito.** El sheet "Explorar
+/// lugares" cubre [PlacesSheet.initialSize] del alto, asi que encuadrar
+/// contra el alto entero mete los pines del sur detras del sheet: no se
+/// ven y no se pueden tocar. Se descuenta esa franja, mas un margen para
+/// que el pin no quede pegado al borde.
+///
+/// [mapHeight] es el alto del area de mapa, no el de la pantalla.
+CameraFit cameraFitFor(List<Attraction> places, {required double mapHeight}) {
+  const margin = 48.0;
+
+  return CameraFit.bounds(
+    bounds: boundsOf(places),
+    padding: EdgeInsets.fromLTRB(
+      margin,
+      margin,
+      margin,
+      margin + mapHeight * PlacesSheet.initialSize,
+    ),
+  );
 }
 
 /// Rectangulo que contiene todos los puntos.
@@ -180,66 +166,142 @@ Color markerColorOf(AttractionCategory category) {
     case AttractionCategory.nature:
       return AppColors.deepGreen;
     case AttractionCategory.cultural:
+      // La paleta tiene tres colores de acento y cuatro categorias. El
+      // gris oscuro es el unico tono restante que se lee sobre teselas;
+      // si algun dia la paleta gana un cuarto acento, este es el sitio.
       return AppColors.textDark;
   }
 }
 
-class _Map extends StatelessWidget {
+/// El mapa y su camara.
+///
+/// Tiene estado —y no lo tiene la pagina— porque encuadrar necesita el
+/// alto del area de mapa, y el alto solo se conoce aqui dentro.
+class _Map extends StatefulWidget {
+  final ThematicRoute route;
   final List<Attraction> places;
-  final LatLng initial;
-  final MapController controller;
-  final VoidCallback onReady;
 
-  const _Map({
-    required this.places,
-    required this.initial,
-    required this.controller,
-    required this.onReady,
-  });
+  const _Map({required this.route, required this.places});
+
+  @override
+  State<_Map> createState() => _MapState();
+}
+
+class _MapState extends State<_Map> {
+  final MapController _controller = MapController();
+
+  /// Casco urbano de Pujili. Es el centro de arranque y el que se usa
+  /// cuando no hay nada que encuadrar (`CONCEPTO.md` §4.5, Estados: la
+  /// app debe ser usable sin conceder ubicacion).
+  static const _pujili = LatLng(-0.9578, -78.6967);
+
+  double _mapHeight = 0;
+
+  /// `FlutterMap` solo libera el controlador si lo creo el mismo; este es
+  /// nuestro, y ademas le cuelga un `AnimationController`. Sin esta
+  /// llamada se filtra.
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  /// Reencuadra al cambiar de ruta.
+  ///
+  /// Se compara la **ruta** y no la lista de lugares porque el filtro
+  /// devuelve una lista nueva en cada build: comparar listas reencuadraria
+  /// el mapa en cada repintado y el usuario no podria ni moverlo.
+  ///
+  /// El **primer** encuadre no pasa por aqui: lo hace `FlutterMap` con
+  /// `initialCameraFit`, que espera a tener un tamaño real antes de
+  /// aplicarlo. Encuadrar a mano contra un tamaño cero produce una camara
+  /// degenerada y el mapa se quedaria abierto al mundo entero.
+  @override
+  void didUpdateWidget(_Map old) {
+    super.didUpdateWidget(old);
+
+    // Una ruta vacia deja la camara donde estaba: no hay nada que
+    // encuadrar, y mover el mapa sin pines solo desorienta.
+    if (old.route != widget.route && widget.places.isNotEmpty) {
+      _controller.fitCamera(cameraFitFor(widget.places, mapHeight: _mapHeight));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final lang = Localizations.localeOf(context).languageCode;
 
-    return FlutterMap(
-      mapController: controller,
-      options: MapOptions(
-        initialCenter: initial,
-        initialZoom: 13,
-        onMapReady: onReady,
-        // Lo que se ve mientras las teselas cargan, o si no hay red. En
-        // crema y no en el gris del paquete: parece parte de la app y no
-        // un hueco.
-        backgroundColor: AppColors.cream,
-      ),
-      children: [
-        TileLayer(
-          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          // La politica de teselas de la OSM Foundation exige que la app
-          // se identifique. Sin esto pueden bloquearla.
-          userAgentPackageName: 'ec.gob.pujili.pujili_vive',
-        ),
-        MarkerLayer(
-          markers: [
-            for (final place in places)
-              Marker(
-                key: Key('map-pin-${place.id}'),
-                point: LatLng(place.latitude, place.longitude),
-                width: 44,
-                height: 44,
-                // El pin apunta hacia abajo: el widget va encima del
-                // punto para que la punta caiga sobre las coordenadas.
-                alignment: Alignment.topCenter,
-                child: _Pin(
-                  label: place.name.resolve(lang),
-                  color: markerColorOf(place.category),
-                  onTap: () => AttractionDetailPage.open(context, place),
-                ),
-              ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        _mapHeight = constraints.maxHeight;
+
+        return FlutterMap(
+          mapController: _controller,
+          options: MapOptions(
+            initialCenter: _pujili,
+            initialZoom: 13,
+            // El Quilotoa esta a ~25 km del casco urbano: sin encuadrar, un
+            // zoom fijo sobre Pujili lo dejaria siempre fuera de pantalla.
+            // Lo aplica `FlutterMap` cuando ya tiene un tamaño real.
+            initialCameraFit: widget.places.isEmpty
+                ? null
+                : cameraFitFor(widget.places, mapHeight: _mapHeight),
+            // Suelo de zoom. Sin el, un pellizco puede alejarse hasta ver
+            // el mundo entero: ahi la proyeccion repite el planeta a los
+            // lados y `MarkerLayer` clona cada pin **con su misma Key** en
+            // cada copia, lo que revienta el `Stack` en debug con
+            // "Duplicate keys found". Y de paso no tiene sentido pedir
+            // teselas de medio planeta para ver un canton.
+            minZoom: 9,
+            // Sin rotacion. `flutter_map` la trae activada y no hay brujula
+            // para deshacerla, asi que un giro accidental con dos dedos
+            // dejaria el mapa torcido sin vuelta atras. Los pines tampoco
+            // se mantienen verticales por si solos: girarian con el mapa
+            // hasta dejar de apuntar a su propio punto.
+            interactionOptions: const InteractionOptions(
+              flags: InteractiveFlag.all & ~InteractiveFlag.rotate,
+            ),
+            // Lo que se ve mientras las teselas cargan, o si no hay red. En
+            // crema y no en el gris del paquete: parece parte de la app y
+            // no un hueco.
+            backgroundColor: AppColors.cream,
+          ),
+          children: [
+            TileLayer(
+              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+              // La politica de teselas de la OSM Foundation exige que la
+              // app se identifique. Sin esto pueden bloquearla.
+              userAgentPackageName: 'ec.gob.pujili.pujili_vive',
+            ),
+            MarkerLayer(
+              markers: [
+                for (final place in widget.places)
+                  Marker(
+                    key: Key('map-pin-${place.id}'),
+                    point: LatLng(place.latitude, place.longitude),
+                    width: 44,
+                    height: 44,
+                    // El pin apunta hacia abajo, asi que el widget va
+                    // encima del punto. No es `topCenter` exacto: los
+                    // iconos de Material dejan 2 de sus 24 unidades de
+                    // margen, asi que la punta dibujada no llega al borde
+                    // de su caja y con `topCenter` cada pin señalaria ~6 px
+                    // mas arriba de su sitio —unos 115 m con el zoom de
+                    // arranque—. El -0.72 baja el ancla hasta la punta de
+                    // verdad.
+                    alignment: const Alignment(0, -0.72),
+                    child: _Pin(
+                      label: place.name.resolve(lang),
+                      color: markerColorOf(place.category),
+                      onTap: () => AttractionDetailPage.open(context, place),
+                    ),
+                  ),
+              ],
+            ),
+            const _OpenStreetMapCredit(),
           ],
-        ),
-        const _OpenStreetMapCredit(),
-      ],
+        );
+      },
     );
   }
 }
@@ -289,8 +351,12 @@ class _Pin extends StatelessWidget {
 /// Credito a OpenStreetMap.
 ///
 /// No es decorativo: las teselas son ODbL y la licencia exige que el
-/// credito se vea. Va arriba a la derecha porque el sheet arrastrable
-/// tapa la esquina de abajo, que es donde suele ponerse.
+/// credito se vea. El texto es el que piden las guias de atribucion de
+/// la OSMF, con "contributors" incluido: son los que aportan los datos y
+/// nombrarlos es justo la parte que la licencia reclama.
+///
+/// Va arriba a la derecha porque el sheet arrastrable tapa la esquina de
+/// abajo, que es donde suele ponerse.
 class _OpenStreetMapCredit extends StatelessWidget {
   const _OpenStreetMapCredit();
 
@@ -308,7 +374,7 @@ class _OpenStreetMapCredit extends StatelessWidget {
           child: const Padding(
             padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
             child: Text(
-              '© OpenStreetMap',
+              '© OpenStreetMap contributors',
               style: TextStyle(fontSize: 11, color: AppColors.textDark),
             ),
           ),

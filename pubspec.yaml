@@ -16,13 +16,18 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
+  # El mapa: teselas de OpenStreetMap, sin API key ni facturacion.
+  # Ver docs/MAPS_SETUP.md.
   flutter_map: ^8.3.2
   get_it: ^9.2.1
 
   intl: any
 
-  # El idioma elegido en Ajustes sobrevive al cierre de la app.
+  # Donde vive LatLng. flutter_map depende de el pero no lo re-exporta,
+  # asi que hay que declararlo aparte.
   latlong2: ^0.10.1
+
+  # El idioma elegido en Ajustes sobrevive al cierre de la app.
   shared_preferences: ^2.3.3
 
   # "Cómo llegar" abre la app de mapas del teléfono con las coordenadas.
