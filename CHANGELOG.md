@@ -8,6 +8,23 @@ y el proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 ## [Unreleased]
 
 ### Added
+- El calendario esta **vivo**: mira el reloj y una fiesta pasa sola a
+  tarjeta blanca cuando le llega su hora, y se atenua cuando termina, sin
+  que el usuario toque nada. La lista se repinta cada 30 s.
+- `EventStatus` y `FestivalEvent.statusAt()`: en que punto esta una
+  fiesta respecto al reloj (`upcoming` / `inProgress` / `past`). Vive en
+  domain, asi que se prueba sin pintar nada.
+- Las fiestas tienen **hora de inicio y de fin**, no solo fecha. El
+  bloque de fecha de la tarjeta la muestra, porque con dos fiestas por
+  dia el dia solo ya no las distingue.
+- Programa simulado de 15 dias en `festival_events.json`: 30 fiestas
+  cantonales inventadas, dos por dia, del 21 de septiembre al 5 de
+  octubre de 2026. **Sustituye a las 4 fiestas de 2027.** Las fiestas
+  reales son dos al año, Corpus en junio y cantonales en octubre; hay que
+  poner las de verdad antes de publicar.
+- Tests que validan el programa entero: dos fiestas por dia, sin huecos,
+  sin solapes, sin cruzar la medianoche y con fin posterior al inicio.
+
 - Mapa: los 6 atractivos como pines sobre `GoogleMap`, selector de rutas
   tematicas y sheet arrastrable "Explorar lugares" que abre el detalle.
   Sustituye al placeholder de 17 lineas. **Necesita una Google Maps API
@@ -65,6 +82,20 @@ y el proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 - `analysis_options.yaml` con set de lints ampliado.
 
 ### Changed
+- El blanco de la tarjeta **cambia de significado**: antes lo ponia
+  `isHighlighted` y era fijo en el JSON; ahora quiere decir "esto esta
+  pasando ahora". `isHighlighted` se queda con lo que siempre quiso decir
+  —esta fiesta importa mas— y pasa a un marco dorado sin relleno, para
+  que no se confundan dos cosas distintas.
+- Los eventos pasados se atenuan en vez de quedarse iguales, y siguen en
+  la lista: se ve por donde va el programa sin perder lo que hubo
+  (`CONCEPTO.md` pregunta resuelta nº 4).
+- Inicio ya no llama "proximo evento" a una fiesta que ya termino: filtra
+  por hora de fin y no por dia. Mientras una ocurre, la tarjeta dice
+  "AHORA" y hasta que hora va, en vez de una cuenta regresiva en ceros.
+- El detalle de fiesta muestra la franja horaria ("21 sept 2026 · 10:00 –
+  12:30") y una pildora distinta segun este ocurriendo o sea destacada.
+
 - El quinto tab deja de ser Perfil y pasa a ser **Artesanos**. Perfil no
   tenia contenido decidido y sin cuentas de usuario no hay perfil que
   mostrar; Artesanos tenia pantalla diseñada y ningun tab. Deshace de paso

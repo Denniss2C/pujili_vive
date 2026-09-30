@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -11,11 +13,16 @@ import 'festival_event_detail_page.dart';
 /// El calendario de fiestas: el diferenciador del producto
 /// (ver `docs/CONCEPTO.md` §8).
 ///
-/// Las tarjetas **no son pulsables todavia**: el detalle de evento no esta
-/// diseñado (pregunta abierta nº 6). Antes que inventar una pantalla, se
-/// deja sin accion.
+/// La lista **esta viva**: mira el reloj y va cambiando el aspecto de las
+/// tarjetas segun avanza el dia. Ver [FestivalEventCard] para los tres
+/// tratamientos.
 class CalendarPage extends StatefulWidget {
-  const CalendarPage({super.key});
+  /// Inyectable para poder fijar "ahora" en los tests: de el depende que
+  /// tarjeta sale blanca y cual atenuada.
+  final DateTime Function() now;
+
+  const CalendarPage({super.key, DateTime Function()? now})
+      : now = now ?? DateTime.now;
 
   @override
   State<CalendarPage> createState() => _CalendarPageState();
@@ -73,7 +80,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     ),
                   ),
                 ),
-                Expanded(child: _Body(state: state)),
+                Expanded(child: _Body(state: state, now: widget.now)),
               ],
             );
           }
@@ -87,7 +94,9 @@ class _CalendarPageState extends State<CalendarPage> {
 
 class _Body extends StatelessWidget {
   final CalendarLoaded state;
-  const _Body({required this.state});
+  final DateTime Function() now;
+
+  const _Body({required this.state, required this.now});
 
   @override
   Widget build(BuildContext context) {
@@ -111,19 +120,55 @@ class _Body extends StatelessWidget {
       );
     }
 
-    return _Timeline(events: state.filtered);
+    return _Timeline(events: state.filtered, now: now);
   }
 }
 
 /// Linea de tiempo vertical: recorre la lista **ya ordenada** e inserta un
 /// encabezado cada vez que cambia el mes.
-class _Timeline extends StatelessWidget {
+///
+/// Es la que **mira el reloj**: se repinta sola para que una fiesta pase
+/// a blanca cuando le llega la hora y se atenue cuando termina, sin que
+/// el usuario toque nada.
+class _Timeline extends StatefulWidget {
   final List<FestivalEvent> events;
-  const _Timeline({required this.events});
+  final DateTime Function() now;
+
+  const _Timeline({required this.events, required this.now});
+
+  @override
+  State<_Timeline> createState() => _TimelineState();
+}
+
+class _TimelineState extends State<_Timeline> {
+  /// Cada 30 s y no cada minuto: las fiestas empiezan y acaban en punto,
+  /// asi que con un tick de un minuto la tarjeta podria tardar hasta 59 s
+  /// en reaccionar. Repintar es barato: el `ListView` es perezoso y solo
+  /// reconstruye lo que se ve.
+  static const _tick = Duration(seconds: 30);
+
+  late DateTime _now;
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _now = widget.now();
+    _timer = Timer.periodic(_tick, (_) {
+      if (mounted) setState(() => _now = widget.now());
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final lang = Localizations.localeOf(context).languageCode;
+    final events = widget.events;
 
     // Se aplana a una lista de filas (encabezado o tarjeta) para poder
     // usar un solo ListView perezoso en vez de anidar scrolls.
@@ -161,6 +206,8 @@ class _Timeline extends StatelessWidget {
             return FestivalEventCard(
               event: row.event!,
               languageCode: lang,
+              // El reloj se mira una vez por tick, no una por tarjeta.
+              status: row.event!.statusAt(_now),
               // Se abre dentro del tab Calendario: el tab no cambia.
               onTap: () => FestivalEventDetailPage.open(context, row.event!),
             );

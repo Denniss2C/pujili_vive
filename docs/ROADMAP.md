@@ -30,9 +30,16 @@ calendario → inicio → atractivos → **mapa** → artesanos → perfil → a
 - [x] Fotos reales de Pujilí en `assets/images/` (comprimidas).
 - [ ] Datos prácticos verificados (horarios, cómo llegar, contactos).
       Bloqueado por trabajo de campo, igual que las coordenadas de abajo.
+- [ ] **Programa real de fiestas.** `festival_events.json` es hoy un
+      programa *simulado* de 15 días (21 sep – 5 oct de 2026) para poder ver
+      el comportamiento en vivo. Las fiestas reales son dos al año: Corpus
+      en junio y cantonales en octubre. Hay que levantarlas con fechas
+      verificadas antes de publicar.
 
 ## Fase 2 — Features scaffold → completas
-- [x] `calendar`: fiestas y eventos (diferenciador clave).
+- [x] `calendar`: fiestas y eventos (diferenciador clave), con la lista
+      viva: la tarjeta se pone blanca mientras la fiesta ocurre y se atenúa
+      al terminar.
 - [x] `home`: contenido de bienvenida real, con cuenta regresiva a la próxima
       fiesta y carrusel "Qué visitar". Sin buscador (pregunta abierta nº 3) ni
       carrusel artesanal (bloqueado por contenido).

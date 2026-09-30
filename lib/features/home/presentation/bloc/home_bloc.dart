@@ -61,23 +61,18 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     );
   }
 
-  /// Solo las fiestas que aun no han pasado.
+  /// Solo las fiestas que **no han terminado**.
   ///
-  /// Se compara contra el **dia**, no contra el instante: una fiesta sigue
-  /// siendo "hoy" a las once de la noche, y desaparecer del contador a
-  /// medianoche del propio dia seria raro.
+  /// Antes se comparaba contra el dia, porque las fiestas no tenian hora
+  /// y una seguia siendo "hoy" a las once de la noche. Ahora hay dos al
+  /// dia con hora de inicio y fin, asi que mantener la de la mañana
+  /// cuando ya es de noche ponia el contador en ceros y llamaba "proximo
+  /// evento" a algo que ya habia acabado.
+  ///
+  /// La que esta ocurriendo **si** se queda: es la mas relevante de
+  /// todas, y la tarjeta lo dice en vez de contar hacia atras.
   List<FestivalEvent> _upcoming(List<FestivalEvent> events) {
-    final today = DateUtilsX.startOfDay(now());
-    return events
-        .where((e) => !DateUtilsX.startOfDay(e.startDate).isBefore(today))
-        .toList();
+    final instant = now();
+    return events.where((e) => !e.endsAt.isBefore(instant)).toList();
   }
-}
-
-/// Helpers de fecha sin dependencias de Flutter, para poder testearlos.
-class DateUtilsX {
-  const DateUtilsX._();
-
-  static DateTime startOfDay(DateTime value) =>
-      DateTime(value.year, value.month, value.day);
 }

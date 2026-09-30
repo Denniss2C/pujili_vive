@@ -38,6 +38,55 @@ void main() {
     );
   }
 
+  /// Igual que [wrap] pero con el reloj bajo control, para poder ver
+  /// como cambian las tarjetas segun avanza el dia.
+  Widget wrapAt(DateTime Function() now) {
+    return MaterialApp(
+      locale: const Locale('es'),
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('es'), Locale('en')],
+      home: BlocProvider<CalendarBloc>.value(
+        value: bloc,
+        child: CalendarPage(now: now),
+      ),
+    );
+  }
+
+  testWidgets('una fiesta se pone blanca sola cuando le llega la hora',
+      (tester) async {
+    // Es el corazon de la pantalla: nadie toca nada, solo pasa el tiempo.
+    final fiesta = buildEvent(
+      titleEs: 'Pregón de Fiestas',
+      startDate: DateTime(2026, 9, 21, 10),
+      endDate: DateTime(2026, 9, 21, 12, 30),
+    );
+    when(() => bloc.state)
+        .thenReturn(CalendarLoaded(all: [fiesta], filtered: [fiesta]));
+
+    var ahora = DateTime(2026, 9, 21, 9, 59);
+    await tester.pumpWidget(wrapAt(() => ahora));
+    await tester.pump();
+
+    expect(find.text('AHORA'), findsNothing);
+
+    // Llega la hora y pasa un tick del reloj de la pantalla.
+    ahora = DateTime(2026, 9, 21, 10, 0, 30);
+    await tester.pump(const Duration(seconds: 31));
+
+    expect(find.text('AHORA'), findsOneWidget);
+
+    // Y al terminar vuelve a ser una tarjeta normal.
+    ahora = DateTime(2026, 9, 21, 12, 31);
+    await tester.pump(const Duration(seconds: 31));
+
+    expect(find.text('AHORA'), findsNothing);
+  });
+
   testWidgets('muestra un cargador mientras carga', (tester) async {
     when(() => bloc.state).thenReturn(CalendarLoading());
 

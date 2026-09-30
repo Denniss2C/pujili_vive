@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../calendar/domain/entities/event_status.dart';
 import '../../../calendar/domain/entities/festival_event.dart';
 
 /// Tarjeta de la proxima fiesta con cuenta regresiva en vivo.
@@ -51,7 +53,9 @@ class _NextEventCardState extends State<NextEventCard> {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    final remaining = widget.event.startDate.difference(DateTime.now());
+    final now = DateTime.now();
+    final live = widget.event.statusAt(now) == EventStatus.inProgress;
+    final remaining = widget.event.startDate.difference(now);
     // Una fiesta que ya empezo hoy no muestra numeros negativos.
     final safe = remaining.isNegative ? Duration.zero : remaining;
 
@@ -73,7 +77,9 @@ class _NextEventCardState extends State<NextEventCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              l.nextEvent,
+              // Si la fiesta esta ocurriendo, llamarla "proximo evento"
+              // seria mentir: lo proximo es que termine.
+              live ? l.eventNow.toUpperCase() : l.nextEvent,
               style: const TextStyle(fontSize: 12, color: AppColors.deepGreen),
             ),
             const SizedBox(height: 2),
@@ -87,15 +93,20 @@ class _NextEventCardState extends State<NextEventCard> {
               ),
             ),
             const SizedBox(height: 10),
-            Row(
-              children: [
-                _CountBlock(value: safe.inDays, label: l.days),
-                const SizedBox(width: 6),
-                _CountBlock(value: safe.inHours % 24, label: l.hours),
-                const SizedBox(width: 6),
-                _CountBlock(value: safe.inMinutes % 60, label: l.minutes),
-              ],
-            ),
+            // Una cuenta regresiva en ceros no dice nada. Mientras la
+            // fiesta ocurre, se enseña hasta cuando dura.
+            if (live)
+              _UntilBlock(endsAt: widget.event.endsAt)
+            else
+              Row(
+                children: [
+                  _CountBlock(value: safe.inDays, label: l.days),
+                  const SizedBox(width: 6),
+                  _CountBlock(value: safe.inHours % 24, label: l.hours),
+                  const SizedBox(width: 6),
+                  _CountBlock(value: safe.inMinutes % 60, label: l.minutes),
+                ],
+              ),
             const SizedBox(height: 10),
             SizedBox(
               width: double.infinity,
@@ -109,6 +120,39 @@ class _NextEventCardState extends State<NextEventCard> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Reemplaza al contador mientras la fiesta ocurre: hasta que hora va.
+///
+/// En futuro, no en pasado: la fiesta no ha terminado, termina a esa hora.
+class _UntilBlock extends StatelessWidget {
+  final DateTime endsAt;
+
+  const _UntilBlock({required this.endsAt});
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context).toLanguageTag();
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      decoration: BoxDecoration(
+        color: AppColors.deepGreen,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        '${l.eventUntil} ${DateFormat.Hm(locale).format(endsAt)}',
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+          color: AppColors.cream,
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
