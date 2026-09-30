@@ -1,48 +1,67 @@
-# Configuración de Google Maps
+# El mapa
 
-La app usa `google_maps_flutter`. La **API key no se versiona**: cada
-plataforma la toma de un sitio local distinto. Sin la key la app compila y
-corre con normalidad; solo el mapa queda en blanco.
+La app dibuja el mapa con [`flutter_map`](https://pub.dev/packages/flutter_map)
+sobre teselas de **OpenStreetMap**. No hay API key, ni cuenta de Google
+Cloud, ni secreto en el CI: **el mapa funciona recién clonado el repo**.
 
-## 1. Crear y restringir la key (Google Cloud Console)
+Este documento existe de todos modos, porque las teselas gratuitas no son
+gratis para todo el mundo y conviene saber por qué.
 
-1. Crea un proyecto en Google Cloud y habilita **Maps SDK for Android**,
-   **Maps SDK for iOS** y **Maps JavaScript API** (web).
-2. Crea una API key por plataforma (o una con varias *application
-   restrictions*).
-3. **Restríngela** siempre:
-   - **Android:** *Application restriction* → Android apps → agrega el
-     package `ec.gob.pujili.pujili_vive` (y `...dev` si usas flavors) con su
-     huella **SHA-1** (`./gradlew signingReport` o `keytool`).
-   - **iOS:** *Application restriction* → iOS apps → bundle id.
-   - **Web:** *Application restriction* → HTTP referrers → tu dominio.
-   - **API restriction:** limita cada key a su SDK correspondiente.
+## 1. De dónde salen las teselas
 
-## 2. Dónde ponerla (local, sin commitear)
+```
+https://tile.openstreetmap.org/{z}/{x}/{y}.png
+```
 
-| Plataforma | Ubicación |
+Es el servidor público de la **OpenStreetMap Foundation**, un servicio
+donado con una
+[política de uso](https://operations.osmfoundation.org/policies/tiles/) que
+la app cumple así:
+
+| Lo que pide la política | Cómo lo cumple la app |
 | --- | --- |
-| Android | `android/local.properties` → `MAPS_API_KEY=tu_clave` (se inyecta como `manifestPlaceholder` desde `build.gradle.kts`). |
-| iOS | `ios/Runner/AppDelegate.swift` → reemplazar `TU_GOOGLE_MAPS_API_KEY_IOS`. |
-| Web | `web/index.html` → reemplazar `TU_GOOGLE_MAPS_API_KEY_WEB`. |
+| Identificarse con un `User-Agent` propio | `userAgentPackageName: 'ec.gob.pujili.pujili_vive'` en el `TileLayer` |
+| No usar subdominios (`{s}.tile...`) | La URL no los lleva |
+| Acreditar a OpenStreetMap de forma visible | El crédito se pinta arriba a la derecha del mapa, y hay un test que falla si alguien lo borra |
+| Tráfico moderado, sin descargas masivas | La app solo pide las teselas que el usuario mira; no precarga ni guarda regiones |
 
-`local.properties` ya está en `.gitignore`. Para iOS/Web, **no** commitees
-el archivo con la clave real.
+**Al ejecutar en modo debug, `flutter_map` imprime un aviso** recordando esa
+política. Es del paquete, no de la app: está detrás de `kDebugMode`, así que
+no aparece en release ni lo ve un usuario. No se puede silenciar sin cambiar
+de servidor de teselas.
 
-## 3. En CI (GitHub Actions)
+## 2. Si la app crece
 
-El workflow inyecta la key desde el secret **`MAPS_API_KEY`**:
+El servidor de la OSMF va sobrado para una app municipal, pero no es para
+tráfico de producción a gran escala. Si algún día hace falta mudarse, solo
+cambia el `urlTemplate` (y las cabeceras) del `TileLayer` en
+[`map_page.dart`](../lib/features/map/presentation/pages/map_page.dart).
+Candidatos habituales, todos con capa gratuita y **key propia**: MapTiler,
+Stadia Maps, Thunderforest, o un servidor de teselas propio.
 
-1. Ve a **Settings → Secrets and variables → Actions → New repository secret**.
-2. Nombre `MAPS_API_KEY`, valor: tu clave de Android.
+Ese mismo cambio es el que haría falta para el **aspecto terracota** que
+dibuja el diseño (`docs/MOCKS.html`, pantalla 5): el estilo por defecto de
+OpenStreetMap no se puede tematizar desde la app, eso lo decide quien sirve
+las teselas.
 
-Si el secret no existe, el build de Android se hace igual (el mapa saldrá en
-blanco) y el CI no se pone rojo por eso.
+## 3. Qué pasa sin red
 
-## 4. Verificación
+El área del mapa se queda en el crema de la paleta y el sheet "Explorar
+lugares" sigue funcionando, porque lee el JSON local. Es lo que pide
+`CONCEPTO.md` §4.5 para ese caso.
+
+## 4. Lo que el mapa *no* hace
+
+- **No pide la ubicación del usuario.** No hay botón de "mi ubicación" y el
+  manifest no declara permisos de ubicación: depende de la pregunta abierta
+  nº 9 de `CONCEPTO.md`.
+- **No calcula rutas.** "Cómo llegar" abre la app de mapas del teléfono
+  (Apple Maps en iOS, Google Maps en el resto) vía `url_launcher`. Eso no
+  necesita key ni cuesta dinero: es la app instalada la que trabaja.
+
+## 5. Verificación
 
 ```bash
-# Android
-grep MAPS_API_KEY android/local.properties   # debe existir localmente
-flutter run --flavor dev                      # (con flavors) el mapa debe cargar
+flutter test test/features/map/   # el mapa entra en la suite
+flutter run --flavor dev          # las teselas deben cargar sin configurar nada
 ```

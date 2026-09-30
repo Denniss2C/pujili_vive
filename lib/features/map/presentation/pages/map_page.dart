@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 
+import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../attractions/domain/entities/attraction.dart';
 import '../../../attractions/domain/entities/attraction_category.dart';
 import '../../../attractions/presentation/bloc/attractions_bloc.dart';
+import '../../../attractions/presentation/pages/attraction_detail_page.dart';
 import '../../domain/entities/thematic_route.dart';
 import '../widgets/places_sheet.dart';
 import '../widgets/route_selector.dart';
@@ -21,11 +24,16 @@ import '../widgets/route_selector.dart';
 /// desde aqui cambiaria en silencio lo que ve el otro tab.
 ///
 /// ---
-/// **Hace falta una Google Maps API key** (ver `docs/MAPS_SETUP.md`). Sin
-/// ella el area del mapa sale en blanco. La pantalla esta montada para
-/// que eso no la inutilice: el sheet de "Explorar lugares" lee datos
-/// locales y sigue funcionando, que es justo lo que pide el diseño para
-/// el caso "sin red" (`docs/CONCEPTO.md` §4.5, Estados).
+/// **Teselas de OpenStreetMap, sin API key ni facturacion** (ver
+/// `docs/MAPS_SETUP.md`). El mapa funciona recien clonado el repo. A
+/// cambio, las teselas son un servicio donado por la OSM Foundation con
+/// condiciones de uso: la app se identifica con `userAgentPackageName` y
+/// el credito a OpenStreetMap se pinta en pantalla, que la licencia ODbL
+/// lo exige.
+///
+/// Sin red, el area del mapa se queda en el color de fondo y el sheet de
+/// "Explorar lugares" sigue funcionando, que es lo que pide el diseño
+/// para ese caso (`docs/CONCEPTO.md` §4.5, Estados).
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
 
@@ -35,7 +43,11 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   ThematicRoute _route = ThematicRoute.all;
-  GoogleMapController? _controller;
+  final MapController _controller = MapController();
+
+  /// `fitCamera` necesita que el mapa exista: llamarlo antes de que
+  /// `FlutterMap` se monte lanza. `onMapReady` levanta esta bandera.
+  bool _ready = false;
 
   /// Casco urbano de Pujili. Es el centro de arranque y el que se usa
   /// cuando no hay nada que encuadrar (`CONCEPTO.md` §4.5, Estados: la
@@ -44,7 +56,7 @@ class _MapPageState extends State<MapPage> {
 
   @override
   void dispose() {
-    _controller?.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -57,12 +69,14 @@ class _MapPageState extends State<MapPage> {
   ///
   /// Hace falta porque el Quilotoa esta a ~25 km del casco urbano: un
   /// zoom fijo sobre Pujili lo dejaria siempre fuera de pantalla.
-  Future<void> _fitTo(List<Attraction> places) async {
-    final controller = _controller;
-    if (controller == null || places.isEmpty) return;
+  void _fitTo(List<Attraction> places) {
+    if (!_ready || places.isEmpty) return;
 
-    await controller.animateCamera(
-      CameraUpdate.newLatLngBounds(boundsOf(places), 64),
+    _controller.fitCamera(
+      CameraFit.bounds(
+        bounds: boundsOf(places),
+        padding: const EdgeInsets.all(64),
+      ),
     );
   }
 
@@ -96,8 +110,9 @@ class _MapPageState extends State<MapPage> {
                     _Map(
                       places: places,
                       initial: _pujili,
-                      onCreated: (controller) {
-                        _controller = controller;
+                      controller: _controller,
+                      onReady: () {
+                        _ready = true;
                         _fitTo(places);
                       },
                     ),
@@ -118,9 +133,8 @@ class _MapPageState extends State<MapPage> {
 /// Con un solo lugar el rectangulo seria un punto y el mapa haria un
 /// zoom absurdo, asi que se le da un margen minimo.
 ///
-/// Esta fuera del `State` para poder probarla sin montar la pantalla: el
-/// widget `GoogleMap` es una platform view y no se puede pintar en un
-/// test de widget.
+/// Esta fuera del `State` para poder probarla sola, sin encuadrar un mapa
+/// de verdad.
 LatLngBounds boundsOf(List<Attraction> places) {
   assert(places.isNotEmpty, 'boundsOf necesita al menos un lugar');
 
@@ -148,69 +162,158 @@ LatLngBounds boundsOf(List<Attraction> places) {
     maxLng = mid + minSpan / 2;
   }
 
-  return LatLngBounds(
-    southwest: LatLng(minLat, minLng),
-    northeast: LatLng(maxLat, maxLng),
-  );
+  return LatLngBounds(LatLng(minLat, minLng), LatLng(maxLat, maxLng));
 }
 
 /// Color del pin segun la categoria del lugar.
 ///
-/// El diseño pide pines ilustrados —un cantaro, una cupula, una montaña—
-/// dentro de una gota. Eso necesita iconos dibujados que no existen
-/// todavia, asi que por ahora se distinguen por color, que es una
-/// degradacion honesta y no un pin inventado.
-double markerHueOf(AttractionCategory category) {
+/// Google imponia su catalogo cerrado de tonos; al pintar los pines
+/// nosotros, el mapa habla el idioma visual del resto de la app. Lo unico
+/// que el mapa no puede permitirse es que dos categorias compartan color:
+/// serian pines distintos que parecen lo mismo.
+Color markerColorOf(AttractionCategory category) {
   switch (category) {
     case AttractionCategory.crafts:
-      return BitmapDescriptor.hueOrange;
+      return AppColors.terracotta;
     case AttractionCategory.religious:
-      return BitmapDescriptor.hueViolet;
+      return AppColors.gold;
     case AttractionCategory.nature:
-      return BitmapDescriptor.hueGreen;
+      return AppColors.deepGreen;
     case AttractionCategory.cultural:
-      return BitmapDescriptor.hueAzure;
+      return AppColors.textDark;
   }
 }
 
 class _Map extends StatelessWidget {
   final List<Attraction> places;
   final LatLng initial;
-  final ValueChanged<GoogleMapController> onCreated;
+  final MapController controller;
+  final VoidCallback onReady;
 
   const _Map({
     required this.places,
     required this.initial,
-    required this.onCreated,
+    required this.controller,
+    required this.onReady,
   });
 
   @override
   Widget build(BuildContext context) {
     final lang = Localizations.localeOf(context).languageCode;
 
-    return GoogleMap(
-      initialCameraPosition: CameraPosition(target: initial, zoom: 13),
-      onMapCreated: onCreated,
-      markers: {
-        for (final place in places)
-          Marker(
-            markerId: MarkerId(place.id),
-            position: LatLng(place.latitude, place.longitude),
-            icon: BitmapDescriptor.defaultMarkerWithHue(
-              markerHueOf(place.category),
+    return FlutterMap(
+      mapController: controller,
+      options: MapOptions(
+        initialCenter: initial,
+        initialZoom: 13,
+        onMapReady: onReady,
+        // Lo que se ve mientras las teselas cargan, o si no hay red. En
+        // crema y no en el gris del paquete: parece parte de la app y no
+        // un hueco.
+        backgroundColor: AppColors.cream,
+      ),
+      children: [
+        TileLayer(
+          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          // La politica de teselas de la OSM Foundation exige que la app
+          // se identifique. Sin esto pueden bloquearla.
+          userAgentPackageName: 'ec.gob.pujili.pujili_vive',
+        ),
+        MarkerLayer(
+          markers: [
+            for (final place in places)
+              Marker(
+                key: Key('map-pin-${place.id}'),
+                point: LatLng(place.latitude, place.longitude),
+                width: 44,
+                height: 44,
+                // El pin apunta hacia abajo: el widget va encima del
+                // punto para que la punta caiga sobre las coordenadas.
+                alignment: Alignment.topCenter,
+                child: _Pin(
+                  label: place.name.resolve(lang),
+                  color: markerColorOf(place.category),
+                  onTap: () => AttractionDetailPage.open(context, place),
+                ),
+              ),
+          ],
+        ),
+        const _OpenStreetMapCredit(),
+      ],
+    );
+  }
+}
+
+/// Pin de un lugar.
+///
+/// El diseño pide una gota con un icono ilustrado dentro —un cantaro,
+/// una cupula, una montaña—, y esos dibujos no existen todavia. Hasta que
+/// existan, la gota de Material en el color de la categoria: una
+/// degradacion honesta y no un pin inventado.
+///
+/// El halo blanco no es adorno. Sobre un mapa con calles y manchas verdes
+/// un pin plano se pierde, y el terracota sobre teja es casi invisible.
+class _Pin extends StatelessWidget {
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
+
+  const _Pin({
+    required this.label,
+    required this.color,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: label,
+      button: true,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            const Icon(Icons.place, size: 44, color: Colors.white),
+            Padding(
+              padding: const EdgeInsets.only(top: 3),
+              child: Icon(Icons.place, size: 38, color: color),
             ),
-            infoWindow: InfoWindow(
-              title: place.name.resolve(lang),
-              snippet: place.location.resolve(lang),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Credito a OpenStreetMap.
+///
+/// No es decorativo: las teselas son ODbL y la licencia exige que el
+/// credito se vea. Va arriba a la derecha porque el sheet arrastrable
+/// tapa la esquina de abajo, que es donde suele ponerse.
+class _OpenStreetMapCredit extends StatelessWidget {
+  const _OpenStreetMapCredit();
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.topRight,
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: AppColors.cardBackground.withValues(alpha: 0.8),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+            child: Text(
+              '© OpenStreetMap',
+              style: TextStyle(fontSize: 11, color: AppColors.textDark),
             ),
           ),
-      },
-      // El boton de "mi ubicacion" pediria permiso de geolocalizacion, que
-      // depende de la pregunta abierta nº 9 y cambiaria el onboarding.
-      myLocationEnabled: false,
-      myLocationButtonEnabled: false,
-      // El sheet arrastrable tapa el control nativo de zoom.
-      zoomControlsEnabled: false,
+        ),
+      ),
     );
   }
 }
