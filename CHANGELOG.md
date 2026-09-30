@@ -42,11 +42,20 @@ y el proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 - Tests que validan el programa entero: dos fiestas por dia, sin huecos,
   sin solapes, sin cruzar la medianoche y con fin posterior al inicio.
 
-- Mapa: los 6 atractivos como pines sobre `GoogleMap`, selector de rutas
-  tematicas y sheet arrastrable "Explorar lugares" que abre el detalle.
-  Sustituye al placeholder de 17 lineas. **Necesita una Google Maps API
-  key** (`docs/MAPS_SETUP.md`): sin ella el area del mapa sale en blanco,
-  pero el sheet sigue funcionando porque lee datos locales.
+- Mapa: los 6 atractivos como pines sobre `flutter_map` con teselas de
+  OpenStreetMap, selector de rutas tematicas y sheet arrastrable
+  "Explorar lugares" que abre el detalle. Sustituye al placeholder de 17
+  lineas. **No necesita API key ni cuenta de Google Cloud**: funciona
+  recien clonado el repo (`docs/MAPS_SETUP.md`). Sin red, el area del mapa
+  se queda en crema y el sheet sigue funcionando porque lee datos
+  locales.
+- **El mapa entra en la suite de tests.** `GoogleMap` era una *platform
+  view* y no pintaba nada en un test de widget, asi que la pantalla solo
+  podia probarse por las piezas de alrededor. `FlutterMap` es Flutter
+  puro: hay tests que montan `MapPage`, cuentan los pines y tocan uno.
+- Credito visible a OpenStreetMap sobre el mapa, arriba a la derecha
+  porque el sheet tapa la esquina de abajo. No es adorno: la licencia
+  ODbL de las teselas lo exige, y un test falla si alguien lo borra.
 - El selector de rutas lleva una cuarta opcion, "Todas", que el diseño no
   dibuja. Sin ella los dos atractivos de categoria `cultural` —la Plaza e
   Iglesia Matriz y la Feria Dominical— no apareceran en ninguna de las
@@ -99,6 +108,28 @@ y el proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 - `analysis_options.yaml` con set de lints ampliado.
 
 ### Changed
+- **El mapa dejo Google Maps y pasa a OpenStreetMap** (`flutter_map`). El
+  motivo: la pantalla estaba hecha desde el 21 de septiembre y llevaba
+  ocho dias en blanco esperando una API key que exigia cuenta de Google
+  Cloud, tarjeta y un secreto en el CI. Con teselas de la OSM Foundation
+  no hay nada que cargar. Lo que se pierde: el aspecto del mapa ya no se
+  puede tematizar desde la app —el estilo lo decide quien sirve las
+  teselas—, asi que el terracota del diseño queda mas lejos que antes
+  (`CONCEPTO.md` pregunta nº 17).
+- **Nuevo requisito para desarrollar en macOS**: aceptar la licencia de
+  Xcode (`sudo xcodebuild -license accept`). `flutter_map` arrastra
+  `path_provider`, que en Apple se apoya en `objective_c`, y su *build
+  hook* llama a `xcrun`. Sin la licencia, `flutter test` falla con
+  "Building native assets failed" antes de correr un solo test. El CI no
+  se entera: compila en Linux y ese hook se salta.
+- Los pines pasan de los tonos del catalogo de Google a los colores de la
+  paleta del Danzante: terracota para artesania, dorado para religioso,
+  verde para naturaleza y gris oscuro para cultural.
+- **Tocar un pin abre el detalle del atractivo**, y ya no una ventana de
+  informacion. La decision nº 12 de `CONCEPTO.md` era la `InfoWindow`
+  nativa de Google y murio con el proveedor; `flutter_map` no tiene
+  equivalente. Lleva a la misma pantalla que las filas del sheet y las
+  tarjetas de Explorar, en vez de estrenar una burbuja propia.
 - El blanco de la tarjeta **cambia de significado**: antes lo ponia
   `isHighlighted` y era fijo en el JSON; ahora quiere decir "esto esta
   pasando ahora". `isHighlighted` se queda con lo que siempre quiso decir
@@ -130,10 +161,49 @@ y el proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
   pantallas necesitan cambiarlo (Inicio manda al Calendario y a Explorar).
 
 ### Removed
+- Dependencia `google_maps_flutter` y **toda la fontaneria de la API
+  key**: la lectura de `MAPS_API_KEY` en `build.gradle.kts`, su
+  `manifestPlaceholder`, el `meta-data com.google.android.geo.API_KEY`
+  del manifest, el `GMSServices.provideAPIKey` de `AppDelegate.swift`, el
+  `<script>` de `maps.googleapis.com` en `web/index.html` y el paso del
+  CI que inyectaba el secreto. El secreto `MAPS_API_KEY` de GitHub ya no
+  se usa y se puede borrar.
+  `ios/Podfile.lock` **sigue listando el pod de GoogleMaps**: no se pudo
+  regenerar (esta maquina no tiene aceptada la licencia de Xcode y
+  `pod install` la exige). Se rehace solo en el proximo `make pods` o
+  build de iOS.
+- `NSLocationWhenInUseUsageDescription` del `Info.plist` de iOS, que
+  prometia "usar tu ubicacion para mostrarte los atractivos mas cercanos".
+  La app nunca lo hizo. Un proposito de ubicacion declarado va a la
+  etiqueta de privacidad de la App Store y lo pregunta la revision.
+- Permisos `ACCESS_FINE_LOCATION` y `ACCESS_COARSE_LOCATION` del manifest
+  de Android. Eran herencia de `google_maps_flutter` y la app **nunca
+  pidio la ubicacion**: no hay boton de "mi ubicacion" (depende de la
+  pregunta abierta nº 9). Pedir permisos que no se usan es de lo que
+  Play Store pregunta en la revision.
 - `dependabot.yml`: las actualizaciones automaticas se gestionan a mano.
   Los bumps que ya habia propuesto quedan aplicados en `main`.
 
 ### Fixed
+- **El mapa encuadraba pines detras de su propio sheet.** El encuadre
+  dejaba 64 px de margen por los cuatro lados, pero el sheet "Explorar
+  lugares" cubre el 45 % de abajo: los pines del sur quedaban tapados, sin
+  poder verse ni tocarse. Ahora el margen inferior descuenta lo que el
+  sheet ocupa. Venia de la version con Google (`newLatLngBounds(bounds,
+  64)` tenia el mismo margen uniforme); lo descubrio uno de los tests
+  nuevos, que no existia porque con Google la pantalla no se podia probar.
+- Los pines señalaban ~6 px por encima de su sitio —unos 115 m con el zoom
+  de arranque—: los iconos de Material dejan margen dentro de su caja, asi
+  que la punta dibujada no llegaba al borde por el que se ancla el pin.
+- Alejar el mapa con dos dedos podia llegar a ver el mundo entero, donde la
+  proyeccion repite el planeta a los lados y cada pin se clonaba **con su
+  misma Key**, reventando la pantalla en debug con "Duplicate keys found".
+  Ahora hay suelo de zoom, que ademas evita pedir teselas de medio planeta
+  a un servidor donado.
+- El giro con dos dedos queda desactivado. `flutter_map` lo trae activado y
+  no hay brujula para deshacerlo, asi que un giro accidental dejaba el mapa
+  torcido sin vuelta atras, con los pines inclinados apuntando a otro
+  sitio.
 - El sheet del mapa envolvia sus filas en un `DecoratedBox` con fondo, que
   tapa el fondo y el ink de los `ListTile`: al tocarlas no se veia nada.
   Pasa a `Material`, que ademas da la sombra.

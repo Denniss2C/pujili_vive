@@ -77,21 +77,6 @@ jobs:
           channel: stable
           cache: true
 
-      # La Maps API key no se versiona. Se restaura desde un secreto en
-      # local.properties. Si el secreto no existe, se compila igual: el
-      # mapa quedará en blanco pero el APK se genera y el CI no se pone
-      # rojo por una configuración que aún no está cargada.
-      - name: Inyectar Maps API key (si existe el secreto)
-        env:
-          MAPS_API_KEY: ${{ secrets.MAPS_API_KEY }}
-        run: |
-          if [ -n "$MAPS_API_KEY" ]; then
-            echo "MAPS_API_KEY=$MAPS_API_KEY" >> android/local.properties
-            echo "::notice::Maps API key inyectada."
-          else
-            echo "::warning::Sin secreto MAPS_API_KEY; el mapa saldrá en blanco. Créalo en Settings → Secrets → Actions."
-          fi
-
       - name: Dependencias
         run: flutter pub get
 

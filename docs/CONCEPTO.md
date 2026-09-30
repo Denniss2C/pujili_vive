@@ -469,8 +469,13 @@ mes: `title`, `description`, `startDate`, `photo`, `isHighlighted`.
 > 3. **Sin distancias** en las filas del sheet: no hay campo y depende de
 >    la pregunta abierta nº 9.
 >
-> Y **falta cargar la API key** (`docs/MAPS_SETUP.md`). Sin ella el área
-> del mapa sale en blanco; el sheet sigue funcionando.
+> Y el mapa **cambió de proveedor el 2026-09-29**: `flutter_map` sobre
+> teselas de OpenStreetMap en lugar de Google Maps. No hay API key ni
+> facturación, así que el mapa funciona recién clonado el repo
+> (`docs/MAPS_SETUP.md`). A cambio se pierde la *ventana de información
+> nativa* de Google, que era la decisión nº 12; ahora tocar un pin abre el
+> detalle del atractivo. Sin red, el área del mapa se queda en crema y el
+> sheet sigue funcionando.
 
 **Qué ve el usuario, de arriba abajo:**
 
@@ -853,8 +858,9 @@ abiertas.
 - Fotografía a sangre, generosa, protagonista: la foto vende, el texto acompaña.
 - Motivos textiles andinos como **adorno de borde** (esquinas, franjas, bandas
   laterales), nunca como fondo de contenido legible.
-- Iconos ilustrados y cálidos en los pines del mapa, no los marcadores por
-  defecto de Google Maps.
+- Iconos ilustrados y cálidos en los pines del mapa, no la gota de Material
+  que se usa hoy. Con `flutter_map` un pin es un widget cualquiera, así que
+  esto ya no tiene obstáculo técnico: falta el dibujo.
 - **Explícitamente evitado:** el look institucional / de folleto turístico
   municipal. Esa fue una restricción de diseño desde el inicio.
 
@@ -906,7 +912,7 @@ contenido de campo (pregunta abierta nº 18).
 | 1 | **Calendar** (calendario de fiestas) | ✅ Completa, con detalle de evento | El diferenciador. Es el contenido que nadie más tiene y el que justifica la app | `[DECIDIDO]` |
 | 2 | **Home** con countdown al próximo evento | ✅ Completa | Es el escaparate del diferenciador. Un calendario que no se ve al abrir la app no diferencia nada | `[PROPUESTA]` |
 | 3 | **Attractions** (lista + detalle) | ✅ Completa | Ya hecha; es la plantilla arquitectónica del resto | `[DECIDIDO]` |
-| 4 | **Map** con pines y rutas temáticas | ✅ Hecha — **falta la API key** | Alto valor de uso ("cómo llego"), pero es la más cara: API key, estilo, permisos, rendimiento | `[PROPUESTA]` |
+| 4 | **Map** con pines y rutas temáticas | ✅ Completa, sin API key | Alto valor de uso ("cómo llego"). Se creía la más cara —key, facturación, permisos—: con OpenStreetMap esa cuenta bajó a cero | `[PROPUESTA]` |
 | 5 | **Artisans** (artesanos y gastronomía) | 🟡 Scaffold vacío, ya con tab asignado (nº 8) | Bloqueada por contenido real: sin fotos ni contactos levantados en campo no hay pantalla que valga | `[PROPUESTA]` |
 | 6 | ~~**Profile**~~ → **Ajustes** | ✅ Hecha; ya no es tab | Sin cuentas de usuario, su contenido es mínimo. No puede bloquear a nadie | `[DECIDIDO]` |
 | 7 | **Ads** (AdMob + espacios vendidos) | No empezada | Es V2 por definición. Monetizar antes de tener usuarios es ruido | `[DECIDIDO]` |
@@ -985,11 +991,15 @@ Todo lo que quedó sin decidir. **Preferir preguntar antes que rellenar.**
     dibujado, sigue sin decidirse y necesitaría una entidad `ThematicRoute`
     con datos, no el enumerado que hay hoy.
 12. ~~**Tocar un pin**: ¿expande el sheet, muestra una card flotante, o navega
-    al detalle?~~ **Resuelta (2026-09-21):** ninguna de las tres. Abre la
-    ventana de información nativa de Google Maps, con el nombre y la
-    ubicación. Es la opción que no inventa interfaz: las tres del diseño
-    seguían sin decidirse y cualquiera de ellas habría sido una elección a
-    ciegas. Si más adelante se quiere una, esta no estorba.
+    al detalle?~~ **Resuelta (2026-09-21), rehecha (2026-09-29):** la
+    primera respuesta fue la ventana de información nativa de Google Maps,
+    porque no inventaba interfaz. Al pasar el mapa a OpenStreetMap esa
+    ventana dejó de existir —`flutter_map` no tiene equivalente—, así que
+    hubo que volver a decidir. **Ahora navega al detalle del atractivo**, la
+    tercera opción del diseño: es la pantalla que ya existe y a la que
+    llevan las filas del sheet y las tarjetas de Explorar, así que el pin no
+    estrena un camino propio. Dibujar una burbuja flotante habría sido
+    inventar interfaz para replicar lo que se perdió.
 13. **Icono de filtro** en Artesanos: lo más probable es que separe artesanía de
     comida, pero no está acordado. (En Mapa se retiró: duplicaba el selector de
     rutas.)
@@ -1007,10 +1017,13 @@ Todo lo que quedó sin decidir. **Preferir preguntar antes que rellenar.**
     grande) pasó a significar "ocurriendo ahora"; lo destacado se quedó con un
     marco dorado sin relleno. Si el medallón con motivo de cáliz/sol se dibuja
     o no sigue abierto: necesita un icono que no existe.
-17. **Estilo del mapa**: para acercarse al diseño haría falta un *map style*
-    JSON personalizado sobre Google Maps. No se decidió si vale la pena el esfuerzo o
-    se usa el estilo por defecto. **Hoy usa el estilo por defecto**, que es lo
-    que se ve mientras no se decida.
+17. **Estilo del mapa**: el terracota del diseño no se alcanza con el
+    estilo estándar de OpenStreetMap, y desde el 2026-09-29 tampoco con un
+    *map style* JSON: eso era de Google. Con teselas, el estilo lo decide
+    quien las sirve, así que tematizar el mapa significa cambiar de
+    proveedor (MapTiler, Stadia, Thunderforest o uno propio) y volver a
+    tener una key. **Hoy usa el estilo estándar**, que es lo que se ve
+    mientras no se decida si el aspecto vale ese precio.
 
 ### Contenido
 

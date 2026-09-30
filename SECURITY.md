@@ -20,23 +20,21 @@ Este proyecto **no versiona** ninguna credencial. En particular:
 
 | Secreto | Dónde va | Por qué no al repo |
 | --- | --- | --- |
-| Google Maps API key (Android) | `android/local.properties` → `MAPS_API_KEY=` | Se inyecta como `manifestPlaceholder` en build. |
-| Google Maps API key (iOS) | `ios/Runner/AppDelegate.swift` (local) | No debe commitearse con la clave real. |
-| Google Maps API key (Web) | `web/index.html` (local) | Ídem. |
 | Material de firma Android | `android/key.properties`, `*.jks` | Firma de release. |
+
+**El mapa no necesita ninguna credencial.** Usa `flutter_map` sobre teselas
+de OpenStreetMap: no hay API key, ni cuenta de Google Cloud, ni secreto en
+el CI (ver [`docs/MAPS_SETUP.md`](./docs/MAPS_SETUP.md)). Hasta el
+2026-09-29 el mapa era Google Maps y esta tabla listaba tres claves; ya no
+existe ninguna de las tres.
 
 Reglas:
 
 - ❌ Prohibido hardcodear claves, tokens o contraseñas en el código.
 - ❌ Prohibido commitear `local.properties`, `key.properties`, `*.jks`, `.env`.
-- ✅ En CI, la Maps API key se restaura desde un **GitHub Secret**
-  (`MAPS_API_KEY`), no desde el repo.
-- ✅ Restringe la Maps API key por *application restrictions*
-  (SHA-1 + package name en Android; bundle id en iOS; HTTP referrer en Web)
-  y por *API restrictions* (solo Maps SDK) en Google Cloud Console.
-
-> La app compila y corre sin la clave; solo el mapa queda en blanco.
-> Eso permite que el CI (análisis y tests) no necesite la clave real.
+- ✅ Si algún día el mapa cambia a un proveedor de teselas con key, la
+  clave va en `android/local.properties` y en un **GitHub Secret** para el
+  CI, nunca en el repo.
 
 ---
 

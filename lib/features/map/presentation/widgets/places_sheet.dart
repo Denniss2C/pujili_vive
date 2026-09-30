@@ -17,6 +17,13 @@ import '../../../attractions/presentation/pages/attraction_detail_page.dart';
 /// geolocalizacion, que es la pregunta abierta nº 9. La fila enseña solo
 /// la categoria: media linea de verdad antes que una distancia inventada.
 class PlacesSheet extends StatelessWidget {
+  /// Fraccion del alto que el sheet cubre al abrirse.
+  ///
+  /// Es publica porque el mapa la necesita: si encuadra los pines usando
+  /// todo el alto, los del sur acaban detras del sheet y no se pueden
+  /// ni ver ni tocar.
+  static const double initialSize = 0.45;
+
   final List<Attraction> places;
 
   const PlacesSheet({super.key, required this.places});
@@ -27,7 +34,7 @@ class PlacesSheet extends StatelessWidget {
     final lang = Localizations.localeOf(context).languageCode;
 
     return DraggableScrollableSheet(
-      initialChildSize: 0.45,
+      initialChildSize: initialSize,
       minChildSize: 0.12,
       maxChildSize: 0.9,
       builder: (context, scrollController) {

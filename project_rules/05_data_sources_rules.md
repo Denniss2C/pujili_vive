@@ -1,8 +1,9 @@
-# 05 — Datos Locales (JSON / assets) y Google Maps
+# 05 — Datos Locales (JSON / assets) y el mapa
 
 > Pujilí Vive **no usa backend ni Firebase** en el MVP. El contenido
 > (atractivos, fiestas, artesanos) vive como **assets locales** y el mapa
-> se dibuja con **Google Maps**. Estas son las reglas para ambos.
+> se dibuja con **`flutter_map` sobre teselas de OpenStreetMap**. Estas son
+> las reglas para ambos.
 
 ---
 
@@ -32,19 +33,23 @@ Reglas:
 
 ---
 
-## 2. Google Maps
+## 2. El mapa (OpenStreetMap)
 
-- La API key **no** se versiona (ver [`10_security_rules.md`](./10_security_rules.md)).
-- El widget `GoogleMap` vive en la capa **presentation** de la feature
+- **No hay API key.** Si algún día se cambia a un proveedor de teselas con
+  clave, esa clave no se versiona (ver
+  [`10_security_rules.md`](./10_security_rules.md)).
+- El widget `FlutterMap` vive en la capa **presentation** de la feature
   `map`; los pines salen de entidades de dominio (atractivos), no de un
   JSON leído en el widget.
-- Restringir la key en Google Cloud Console:
-  - Android: SHA-1 + package name (`ec.gob.pujili.pujili_vive`).
-  - iOS: bundle id.
-  - Web: HTTP referrers.
-  - API restrictions: solo **Maps SDK**.
-- La app debe compilar y funcionar **sin** la key (mapa en blanco), para
-  no bloquear el CI ni el desarrollo local.
+- El `TileLayer` **siempre** lleva `userAgentPackageName`: la política de
+  teselas de la OSM Foundation exige que la app se identifique.
+- El crédito a OpenStreetMap **se ve en pantalla**. Lo exige la licencia
+  ODbL y hay un test que falla si desaparece.
+- La app debe funcionar **sin red**: el área del mapa se queda en el color
+  de fondo y el sheet con la lista sigue sirviendo, porque lee datos
+  locales.
+- Ver [`docs/MAPS_SETUP.md`](../docs/MAPS_SETUP.md) para la política de
+  teselas y qué haría falta para cambiar de proveedor.
 
 ---
 
@@ -62,5 +67,5 @@ decide origen (remoto con caché local de respaldo). El contrato del
 - [ ] Los datos nuevos van a `assets/data/` y están declarados en `pubspec.yaml`.
 - [ ] Hay un `Model.fromJson` que refleja el esquema, con test.
 - [ ] Ningún widget/BLoC lee o parsea assets directamente.
-- [ ] La Maps API key no está en el diff.
-- [ ] La app corre sin la Maps API key.
+- [ ] El `TileLayer` lleva `userAgentPackageName`.
+- [ ] El crédito a OpenStreetMap sigue visible.

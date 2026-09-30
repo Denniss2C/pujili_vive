@@ -8,7 +8,7 @@
 App móvil de turismo para el cantón Pujilí (Cotopaxi). Flutter, bilingüe
 (ES/EN), con **Clean Architecture + BLoC** y **Feature-First**. Sin backend
 en el MVP: el contenido viaja como **assets locales** (`assets/data/`) y el
-mapa usa **Google Maps**.
+mapa usa **OpenStreetMap** (`flutter_map`), sin API key ni facturación.
 
 - Bundle id / applicationId: `ec.gob.pujili.pujili_vive`
 - Plataformas: Android, iOS y Web
@@ -64,10 +64,10 @@ assets/
 | `artisans` | 🟡 Scaffold: una página de 17 líneas, sin domain ni data. Bloqueada por contenido (pregunta abierta nº 18). |
 | Contenido del calendario | 🟡 **Simulado**: 30 fiestas inventadas del 21 sep al 5 oct de 2026, para poder ver el estado en vivo. Las reales son Corpus (junio) y cantonales (octubre). |
 | Contenido real | 🟡 Fotos de atractivos ✅. Faltan datos prácticos verificados, las coordenadas de dos atractivos y todo el contenido de artesanos. |
-| Google Maps | 🟡 La pantalla está hecha; **falta la API key**. Sin ella el área del mapa sale en blanco, pero el build no se rompe y el sheet con la lista sigue funcionando. |
+| Mapa | ✅ `flutter_map` sobre teselas de OpenStreetMap: sin API key, sin cuenta de Google Cloud y sin secretos en el CI. Funciona recién clonado el repo. Las teselas son un servicio donado con condiciones de uso ([`MAPS_SETUP.md`](./MAPS_SETUP.md)). |
 | Quinto tab | ✅ Es Artesanos. Ajustes salió de la barra y se abre desde el engranaje de Inicio (preguntas resueltas nº 8 y nº 1). |
 | Flavors y firma | ✅ `dev` / `prod` en Android e iOS, con `make aab-prod`. Falta generar el keystore real. |
-| Tests | 🟡 133 tests. `calendar`, `home` y el shell cubiertos; a `attractions` le faltan usecase, repositorio y bloc. |
+| Tests | 🟡 141 tests. El mapa entra por fin en la suite: `FlutterMap` es Flutter puro, mientras `GoogleMap` era una *platform view* que no pintaba en un test. `calendar`, `home`, `map` y el shell cubiertos; a `attractions` le faltan usecase, repositorio y bloc. |
 
 ## 5. Decisiones de diseño
 
@@ -82,7 +82,7 @@ assets/
 ## 6. Referencias
 
 - Reglas de código y arquitectura: [`project_rules/`](../project_rules/)
-- Configuración de Google Maps: [`MAPS_SETUP.md`](./MAPS_SETUP.md)
+- El mapa y sus teselas: [`MAPS_SETUP.md`](./MAPS_SETUP.md)
 - Publicación Android: [`RELEASE_ANDROID.md`](./RELEASE_ANDROID.md)
 - Qué sigue y qué bloquea cada fase: [`ROADMAP.md`](./ROADMAP.md)
 - El producto, con sus 20 preguntas abiertas: [`CONCEPTO.md`](./CONCEPTO.md)

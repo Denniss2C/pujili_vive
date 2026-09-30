@@ -15,22 +15,30 @@ flutter run
 Plataformas soportadas: **Android, iOS y web**. El bundle ID / applicationId es
 `ec.gob.pujili.pujili_vive`.
 
+> **En macOS, acepta la licencia de Xcode antes de correr los tests:**
+>
+> ```bash
+> sudo xcodebuild -license accept
+> ```
+>
+> `flutter_map` arrastra `path_provider`, que en Apple se apoya en el
+> paquete `objective_c`. Su *build hook* llama a `xcrun`, y `xcrun` no
+> responde nada mientras la licencia esté sin aceptar: `flutter test`
+> falla con `Building native assets failed` antes de correr un solo test.
+> No afecta al CI, que compila en Linux y se salta ese hook.
+
 Los archivos de localización (`lib/l10n/app_localizations*.dart`) se generan
 solos a partir de los `.arb` en cada build, por eso no se versionan.
 
-### Clave de Google Maps
+### El mapa
 
-El mapa necesita una API key de Google Maps, que **no** se versiona. Cada
-plataforma la toma de un sitio distinto:
+**No hay nada que configurar.** El mapa usa `flutter_map` sobre teselas de
+OpenStreetMap: sin API key, sin cuenta de Google Cloud y sin secretos en el
+CI. Funciona recién clonado el repo.
 
-| Plataforma | Dónde ponerla |
-|---|---|
-| Android | `android/local.properties` → `MAPS_API_KEY=tu_clave` (se inyecta como `manifestPlaceholder`) |
-| iOS | `ios/Runner/AppDelegate.swift` → reemplazar `TU_GOOGLE_MAPS_API_KEY_IOS` |
-| Web | `web/index.html` → reemplazar `TU_GOOGLE_MAPS_API_KEY_WEB` |
-
-Sin la clave la app compila y corre con normalidad; solo el mapa quedaría en
-blanco.
+Las teselas son un servicio donado por la OpenStreetMap Foundation y tienen
+condiciones de uso; están explicadas en
+[`docs/MAPS_SETUP.md`](./docs/MAPS_SETUP.md).
 
 ### Comandos útiles
 
@@ -50,10 +58,12 @@ lib/
   l10n/            # app_es.arb / app_en.arb  (textos bilingües)
   features/
     attractions/   # feature COMPLETA de referencia (domain/data/presentation + BLoC)
-    home/          # scaffold
-    calendar/      # scaffold  <- diferenciador clave, priorizar
-    map/           # scaffold  <- Google Maps embebido con rutas
-    artisans/      # scaffold
+    home/          # completa  <- compone calendar + attractions
+    calendar/      # completa  <- diferenciador clave; reacciona al reloj
+    map/           # completa  <- flutter_map + teselas de OpenStreetMap
+    artisans/      # scaffold  <- bloqueada por contenido
+    favorites/     # completa  <- guardados
+    settings/      # completa  <- idioma persistido
   shell/           # MainShell: barra de navegación inferior UNIFICADA (5 tabs)
 assets/
   data/attractions.json   # 6 atractivos acordados, bilingüe
@@ -73,12 +83,12 @@ assets/
 
 ## Pendientes (TODO en el código)
 
-- Pantallas `home`, `calendar`, `map`, `artisans` están como scaffold.
-  La feature `attractions` sirve de plantilla para replicar el patrón.
-- Falta contenido real: fotos de Pujilí y datos prácticos verificados.
-- El tab "Perfil" apunta temporalmente a `ArtisansPage`; crear su feature.
-- Para el mapa: falta la API key de Google Maps (ver arriba) y reemplazar el
-  placeholder de `map_page.dart` por el widget `GoogleMap` con los pines.
+- `artisans` sigue como scaffold, bloqueada por contenido: hacen falta las
+  fotos y los datos de los artesanos. La feature `attractions` sirve de
+  plantilla para replicar el patrón.
+- Falta contenido real: datos prácticos verificados y las coordenadas finas
+  de dos atractivos.
+- El calendario va con **fiestas simuladas** hasta el 5 de octubre de 2026.
 
 ## Contribuir y políticas del repositorio
 
