@@ -226,6 +226,15 @@ class _MapState extends State<_Map> {
 
   bool _tilesFailed = false;
 
+  /// Las teselas esperan a que el mapa este encuadrado. `FlutterMap`
+  /// aplica `initialCameraFit` en un post-frame callback, asi que el
+  /// primer frame sale con el zoom inicial; con el `TileLayer` ya montado,
+  /// en ese frame se pedian ~30 teselas de zoom 13 que el encuadre
+  /// descartaba al instante. `onMapReady` llega en el mismo post-frame,
+  /// registrado antes que el encuadre: para el frame siguiente la camara
+  /// ya esta en su sitio.
+  bool _mapReady = false;
+
   /// `FlutterMap` solo libera el controlador si lo creo el mismo; este es
   /// nuestro, y ademas le cuelga un `AnimationController`. Sin esta
   /// llamada se filtra.
@@ -309,17 +318,19 @@ class _MapState extends State<_Map> {
             // crema y no en el gris del paquete: parece parte de la app y
             // no un hueco.
             backgroundColor: AppColors.cream,
+            onMapReady: () => setState(() => _mapReady = true),
           ),
           children: [
-            TileLayer(
-              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-              // La politica de teselas de la OSM Foundation exige que la
-              // app se identifique. Sin esto pueden bloquearla.
-              userAgentPackageName: 'ec.gob.pujili.pujili_vive',
-              tileProvider: _tiles,
-              errorTileCallback: _onTileError,
-              reset: _reloadTiles.stream,
-            ),
+            if (_mapReady)
+              TileLayer(
+                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                // La politica de teselas de la OSM Foundation exige que la
+                // app se identifique. Sin esto pueden bloquearla.
+                userAgentPackageName: 'ec.gob.pujili.pujili_vive',
+                tileProvider: _tiles,
+                errorTileCallback: _onTileError,
+                reset: _reloadTiles.stream,
+              ),
             MarkerLayer(
               markers: [
                 for (final place in widget.places)

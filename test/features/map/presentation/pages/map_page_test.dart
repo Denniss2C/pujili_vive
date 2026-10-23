@@ -36,9 +36,14 @@ class _FakeTileProvider extends TileProvider {
   /// Descargas de verdad, sin contar las que el `ImageCache` resuelve.
   int downloads = 0;
 
+  /// Zooms de todas las teselas que el mapa llego a pedir.
+  final requestedZooms = <int>{};
+
   @override
-  ImageProvider getImage(TileCoordinates coordinates, TileLayer options) =>
-      _FakeTile(coordinates, this);
+  ImageProvider getImage(TileCoordinates coordinates, TileLayer options) {
+    requestedZooms.add(coordinates.z);
+    return _FakeTile(coordinates, this);
+  }
 }
 
 /// La clave de cache es la coordenada, igual que la URL lo es para las
@@ -242,6 +247,27 @@ void main() {
       isTrue,
       reason: 'el Quilotoa deberia quedar encuadrado',
     );
+  });
+
+  testWidgets('solo pide teselas del zoom en que se ve el mapa',
+      (tester) async {
+    // Bug real: el mapa arrancaba en zoom 13 y encuadraba los lugares un
+    // frame despues, asi que en ese primer frame pedia ~30 teselas de zoom
+    // 13 que se descartaban enseguida. Con red es trafico tirado contra el
+    // servidor de la OSMF; sin red, cada una dejaba un "EXCEPTION CAUGHT BY
+    // IMAGE RESOURCE SERVICE" en la consola, porque cuando llegaba el
+    // fallo ya nadie la escuchaba.
+    when(() => bloc.state).thenReturn(
+      AttractionsLoaded(all: [plaza, quilotoa], filtered: [plaza, quilotoa]),
+    );
+    final tiles = _FakeTileProvider()..online = true;
+
+    await tester.pumpWidget(wrap(tiles: tiles));
+    await tester.pump();
+    await tester.pump();
+
+    final camera = MapCamera.of(tester.element(find.byType(MarkerLayer)));
+    expect(tiles.requestedZooms, {camera.zoom.round()});
   });
 
   group('sin red', () {

@@ -201,6 +201,13 @@ y el proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 - El mapa creaba un proveedor de teselas, con su propio cliente HTTP, en
   cada repintado (cada cambio de ruta), y al salir solo cerraba el ultimo.
   Ahora hay uno solo por mapa.
+- **Al abrir, el mapa pedia ~30 teselas que nunca mostraba.** `FlutterMap`
+  encuadra los lugares un frame despues de pintar, y en ese primer frame
+  el `TileLayer` ya pedia las teselas del zoom inicial (13) que el
+  encuadre descartaba al instante: 78 descargas en vez de 48. Con red era
+  trafico tirado contra el servidor de la OSMF, que pide no hacerlo; sin
+  red, cada una dejaba un "EXCEPTION CAUGHT BY IMAGE RESOURCE SERVICE" en
+  la consola. Ahora las teselas esperan a que el mapa este encuadrado.
 - **iOS no compilaba con Xcode 27.** El pod `Flutter` declaraba iOS 13.0
   y Xcode 27 ya no admite nada por debajo de 15.0. El `post_install` del
   Podfile iguala los Pods al minimo del Runner. De paso, `pod install`
