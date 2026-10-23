@@ -192,6 +192,34 @@ y el proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
   Los bumps que ya habia propuesto quedan aplicados en `main`.
 
 ### Fixed
+- **Sin red, el mapa se quedaba en blanco sin decir nada.** Ahora, si las
+  teselas fallan, aparece un aviso dentro del mapa con "Reintentar", como
+  pedia el diseño (`CONCEPTO.md` §4.5), y la lista de lugares sigue
+  funcionando. El aviso no depende de detectar la conexion: en el
+  emulador del bug el wifi figuraba como conectado y validado, y lo que
+  fallaba era el DNS.
+- El mapa creaba un proveedor de teselas, con su propio cliente HTTP, en
+  cada repintado (cada cambio de ruta), y al salir solo cerraba el ultimo.
+  Ahora hay uno solo por mapa.
+- **Al abrir, el mapa pedia ~30 teselas que nunca mostraba.** `FlutterMap`
+  encuadra los lugares un frame despues de pintar, y en ese primer frame
+  el `TileLayer` ya pedia las teselas del zoom inicial (13) que el
+  encuadre descartaba al instante: 78 descargas en vez de 48. Con red era
+  trafico tirado contra el servidor de la OSMF, que pide no hacerlo; sin
+  red, cada una dejaba un "EXCEPTION CAUGHT BY IMAGE RESOURCE SERVICE" en
+  la consola. Ahora las teselas esperan a que el mapa este encuadrado.
+- **iOS no compilaba con Xcode 27.** El pod `Flutter` declaraba iOS 13.0
+  y Xcode 27 ya no admite nada por debajo de 15.0. El `post_install` del
+  Podfile iguala los Pods al minimo del Runner. De paso, `pod install`
+  quito de `Podfile.lock` y del proyecto los restos de Google Maps que
+  quedaron al pasar a OpenStreetMap: el CI compila en Linux y no los vio.
+- **El corazon y el engranaje de Inicio se pintaban encima del nombre de
+  la app.** Iban en un `Stack` que media lo mismo que el titulo, asi que
+  "arriba a la derecha" era la esquina del titulo y no la de la cabecera.
+  Pasaba desde que se añadio el engranaje y empeoro con el corazon y el
+  logo. Ahora los iconos tienen su propia fila sobre el titulo, el titulo
+  se encoge si no cabe (letra grande de accesibilidad) y la cabecera crece
+  con la barra de estado en vez de tener 150 dp fijos.
 - **El mapa encuadraba pines detras de su propio sheet.** El encuadre
   dejaba 64 px de margen por los cuatro lados, pero el sheet "Explorar
   lugares" cubre el 45 % de abajo: los pines del sur quedaban tapados, sin

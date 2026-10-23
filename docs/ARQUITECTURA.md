@@ -67,7 +67,7 @@ assets/
 | Mapa | ✅ `flutter_map` sobre teselas de OpenStreetMap: sin API key, sin cuenta de Google Cloud y sin secretos en el CI. Funciona recién clonado el repo. Las teselas son un servicio donado con condiciones de uso ([`MAPS_SETUP.md`](./MAPS_SETUP.md)). |
 | Quinto tab | ✅ Es Artesanos. Ajustes salió de la barra y se abre desde el engranaje de Inicio (preguntas resueltas nº 8 y nº 1). |
 | Flavors y firma | ✅ `dev` / `prod` en Android e iOS, con `make aab-prod`. Falta generar el keystore real. |
-| Tests | ✅ 173 tests. Todas las features con árbol completo; cobertura de 98,6 % en `domain/` y 97,9 % en `data/`. El CI no impone un mínimo de cobertura. |
+| Tests | ✅ 180 tests. Todas las features con árbol completo; cobertura de 98,6 % en `domain/` y 97,9 % en `data/`. El CI no impone un mínimo de cobertura. |
 
 ## 5. Decisiones de diseño
 

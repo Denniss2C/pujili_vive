@@ -76,6 +76,14 @@ los `xcconfig` de los Pods con los ajustes equivocados.
 > (`cd ios && pod install`), o el build falla con errores de framework no
 > encontrado.
 
+### El `post_install` fuerza iOS 15.0 en los Pods
+
+El `Flutter.podspec` que genera la herramienta declara iOS 13.0, y desde
+Xcode 27 el mínimo admitido es 15.0: sin el ajuste, el build falla con
+*"The iOS Simulator deployment target 'IPHONEOS_DEPLOYMENT_TARGET' is set
+to 13.0"*. El `post_install` iguala todos los targets de los Pods al
+mínimo del Runner.
+
 ## Verificación
 
 ```bash

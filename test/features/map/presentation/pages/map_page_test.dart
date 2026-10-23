@@ -1,4 +1,8 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -21,6 +25,67 @@ class _MockAttractionsBloc extends MockBloc<AttractionsEvent, AttractionsState>
     implements AttractionsBloc {}
 
 class _MockMapsLauncher extends Mock implements MapsLauncher {}
+
+/// Teselas de un telefono que no resuelve `tile.openstreetmap.org`.
+///
+/// Mientras [online] sea falso, cada tesela falla al instante. Con red se
+/// queda cargando para siempre: al test le basta con que no falle.
+class _FakeTileProvider extends TileProvider {
+  bool online = false;
+
+  /// Descargas de verdad, sin contar las que el `ImageCache` resuelve.
+  int downloads = 0;
+
+  /// Zooms de todas las teselas que el mapa llego a pedir.
+  final requestedZooms = <int>{};
+
+  @override
+  ImageProvider getImage(TileCoordinates coordinates, TileLayer options) {
+    requestedZooms.add(coordinates.z);
+    return _FakeTile(coordinates, this);
+  }
+}
+
+/// La clave de cache es la coordenada, igual que la URL lo es para las
+/// teselas de verdad.
+class _FakeTile extends ImageProvider<_FakeTile> {
+  final TileCoordinates coordinates;
+  final _FakeTileProvider provider;
+
+  _FakeTile(this.coordinates, this.provider);
+
+  @override
+  Future<_FakeTile> obtainKey(ImageConfiguration configuration) =>
+      SynchronousFuture(this);
+
+  @override
+  ImageStreamCompleter loadImage(_FakeTile key, ImageDecoderCallback decode) {
+    provider.downloads++;
+    if (provider.online) {
+      return OneFrameImageStreamCompleter(Completer<ImageInfo>().future);
+    }
+    // Como `NetworkTileImageProvider`, que se borra del `ImageCache` antes
+    // de propagar el fallo: si no, el error quedaria guardado y la tesela
+    // no se volveria a pedir nunca.
+    scheduleMicrotask(() => PaintingBinding.instance.imageCache.evict(key));
+    return OneFrameImageStreamCompleter(
+      Future<ImageInfo>.error(
+        const SocketException("Failed host lookup: 'tile.openstreetmap.org'"),
+      ),
+    );
+  }
+
+  // El proveedor entra en la igualdad para que un test no herede los
+  // errores que otro dejo en el `ImageCache`, que es global.
+  @override
+  bool operator ==(Object other) =>
+      other is _FakeTile &&
+      other.coordinates == coordinates &&
+      identical(other.provider, provider);
+
+  @override
+  int get hashCode => Object.hash(coordinates, identityHashCode(provider));
+}
 
 /// Esta pantalla no se podia probar con Google Maps: `GoogleMap` es una
 /// *platform view* y en un test de widget no pinta nada. `FlutterMap` es
@@ -72,7 +137,7 @@ void main() {
   /// Los providers van encima del `MaterialApp`, como en `main.dart`: el
   /// detalle se empuja con `Navigator.push` y si cuelgan del `home` queda
   /// fuera de su alcance.
-  Widget wrap() {
+  Widget wrap({TileProvider? tiles}) {
     return RepositoryProvider<MapsLauncher>(
       create: (_) => _MockMapsLauncher(),
       child: MultiBlocProvider(
@@ -80,20 +145,22 @@ void main() {
           BlocProvider<AttractionsBloc>.value(value: bloc),
           BlocProvider<FavoritesCubit>.value(value: favorites),
         ],
-        child: const MaterialApp(
-          locale: Locale('es'),
-          localizationsDelegates: [
+        child: MaterialApp(
+          locale: const Locale('es'),
+          localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          supportedLocales: [Locale('es'), Locale('en')],
-          home: MapPage(),
+          supportedLocales: const [Locale('es'), Locale('en')],
+          home: MapPage(tileProvider: tiles),
         ),
       ),
     );
   }
+
+  final tilesFailed = find.byKey(const Key('map-tiles-failed'));
 
   testWidgets('pone un pin por cada lugar de la ruta', (tester) async {
     await tester.pumpWidget(wrap());
@@ -180,5 +247,85 @@ void main() {
       isTrue,
       reason: 'el Quilotoa deberia quedar encuadrado',
     );
+  });
+
+  testWidgets('solo pide teselas del zoom en que se ve el mapa',
+      (tester) async {
+    // Bug real: el mapa arrancaba en zoom 13 y encuadraba los lugares un
+    // frame despues, asi que en ese primer frame pedia ~30 teselas de zoom
+    // 13 que se descartaban enseguida. Con red es trafico tirado contra el
+    // servidor de la OSMF; sin red, cada una dejaba un "EXCEPTION CAUGHT BY
+    // IMAGE RESOURCE SERVICE" en la consola, porque cuando llegaba el
+    // fallo ya nadie la escuchaba.
+    when(() => bloc.state).thenReturn(
+      AttractionsLoaded(all: [plaza, quilotoa], filtered: [plaza, quilotoa]),
+    );
+    final tiles = _FakeTileProvider()..online = true;
+
+    await tester.pumpWidget(wrap(tiles: tiles));
+    await tester.pump();
+    await tester.pump();
+
+    final camera = MapCamera.of(tester.element(find.byType(MarkerLayer)));
+    expect(tiles.requestedZooms, {camera.zoom.round()});
+  });
+
+  group('sin red', () {
+    testWidgets('avisa dentro del mapa y la lista de lugares sigue ahi',
+        (tester) async {
+      // Bug real: en un emulador sin DNS el mapa se quedaba en crema sin
+      // decir nada mientras la consola se llenaba de "Failed host lookup".
+      await tester.pumpWidget(wrap(tiles: _FakeTileProvider()));
+      await tester.pump();
+      await tester.pump();
+
+      expect(tilesFailed, findsOneWidget);
+      expect(
+        find.text('No se pudo cargar el mapa. Revisa tu conexión.'),
+        findsOneWidget,
+      );
+      // CONCEPTO §4.5: los datos del sheet son locales y siguen sirviendo.
+      expect(find.text('Talleres de Cerámica'), findsWidgets);
+    });
+
+    testWidgets('con red no hay aviso', (tester) async {
+      await tester.pumpWidget(wrap(tiles: _FakeTileProvider()..online = true));
+      await tester.pump();
+      await tester.pump();
+
+      expect(tilesFailed, findsNothing);
+    });
+
+    testWidgets('al volver la red, "Reintentar" pide las teselas de nuevo',
+        (tester) async {
+      final tiles = _FakeTileProvider();
+      await tester.pumpWidget(wrap(tiles: tiles));
+      await tester.pump();
+      await tester.pump();
+      expect(tilesFailed, findsOneWidget);
+
+      tiles.online = true;
+      final downloadsBefore = tiles.downloads;
+      await tester.tap(find.text('Reintentar'));
+      await tester.pump();
+      await tester.pump();
+
+      expect(tiles.downloads, greaterThan(downloadsBefore));
+      expect(tilesFailed, findsNothing);
+    });
+
+    testWidgets('"Reintentar" sin red vuelve a avisar', (tester) async {
+      // Lo contrario del anterior: el boton no puede limitarse a esconder
+      // el aviso, tiene que volver a intentarlo de verdad.
+      await tester.pumpWidget(wrap(tiles: _FakeTileProvider()));
+      await tester.pump();
+      await tester.pump();
+
+      await tester.tap(find.text('Reintentar'));
+      await tester.pump();
+      await tester.pump();
+
+      expect(tilesFailed, findsOneWidget);
+    });
   });
 }

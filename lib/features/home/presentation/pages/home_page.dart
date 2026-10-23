@@ -107,9 +107,10 @@ class _Hero extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
 
-    return Container(
-      height: 150,
-      alignment: Alignment.center,
+    // Sin altura fija: la barra de estado mide 24 dp en un Android y
+    // casi 60 en un iPhone con isla, y la cabecera tiene que crecer con
+    // ella en vez de apretar el titulo.
+    return DecoratedBox(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -119,42 +120,17 @@ class _Hero extends StatelessWidget {
       ),
       child: SafeArea(
         bottom: false,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // La misma marca que el icono y el splash: que la app se
-                // reconozca por dentro igual que en el lanzador.
-                Image.asset(
-                  'assets/brand/logo.png',
-                  width: 52,
-                  height: 52,
-                  cacheWidth: 156,
-                  errorBuilder: (_, __, ___) => const SizedBox.shrink(),
-                ),
-                const SizedBox(width: 10),
-                Text(
-                  l.appName,
-                  style: const TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.gold,
-                    letterSpacing: -0.5,
-                  ),
-                ),
-              ],
-            ),
-            // Ajustes cuelga de aqui porque dejo de ser un tab: su slot
-            // en la barra se lo quedo Artesanos (`CONCEPTO.md` §4.7).
-            Positioned(
-              top: 0,
-              right: 4,
+        child: Padding(
+          padding: const EdgeInsets.only(right: 4, bottom: 20),
+          child: Column(
+            children: [
+              // Los iconos van en su propia fila y no flotando sobre el
+              // titulo: compartiendo franja, en un telefono angosto o con
+              // letra grande acababan pintados encima del nombre.
               // Guardados y Ajustes cuelgan de aqui porque los cinco tabs
               // estan tomados (`CONCEPTO.md` §4.7).
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   IconButton(
                     onPressed: () => FavoritesPage.open(context),
@@ -170,8 +146,42 @@ class _Hero extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-          ],
+              // Si el nombre no cabe, se encoge entero en vez de
+              // desbordarse por la derecha. El margen es simetrico para
+              // que quede centrado de verdad: los 4 dp del borde derecho
+              // son de los iconos.
+              Padding(
+                padding: const EdgeInsets.only(left: 20, right: 16),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // La misma marca que el icono y el splash: que la app
+                      // se reconozca por dentro igual que en el lanzador.
+                      Image.asset(
+                        'assets/brand/logo.png',
+                        width: 52,
+                        height: 52,
+                        cacheWidth: 156,
+                        errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        l.appName,
+                        style: const TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.gold,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
