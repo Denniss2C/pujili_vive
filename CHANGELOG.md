@@ -192,6 +192,11 @@ y el proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
   Los bumps que ya habia propuesto quedan aplicados en `main`.
 
 ### Fixed
+- **iOS no compilaba con Xcode 27.** El pod `Flutter` declaraba iOS 13.0
+  y Xcode 27 ya no admite nada por debajo de 15.0. El `post_install` del
+  Podfile iguala los Pods al minimo del Runner. De paso, `pod install`
+  quito de `Podfile.lock` y del proyecto los restos de Google Maps que
+  quedaron al pasar a OpenStreetMap: el CI compila en Linux y no los vio.
 - **El corazon y el engranaje de Inicio se pintaban encima del nombre de
   la app.** Iban en un `Stack` que media lo mismo que el titulo, asi que
   "arriba a la derecha" era la esquina del titulo y no la de la cabecera.
