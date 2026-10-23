@@ -192,6 +192,13 @@ y el proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
   Los bumps que ya habia propuesto quedan aplicados en `main`.
 
 ### Fixed
+- **El corazon y el engranaje de Inicio se pintaban encima del nombre de
+  la app.** Iban en un `Stack` que media lo mismo que el titulo, asi que
+  "arriba a la derecha" era la esquina del titulo y no la de la cabecera.
+  Pasaba desde que se añadio el engranaje y empeoro con el corazon y el
+  logo. Ahora los iconos tienen su propia fila sobre el titulo, el titulo
+  se encoge si no cabe (letra grande de accesibilidad) y la cabecera crece
+  con la barra de estado en vez de tener 150 dp fijos.
 - **El mapa encuadraba pines detras de su propio sheet.** El encuadre
   dejaba 64 px de margen por los cuatro lados, pero el sheet "Explorar
   lugares" cubre el 45 % de abajo: los pines del sur quedaban tapados, sin

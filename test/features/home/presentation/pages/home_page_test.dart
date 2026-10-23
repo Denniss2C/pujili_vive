@@ -174,4 +174,51 @@ void main() {
 
     expect(find.byType(SettingsPage), findsOneWidget);
   });
+
+  // Telefono Android tipico (412 dp) con barra de estado alta, y uno
+  // angosto (360 dp) con letra grande de accesibilidad.
+  for (final (width, statusBar, textScale) in const [
+    (412.0, 48.0, 1.0),
+    (360.0, 24.0, 1.3),
+  ]) {
+    testWidgets(
+        'en $width dp con letra x$textScale los iconos de la cabecera '
+        'no tapan el titulo', (tester) async {
+      // Bug real: el corazon y el engranaje se colocaban respecto al
+      // titulo y no a la cabecera, y quedaban pintados encima del nombre.
+      tester.view
+        ..devicePixelRatio = 3
+        ..physicalSize = Size(width * 3, 800 * 3)
+        ..padding = FakeViewPadding(top: statusBar * 3);
+      tester.platformDispatcher.textScaleFactorTestValue = textScale;
+      addTearDown(tester.view.reset);
+      addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+      when(() => bloc.state).thenReturn(
+        const HomeLoaded(
+          upcomingEvents: [],
+          eventsFailed: false,
+          attractions: [],
+          attractionsFailed: false,
+        ),
+      );
+
+      await tester.pumpWidget(wrap());
+
+      final title = tester.getRect(find.text('Pujilí Vive'));
+      for (final icon in [Icons.favorite_border, Icons.settings_outlined]) {
+        final button = tester.getRect(
+          find.ancestor(
+            of: find.byIcon(icon),
+            matching: find.byType(IconButton),
+          ),
+        );
+        expect(button.overlaps(title), isFalse, reason: '$icon tapa el titulo');
+        expect(button.top, greaterThanOrEqualTo(statusBar));
+      }
+      // Y siguen en la esquina de la pantalla, no al lado del titulo.
+      final gear = tester.getRect(find.byIcon(Icons.settings_outlined));
+      expect(gear.right, greaterThan(width - 48));
+      expect(tester.takeException(), isNull);
+    });
+  }
 }
