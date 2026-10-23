@@ -91,6 +91,13 @@ y el proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
   marcador: es la primera vez que se ven fotos de verdad.
 - Arbol de tests de `calendar` (24 tests en total, antes habia 1), incluido
   uno que valida el asset real que se empaqueta.
+- Arbol de tests de `attractions` completo: usecase, repositorio, bloc y
+  la lista de Explorar, que hasta ahora solo se pintaba de paso en el test
+  de navegacion y nunca habia probado que tocar un chip filtre.
+- Tests de los datasources de `favorites` y `settings` contra
+  `shared_preferences` en memoria, del repositorio de guardados y de
+  `SaveLanguageCode`. La cobertura de `domain/` sube a 98,6 % y la de
+  `data/` de 76 % a 97,9 %.
 - Tests que validan el asset de atractivos: ids unicos, textos bilingues
   completos y que **cada foto referenciada exista en disco**.
 - Flavors `dev` / `prod`: entrypoints, `FlavorConfig`, productFlavors de

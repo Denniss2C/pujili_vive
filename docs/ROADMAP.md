@@ -82,11 +82,11 @@ falta el contenido.
 > demás de la fase está hecho.
 
 ## Fase 3 — Calidad
-- [ ] Árbol de tests de `attractions` (usecases, repo, bloc, widget).
-      **A medias:** hay asset, modelo y página de detalle; faltan usecase,
-      repositorio y bloc. La feature plantilla está hoy peor cubierta que
-      `calendar`, que sí tiene el árbol completo.
-- [ ] Subir cobertura a ≥ 80 % en `domain/` y `data/`.
+- [x] Árbol de tests de `attractions` (usecases, repo, bloc, widget):
+      asset, modelo, usecase, repositorio, bloc, lista y detalle. La
+      feature plantilla vuelve a estar a la altura de `calendar`.
+- [x] Subir cobertura a ≥ 80 % en `domain/` y `data/`: 98,6 % y 97,9 %.
+      El CI no lo exige todavía, así que nada impide que vuelva a bajar.
 - [ ] Endurecer lints a `--fatal-infos` por grupos
       (ver [`project_rules/09_code_style.md`](../project_rules/09_code_style.md)).
 
