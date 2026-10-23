@@ -58,7 +58,7 @@ app.*.map.json
 .env.*
 !.env.example
 
-# Google Maps API key y config local por plataforma
+# Config local por plataforma (el mapa no usa API key)
 **/local.properties
 **/key.properties
 android/app/src/**/AndroidManifest.local.xml

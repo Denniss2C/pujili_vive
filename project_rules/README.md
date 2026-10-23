@@ -32,7 +32,7 @@ alineado con:
 | 02  | `02_clean_architecture_rules.md` | Reglas de Clean Architecture             |
 | 03  | `03_bloc_rules.md`               | Reglas de uso de BLoC                    |
 | 04  | `04_repository_rules.md`         | Repositorios y datasources               |
-| 05  | `05_data_sources_rules.md`       | Datos locales (JSON/assets) y Google Maps|
+| 05  | `05_data_sources_rules.md`       | Datos locales (JSON/assets) y el mapa    |
 | 06  | `06_testing_rules.md`            | Testing (Unit, Widget, Integration)      |
 | 07  | `07_naming_conventions.md`       | Convenciones de nombrado                 |
 | 08  | `08_folder_structure.md`         | Estructura obligatoria de carpetas       |

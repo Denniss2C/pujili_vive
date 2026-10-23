@@ -49,7 +49,7 @@ lib/
 │   ├── attractions/        ← FEATURE DE REFERENCIA (completa)
 │   ├── home/               ← scaffold → migrar al patrón
 │   ├── calendar/           ← scaffold
-│   ├── map/                ← scaffold (Google Maps)
+│   ├── map/                ← completa (flutter_map + OpenStreetMap)
 │   └── artisans/           ← scaffold
 ├── shell/                  ← main_shell.dart (navegación inferior)
 └── l10n/                   ← app_es.arb, app_en.arb (+ generados, gitignored)

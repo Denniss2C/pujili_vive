@@ -94,7 +94,7 @@ Adicionalmente:
 
 ## 5. Reglas innegociables
 
-1. **Ningún Widget importa un datasource, `http` o `google_maps_flutter`
+1. **Ningún Widget importa un datasource, `http` o `flutter_map`
    como fuente de datos de negocio directamente.**
 2. **Ningún BLoC importa modelos DTO.** Solo entidades de dominio.
 3. **Ningún archivo en `domain/` importa Flutter.**

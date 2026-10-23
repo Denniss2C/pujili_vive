@@ -12,10 +12,10 @@ void main() {
       buildAttraction(id: 'quilotoa', latitude: -0.8583, longitude: -78.9061),
     ]);
 
-    expect(bounds.southwest.latitude, -0.9578);
-    expect(bounds.northeast.latitude, -0.8583);
-    expect(bounds.southwest.longitude, -78.9061);
-    expect(bounds.northeast.longitude, -78.6967);
+    expect(bounds.southWest.latitude, -0.9578);
+    expect(bounds.northEast.latitude, -0.8583);
+    expect(bounds.southWest.longitude, -78.9061);
+    expect(bounds.northEast.longitude, -78.6967);
   });
 
   test('con un solo lugar deja un margen, no un punto', () {
@@ -25,11 +25,11 @@ void main() {
     ]);
 
     expect(
-      bounds.northeast.latitude - bounds.southwest.latitude,
+      bounds.northEast.latitude - bounds.southWest.latitude,
       closeTo(0.01, 1e-9),
     );
     expect(
-      bounds.northeast.longitude - bounds.southwest.longitude,
+      bounds.northEast.longitude - bounds.southWest.longitude,
       closeTo(0.01, 1e-9),
     );
   });

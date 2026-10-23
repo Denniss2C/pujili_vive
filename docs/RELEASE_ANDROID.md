@@ -40,12 +40,7 @@ Eso es **todo lo que hay que hacer**: la firma ya está enganchada en
 > para siempre**. Guarda copia en dos sitios y la contraseña en un
 > gestor.
 
-## 2. Maps API key
-
-Asegúrate de tener `MAPS_API_KEY` en `android/local.properties`
-(ver [`MAPS_SETUP.md`](./MAPS_SETUP.md)).
-
-## 3. Build (flavor prod)
+## 2. Build (flavor prod)
 
 ```bash
 # App Bundle para Play Store (recomendado)
@@ -61,7 +56,7 @@ Salida:
 - AAB: `build/app/outputs/bundle/prodRelease/app-prod-release.aab`
 - APK: `build/app/outputs/flutter-apk/app-prod-release.apk`
 
-## 4. Recomendaciones
+## 3. Recomendaciones
 
 - Ofusca el binario:
   `--obfuscate --split-debug-info=build/symbols`.

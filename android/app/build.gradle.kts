@@ -5,8 +5,6 @@ val localProperties = Properties()
 rootProject.file("local.properties").takeIf { it.exists() }?.let { file ->
     FileInputStream(file).use { localProperties.load(it) }
 }
-val mapsApiKey: String = localProperties.getProperty("MAPS_API_KEY") ?: ""
-
 // Firma de release. `key.properties` esta gitignorado y no llega con un
 // clone, asi que la config es OPCIONAL: quien no lo tenga sigue pudiendo
 // compilar release (firmado con debug) y el build no se rompe para nadie.
@@ -43,7 +41,6 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
-        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
     }
 
     // AGP 8 trae la feature resValues DESACTIVADA por defecto, y sin

@@ -15,18 +15,21 @@ calendario → inicio → atractivos → **mapa** → artesanos → perfil → a
 - [x] Higiene de repo: políticas, CI, project_rules.
 
 ## Fase 1 — Contenido y mapa
-- [x] Reemplazar el placeholder de `map_page.dart` por `GoogleMap` con pines
-      de los atractivos, selector de rutas temáticas y sheet "Explorar
+- [x] Reemplazar el placeholder de `map_page.dart` por un mapa con pines de
+      los atractivos, selector de rutas temáticas y sheet "Explorar
       lugares".
-- [ ] **Cargar la Google Maps API key** (ver [`MAPS_SETUP.md`](./MAPS_SETUP.md)).
-      Sigue sin poner: `TU_GOOGLE_MAPS_API_KEY_IOS` en
-      [`AppDelegate.swift`](../ios/Runner/AppDelegate.swift) y `MAPS_API_KEY`
-      ausente de `android/local.properties`. **Es lo único que separa al mapa
-      de funcionar:** el código está hecho y el build no se rompe sin ella,
-      pero el área del mapa sale en blanco. El sheet con la lista sí funciona,
-      porque lee datos locales.
-- [ ] Pines ilustrados (cántaro, cúpula, montaña) en vez de los marcadores de
-      color de ahora. Necesita iconos dibujados que no existen.
+- [x] **Mapa sin API key**: `flutter_map` sobre teselas de OpenStreetMap en
+      lugar de Google Maps. Cerró la tarea de cargar la clave, que era lo
+      único que separaba al mapa de funcionar; ahora no hay clave que cargar
+      (ver [`MAPS_SETUP.md`](./MAPS_SETUP.md)).
+- [ ] Pines ilustrados (cántaro, cúpula, montaña) en vez de las gotas de
+      color de ahora. Necesita iconos dibujados que no existen. Con
+      `flutter_map` un pin es un widget cualquiera, así que ya no hay
+      obstáculo técnico: falta el dibujo.
+- [ ] Estilo del mapa en la paleta terracota del diseño. El servidor de
+      teselas de la OSMF sirve el estilo estándar y no se puede tematizar
+      desde la app: necesitaría un proveedor con estilo propio, y eso vuelve
+      a pedir una key.
 - [x] Fotos reales de Pujilí en `assets/images/` (comprimidas).
 - [ ] Datos prácticos verificados (horarios, cómo llegar, contactos).
       Bloqueado por trabajo de campo, igual que las coordenadas de abajo.

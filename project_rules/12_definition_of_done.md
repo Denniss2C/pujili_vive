@@ -25,7 +25,7 @@
 - [ ] Estados: `initial`, `loading`, `loaded`, `error`.
 
 ## ✅ Seguridad
-- [ ] Sin secretos ni Maps API key en el código.
+- [ ] Sin secretos ni claves de API en el código.
 - [ ] Sin permisos nuevos sin documentar.
 - [ ] Validación de inputs.
 

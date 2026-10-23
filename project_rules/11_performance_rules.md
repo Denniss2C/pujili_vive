@@ -36,11 +36,20 @@ BlocSelector<AttractionsBloc, AttractionsState, int>(
 
 ---
 
-## 4. Google Maps
+## 4. Mapa
 
 - Limitar el número de `Marker` visibles; agrupar si crecen.
-- No recrear el `GoogleMapController` en cada rebuild.
-- Cargar el mapa de forma perezosa (solo al entrar al tab).
+- No recrear el `MapController` en cada rebuild, y **liberarlo** en
+  `dispose`: `FlutterMap` solo libera el que crea él mismo, y al nuestro le
+  cuelga un `AnimationController`.
+- No reencuadrar la cámara en cada repintado. El filtro de ruta devuelve
+  una lista nueva cada build, así que el disparador es el **cambio de
+  ruta**, no la lista.
+- Poner suelo de zoom (`minZoom`): alejarse hasta ver el mundo entero pide
+  teselas de medio planeta a un servidor donado.
+- Cargar el mapa de forma perezosa (solo al entrar al tab). **Pendiente:**
+  hoy el `IndexedStack` del shell monta los cinco tabs al arrancar, así que
+  el mapa pide teselas aunque nadie abra su tab.
 
 ---
 
