@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -31,11 +33,16 @@ import '../widgets/route_selector.dart';
 /// el credito a OpenStreetMap se pinta en pantalla, que la licencia ODbL
 /// lo exige.
 ///
-/// Sin red, el area del mapa se queda en el color de fondo y el sheet de
-/// "Explorar lugares" sigue funcionando, que es lo que pide el diseño
-/// para ese caso (`docs/CONCEPTO.md` §4.5, Estados).
+/// Sin red, el area del mapa se queda en el color de fondo con un aviso
+/// encima, y el sheet de "Explorar lugares" sigue funcionando, que es lo
+/// que pide el diseño para ese caso (`docs/CONCEPTO.md` §4.5, Estados).
 class MapPage extends StatefulWidget {
-  const MapPage({super.key});
+  /// De donde salen las teselas. Solo lo cambian los tests, para simular
+  /// un telefono sin red; la app usa siempre OpenStreetMap.
+  @visibleForTesting
+  final TileProvider? tileProvider;
+
+  const MapPage({super.key, this.tileProvider});
 
   @override
   State<MapPage> createState() => _MapPageState();
@@ -78,7 +85,11 @@ class _MapPageState extends State<MapPage> {
               Expanded(
                 child: Stack(
                   children: [
-                    _Map(route: _route, places: places),
+                    _Map(
+                      route: _route,
+                      places: places,
+                      tileProvider: widget.tileProvider,
+                    ),
                     PlacesSheet(places: places),
                   ],
                 ),
@@ -180,8 +191,13 @@ Color markerColorOf(AttractionCategory category) {
 class _Map extends StatefulWidget {
   final ThematicRoute route;
   final List<Attraction> places;
+  final TileProvider? tileProvider;
 
-  const _Map({required this.route, required this.places});
+  const _Map({
+    required this.route,
+    required this.places,
+    this.tileProvider,
+  });
 
   @override
   State<_Map> createState() => _MapState();
@@ -197,13 +213,41 @@ class _MapState extends State<_Map> {
 
   double _mapHeight = 0;
 
+  /// Uno solo para toda la vida del mapa. Si el `TileLayer` lo crea por su
+  /// cuenta, cada repintado —cada cambio de ruta— estrena un proveedor con
+  /// su propio cliente HTTP, y al salir solo se cierra el ultimo.
+  ///
+  /// No se desecha en [dispose]: lo hace el `TileLayer` al desmontarse.
+  late final TileProvider _tiles = widget.tileProvider ?? NetworkTileProvider();
+
+  /// Cada evento hace que el `TileLayer` descarte sus teselas y las pida
+  /// de nuevo. Es lo que dispara "Reintentar".
+  final StreamController<void> _reloadTiles = StreamController.broadcast();
+
+  bool _tilesFailed = false;
+
   /// `FlutterMap` solo libera el controlador si lo creo el mismo; este es
   /// nuestro, y ademas le cuelga un `AnimationController`. Sin esta
   /// llamada se filtra.
   @override
   void dispose() {
     _controller.dispose();
+    _reloadTiles.close();
     super.dispose();
+  }
+
+  void _onTileError(TileImage tile, Object error, StackTrace? stackTrace) {
+    if (_tilesFailed) return;
+    // El fallo puede llegar mientras el `TileLayer` se esta construyendo,
+    // y ahi no se puede llamar a setState: se aplaza al final del frame.
+    scheduleMicrotask(() {
+      if (mounted && !_tilesFailed) setState(() => _tilesFailed = true);
+    });
+  }
+
+  void _retryTiles() {
+    setState(() => _tilesFailed = false);
+    _reloadTiles.add(null);
   }
 
   /// Reencuadra al cambiar de ruta.
@@ -272,6 +316,9 @@ class _MapState extends State<_Map> {
               // La politica de teselas de la OSM Foundation exige que la
               // app se identifique. Sin esto pueden bloquearla.
               userAgentPackageName: 'ec.gob.pujili.pujili_vive',
+              tileProvider: _tiles,
+              errorTileCallback: _onTileError,
+              reset: _reloadTiles.stream,
             ),
             MarkerLayer(
               markers: [
@@ -299,6 +346,7 @@ class _MapState extends State<_Map> {
               ],
             ),
             const _OpenStreetMapCredit(),
+            if (_tilesFailed) _TilesFailedNotice(onRetry: _retryTiles),
           ],
         );
       },
@@ -376,6 +424,61 @@ class _OpenStreetMapCredit extends StatelessWidget {
             child: Text(
               '© OpenStreetMap contributors',
               style: TextStyle(fontSize: 11, color: AppColors.textDark),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Aviso de que las teselas no cargan (`CONCEPTO.md` §4.5, Estados: sin
+/// red). Va **dentro** del area del mapa y no a pantalla completa: el
+/// sheet de lugares es local y sigue sirviendo sin conexion.
+///
+/// Dice "no se pudo cargar" y no "sin conexion" a proposito: lo unico que
+/// la app sabe es que las teselas fallaron. Un telefono puede tener wifi y
+/// no resolver nombres —le paso al emulador—, y ahi un detector de
+/// conectividad juraria que todo va bien.
+class _TilesFailedNotice extends StatelessWidget {
+  final VoidCallback onRetry;
+
+  const _TilesFailedNotice({required this.onRetry});
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
+
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Padding(
+        // Por debajo del credito de OpenStreetMap, que ocupa la esquina.
+        padding: const EdgeInsets.fromLTRB(12, 36, 12, 0),
+        child: Material(
+          key: const Key('map-tiles-failed'),
+          color: AppColors.cardBackground,
+          elevation: 2,
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(14, 6, 6, 6),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.cloud_off_outlined,
+                  color: AppColors.terracotta,
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    l.mapTilesFailed,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: AppColors.textDark,
+                    ),
+                  ),
+                ),
+                TextButton(onPressed: onRetry, child: Text(l.retry)),
+              ],
             ),
           ),
         ),

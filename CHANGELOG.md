@@ -192,6 +192,15 @@ y el proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
   Los bumps que ya habia propuesto quedan aplicados en `main`.
 
 ### Fixed
+- **Sin red, el mapa se quedaba en blanco sin decir nada.** Ahora, si las
+  teselas fallan, aparece un aviso dentro del mapa con "Reintentar", como
+  pedia el diseño (`CONCEPTO.md` §4.5), y la lista de lugares sigue
+  funcionando. El aviso no depende de detectar la conexion: en el
+  emulador del bug el wifi figuraba como conectado y validado, y lo que
+  fallaba era el DNS.
+- El mapa creaba un proveedor de teselas, con su propio cliente HTTP, en
+  cada repintado (cada cambio de ruta), y al salir solo cerraba el ultimo.
+  Ahora hay uno solo por mapa.
 - **iOS no compilaba con Xcode 27.** El pod `Flutter` declaraba iOS 13.0
   y Xcode 27 ya no admite nada por debajo de 15.0. El `post_install` del
   Podfile iguala los Pods al minimo del Runner. De paso, `pod install`

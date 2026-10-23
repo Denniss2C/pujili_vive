@@ -39,6 +39,7 @@
   "mapTitle": "Interactive Map",
   "routeAll": "All",
   "mapRouteEmpty": "No places on this route yet.",
+  "mapTilesFailed": "The map could not load. Check your connection.",
   "routeArtisan": "Artisan Route",
   "routeReligious": "Religious Route",
   "routeNature": "Nature Route",
